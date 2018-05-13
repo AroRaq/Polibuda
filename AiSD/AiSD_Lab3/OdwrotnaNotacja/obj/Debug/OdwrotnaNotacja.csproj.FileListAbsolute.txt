@@ -1,0 +1,7 @@
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\OdwrotnaNotacja\OdwrotnaNotacja\bin\Debug\OdwrotnaNotacja.exe.config
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\OdwrotnaNotacja\OdwrotnaNotacja\bin\Debug\OdwrotnaNotacja.exe
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\OdwrotnaNotacja\OdwrotnaNotacja\bin\Debug\OdwrotnaNotacja.pdb
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\OdwrotnaNotacja\OdwrotnaNotacja\obj\Debug\OdwrotnaNotacja.csprojResolveAssemblyReference.cache
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\OdwrotnaNotacja\OdwrotnaNotacja\obj\Debug\OdwrotnaNotacja.csproj.CoreCompileInputs.cache
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\OdwrotnaNotacja\OdwrotnaNotacja\obj\Debug\OdwrotnaNotacja.exe
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\OdwrotnaNotacja\OdwrotnaNotacja\obj\Debug\OdwrotnaNotacja.pdb

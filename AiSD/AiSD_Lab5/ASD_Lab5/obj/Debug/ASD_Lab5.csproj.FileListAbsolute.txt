@@ -1,0 +1,7 @@
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_Lab5\ASD_Lab5\bin\Debug\ASD_Lab5.exe.config
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_Lab5\ASD_Lab5\bin\Debug\ASD_Lab5.exe
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_Lab5\ASD_Lab5\bin\Debug\ASD_Lab5.pdb
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_Lab5\ASD_Lab5\obj\Debug\ASD_Lab5.csprojResolveAssemblyReference.cache
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_Lab5\ASD_Lab5\obj\Debug\ASD_Lab5.csproj.CoreCompileInputs.cache
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_Lab5\ASD_Lab5\obj\Debug\ASD_Lab5.exe
+C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_Lab5\ASD_Lab5\obj\Debug\ASD_Lab5.pdb
