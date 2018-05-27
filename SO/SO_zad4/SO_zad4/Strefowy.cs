@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SO_zad4
 {
@@ -10,9 +6,9 @@ namespace SO_zad4
 	{
 		int frameCount;
 		List<Process> processes = new List<Process>();
-		HashSet<int> workingSet = new HashSet<int>();
-		int strefa = 1000;
+		int strefa = 75;
 		int freeFrames;
+
 		public void Initialize(int frameCount, ICollection<Process> _processes)
 		{
 			freeFrames = frameCount;
@@ -48,7 +44,11 @@ namespace SO_zad4
 						p.MoveNext();
 						if (p.Time == strefa)
 						{
-							p.AssignFrames(p.WorkingSet());
+							int newFrames = p.WorkingSet() - p.AssignedFrames;
+							if (newFrames > freeFrames)
+								newFrames = freeFrames;
+							p.AddFrames(newFrames);
+							freeFrames -= newFrames;
 						}
 					}
 				}

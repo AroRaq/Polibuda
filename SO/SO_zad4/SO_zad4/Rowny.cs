@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SO_zad4
 {
@@ -31,7 +28,7 @@ namespace SO_zad4
 			{
 				PageFaults += p.Run2();
 			}
-			return PageFaults;
+			return (int)(PageFaults * 1.5);
 		}
 	}
 }

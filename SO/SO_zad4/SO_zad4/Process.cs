@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SO_zad4
 {
@@ -179,39 +177,14 @@ namespace SO_zad4
 			return pageFaults;
 		}
 
-		public void AddFrame()
+		public void AddFrames(int count)
 		{
-			int?[] temp = new int?[frames.Length + 1];
-			int[] rece = new int[frames.Length + 1];
-			for (int i = 0; i < frames.Length; i++)
-			{
-				temp[i] = frames[i];
-				rece[i] = recent[i];
-			}
-			rece[frames.Length] = 0;
-			frames = temp;
-			recent = rece;
+			AssignFrames(AssignedFrames + count);
 		}
 
-		public void RemoveFrame()
+		public void RemoveFrames(int count)
 		{
-			if (frames.Length == 1)
-				return;
-			int idx = FindLongest();
-			int?[] temp = new int?[frames.Length - 1];
-			int[] rece = new int[frames.Length - 1];
-			for (int i = 0; i < idx; i++)
-			{
-				temp[i] = frames[i];
-				rece[i] = recent[i];
-			}
-			for (int i = idx + 1; i < frames.Length; i++)
-			{
-				temp[i - 1] = frames[i];
-				rece[i - 1] = recent[i];
-			}
-			frames = temp;
-			recent = rece;
+			AssignFrames(AssignedFrames - count);
 		}
 
 		private int? FindPage(int reqest)

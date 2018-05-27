@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SO_zad4
 {
@@ -12,7 +8,7 @@ namespace SO_zad4
 		List<Process> processes = new List<Process>();
 		int freeFrames;
 
-		double maxFaults = 0.1;
+		double maxFaults = 0.2;
 		double minFaults = 0.01;
 
 		public void Initialize(int frameCount, ICollection<Process> _processes)
@@ -51,23 +47,26 @@ namespace SO_zad4
 					if (!processes[i].IsFinished)
 					{
 						finished = false;
-						processes[i].MoveNext();
+						timeSince[i]++;
+						pageFault[i] += processes[i].MoveNext() ? 1 : 0;
 						double perc = (double)pageFault[i] / timeSince[i];
-						if (processes[i].Time > 50 && perc > maxFaults && freeFrames > 0)
+						//System.Console.Out.WriteLine(perc);
+						if (timeSince[i] > 50 && perc > maxFaults && freeFrames > 0)
 						{
-							processes[i].AddFrame();
-							processes[i].WorkingSet();
+							processes[i].AddFrames(1);
 							timeSince[i] = 0;
 							pageFault[i] = 0;
 							freeFrames--;
 						}
-						if (processes[i].Time > 100 && perc < minFaults && processes[i].AssignedFrames > 1)
+						if (timeSince[i] > 50 && perc < minFaults && processes[i].AssignedFrames > 1)
 						{
-							processes[i].RemoveFrame();
+
+							//System.Console.Out.WriteLine("zabieram");
+							processes[i].RemoveFrames(1);
 							freeFrames++;
-							processes[i].WorkingSet();
 							timeSince[i] = 0;
 							pageFault[i] = 0;
+							
 						}
 						
 					}
