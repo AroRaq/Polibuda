@@ -11,12 +11,12 @@ namespace SO_zad4
 		public static Random rand = new Random();
 
 		public static int PROCESS_COUNT = 10;
-		public static int REQUEST_COUNT = 1000;
-		public static int FRAME_COUNT = 275;
-		public static int RADIUS = 3;
-		public static int TESTS = 10;
-		public static int MIN_SIZE = 10;
-		public static int MAX_SIZE = 100;
+		public static int REQUEST_COUNT = 2000;
+		public static int FRAME_COUNT = 30;
+		public static int RADIUS = 2;
+		public static int TESTS = 100;
+		public static int MIN_SIZE = 2;
+		public static int MAX_SIZE = 8;
 
 		static void Main(string[] args)
 		{
@@ -27,27 +27,28 @@ namespace SO_zad4
 
 			for (int test = 0; test < TESTS; test++)
 			{
-				Process[] processes = new Process[PROCESS_COUNT];
+				List<Process> processes = new List<Process>();
 				for (int i = 0; i < PROCESS_COUNT; i++)
 				{
-					processes[i] = new Process();
-					processes[i].GenerateRequests(rand.Next(MIN_SIZE, MAX_SIZE), REQUEST_COUNT);
+					Process p = new Process();
+					p.GenerateRequests(rand.Next(MIN_SIZE, MAX_SIZE), REQUEST_COUNT);
+					processes.Add(p);
 				}
 
 				IAllocationAlgorithm rowny = new Rowny();
-				rowny.Initialize(FRAME_COUNT, processes);
+				rowny.Initialize(FRAME_COUNT, processes.AsReadOnly());
 				_rowny += rowny.Run();
 
-				IAllocationAlgorithm proporconalny = new Proporcjonalny();
-				proporconalny.Initialize(FRAME_COUNT, processes);
-				_propo += proporconalny.Run();
+				IAllocationAlgorithm proporcjonalny = new Proporcjonalny();
+				proporcjonalny.Initialize(FRAME_COUNT, processes.AsReadOnly());
+				_propo += proporcjonalny.Run();
 
 				IAllocationAlgorithm strefowy = new Strefowy();
-				strefowy.Initialize(FRAME_COUNT, processes);
+				strefowy.Initialize(FRAME_COUNT, processes.AsReadOnly());
 				_stref += strefowy.Run();
 
 				IAllocationAlgorithm zliczanie = new Zliczanie();
-				zliczanie.Initialize(FRAME_COUNT, processes);
+				zliczanie.Initialize(FRAME_COUNT, processes.AsReadOnly());
 				_zlicz += zliczanie.Run();
 			}
 			System.Console.Out.WriteLine("Równy:          {0}", _rowny / TESTS);

@@ -8,7 +8,7 @@ namespace SO_zad4
 {
 	interface IAllocationAlgorithm
 	{
-		void Initialize(int pageCount, Process[] processes);
+		void Initialize(int pageCount, ICollection<Process> processes);
 		int Run();
 	}
 }

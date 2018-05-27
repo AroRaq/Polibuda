@@ -8,16 +8,25 @@ namespace SO_zad4
 {
 	public class Process
 	{
-		public int[] Requests;
-		int?[] Frames;
-		int[] Recent;
+		public Queue<int> requests = new Queue<int>();
+		int?[] frames;
+		int[] recent;
 		bool isFinished = false;
 		int pageFaults = 0;
+
+		private bool started = false;
+		private IEnumerator<bool> enumer;
+		private HashSet<int> workingSet = new HashSet<int>();
+		private int timeSinceReset = 0;
+		private int current;
 
 		private int size;
 		public int Size => size;
 		public bool IsFinished => isFinished;
 		public int PageFaults => pageFaults;
+		public int AssignedFrames => frames.Length;
+		public int Current => current;
+		public int Time => timeSinceReset;
 
 		public Process()
 		{
@@ -26,119 +35,197 @@ namespace SO_zad4
 
 		public Process(Process other)
 		{
-			Requests = other.Requests;
-			Frames = other.Frames;
+			requests = new Queue<int>(other.requests);
 			size = other.size;
 		}
 
 		public void GenerateRequests(int MaxPage, int Count)
 		{
 			size = MaxPage;
-			Requests = new int[Count];
-			Requests[0] = Program.rand.Next(MaxPage);
+			requests.Enqueue(Program.rand.Next(1, MaxPage));
 			for (int i = 1; i < Count; i++)
 			{
 				if (Program.rand.NextDouble() <= 0.9)
-					Requests[i] = Requests[i - 1];
+					requests.Enqueue(requests.Peek());
 				else if (Program.rand.NextDouble() <= 0.9)
-					Requests[i] = Math.Min(Math.Max(0, Requests[i - 1] + Program.rand.Next(-Program.RADIUS, Program.RADIUS)), MaxPage - 1);
+					requests.Enqueue(Math.Min(Math.Max(1, requests.Peek() + Program.rand.Next(-Program.RADIUS, Program.RADIUS)), MaxPage - 1));
 				else
-					Requests[i] = Program.rand.Next(MaxPage);
+					requests.Enqueue(Program.rand.Next(1, MaxPage));
 			}
 		}
 
-		public void AssignFrames(int Count)
+		public void AssignFrames(int count)
 		{
-			Frames = new int?[Count];
-			for (int i = 0; i < Count; i++)
-				Frames[i] = null;
+			if (frames == null)
+			{
+				frames = new int?[count];
+				recent = new int[count];
+			}
+			else if (frames.Length < count)
+			{
+				int?[] temp = new int?[count];
+				int[] rece = new int[count];
+				for (int i = 0; i < frames.Length; i++)
+				{
+					temp[i] = frames[i];
+					rece[i] = recent[i];
+				}
+				frames = temp;
+				recent = rece;
+			}
+			else if (frames.Length > count)
+			{
+				int?[] temp = new int?[count];
+				int[] rece = new int[count];
+				for (int i = 0; i < count; i++)
+				{
+					temp[i] = frames[i];
+					rece[i] = recent[i];
+				}
+				frames = temp;
+				recent = rece;
+			}
 		}
 
 		public int Run()
 		{
-			//foreach (int i in Requests)
-			//	System.Console.Out.Write(i + " ");
 			IEnumerator<bool> enumer = Enumerator1();
 			while (enumer.MoveNext()) ;
 			return pageFaults;
 		}
 
-		public IEnumerator<bool> Enumerator1()
+		public bool MoveNext()
 		{
-			Recent = new int[Frames.Length];
-			for (int time = 0; time < Requests.Length; time++)
+			if (!started)
 			{
-				int? Page = FindRequest(Requests[time]);
-				if (Page != null)
+				started = true;
+				enumer = Enumerator1();
+			}
+			if (isFinished)
+				return false;
+			enumer.MoveNext();
+			return enumer.Current;
+		}
+
+		private IEnumerator<bool> Enumerator1()
+		{
+			recent = new int[frames.Length];
+			for (int time = 0; requests.Any(); time++)
+			{
+				timeSinceReset++;
+				int page = requests.Dequeue();
+				workingSet.Add(page);
+				current = page;
+				int? frame = FindPage(page);
+				if (frame != null)
 				{
-					Recent[(int)Page] = time;
+					recent[(int)frame] = time;
 					yield return false;
 				}
 				else
 				{
 					pageFaults++;
-					Page = FindFreePage();
-					if (Page != null)
+					frame = FindFreeFrame();
+					if (frame != null)
 					{
-						Frames[(int)Page] = Requests[time];
-						Recent[(int)Page] = time;
+						frames[(int)frame] = page;
+						recent[(int)frame] = time;
 					}
 					else
 					{
-						Page = FindLongest();
-						Frames[(int)Page] = Requests[time];
-						Recent[(int)Page] = time;
+						frame = FindLongest();
+						frames[(int)frame] = page;
+						recent[(int)frame] = time;
 					}
 					yield return true;
 				}
 			}
 			isFinished = true;
-			System.Console.Out.WriteLine("TEST" + this.GetHashCode());
+			yield return false;
 			yield break;
-			//return pageFaults;
+		}
+
+		public int Run2()
+		{
+			recent = new int[frames.Length];
+			for (int time = 0; requests.Any(); time++)
+			{
+				int page = requests.Dequeue();
+				workingSet.Add(page);
+				current = page;
+				int? frame = FindPage(page);
+				if (frame != null)
+				{
+					recent[(int)frame] = time;
+				}
+				else
+				{
+					pageFaults++;
+					frame = FindFreeFrame();
+					if (frame != null)
+					{
+						frames[(int)frame] = page;
+						recent[(int)frame] = time;
+					}
+					else
+					{
+						frame = FindLongest();
+						frames[(int)frame] = page;
+						recent[(int)frame] = time;
+					}
+				}
+			}
+			isFinished = true;
+			return pageFaults;
 		}
 
 		public void AddFrame()
 		{
-			int?[] temp = new int?[Frames.Length + 1];
-			for (int i = 0; i < Frames.Length; i++)
-				temp[i] = Frames[i];
-			Frames = temp;
+			int?[] temp = new int?[frames.Length + 1];
+			int[] rece = new int[frames.Length + 1];
+			for (int i = 0; i < frames.Length; i++)
+			{
+				temp[i] = frames[i];
+				rece[i] = recent[i];
+			}
+			rece[frames.Length] = 0;
+			frames = temp;
+			recent = rece;
 		}
 
-		public void RemovePage()
+		public void RemoveFrame()
 		{
+			if (frames.Length == 1)
+				return;
 			int idx = FindLongest();
-			int?[] temp = new int?[Frames.Length - 1];
+			int?[] temp = new int?[frames.Length - 1];
+			int[] rece = new int[frames.Length - 1];
 			for (int i = 0; i < idx; i++)
-				temp[i] = Frames[i];
-			for (int i = idx + 1; i < Frames.Length; i++)
-				temp[i - 1] = Frames[i];
-			Frames = temp;
+			{
+				temp[i] = frames[i];
+				rece[i] = recent[i];
+			}
+			for (int i = idx + 1; i < frames.Length; i++)
+			{
+				temp[i - 1] = frames[i];
+				rece[i - 1] = recent[i];
+			}
+			frames = temp;
+			recent = rece;
 		}
 
-		public int WorkingSet(int start, int delta)
+		private int? FindPage(int reqest)
 		{
-			if (start + delta > Requests.Length)
-				throw new ArgumentOutOfRangeException();
-			HashSet<int> set = new HashSet<int>();
-			for (int i = 0; i < delta; i++)
-				set.Add(Requests[start + i]);
-			return set.Count();
-		}
-
-		private int? FindRequest(int Reqest)
-		{
-			for (int i = 0; i < Frames.Length; i++)
-				if (Frames[i] == Reqest)
+			for (int i = 0; i < frames.Length; i++)
+				if (frames[i] == reqest)
 					return i;
 			return null;
 		}
 
-		private int? FindFreePage()
+		private int? FindFreeFrame()
 		{
-			for (int i = 0; i < Frames.Length; i++)
-				if (Frames[i] == null)
+			for (int i = 0; i < frames.Length; i++)
+				if (frames[i] == null)
 					return i;
 			return null;
 		}
@@ -147,15 +234,23 @@ namespace SO_zad4
 		{
 			int Longest = int.MaxValue;
 			int LongestIdx = 0;
-			for (int i = 0; i < Recent.Length; i++)
+			for (int i = 0; i < recent.Length; i++)
 			{
-				if (Recent[i] < Longest)
+				if (recent[i] < Longest)
 				{
-					Longest = Recent[i];
+					Longest = recent[i];
 					LongestIdx = i;
 				}
 			}
 			return LongestIdx;
+		}
+
+		public int WorkingSet()
+		{
+			int ret = workingSet.Count;
+			timeSinceReset = 0;
+			workingSet.Clear();
+			return ret;
 		}
 	}
 }

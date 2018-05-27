@@ -1,7 +1,7 @@
 C:\Users\arkad\source\repos\Polibuda\SO\SO_zad4\SO_zad4\bin\Debug\SO_zad4.exe.config
 C:\Users\arkad\source\repos\Polibuda\SO\SO_zad4\SO_zad4\bin\Debug\SO_zad4.exe
 C:\Users\arkad\source\repos\Polibuda\SO\SO_zad4\SO_zad4\bin\Debug\SO_zad4.pdb
-C:\Users\arkad\source\repos\Polibuda\SO\SO_zad4\SO_zad4\obj\Debug\SO_zad4.csprojResolveAssemblyReference.cache
 C:\Users\arkad\source\repos\Polibuda\SO\SO_zad4\SO_zad4\obj\Debug\SO_zad4.csproj.CoreCompileInputs.cache
 C:\Users\arkad\source\repos\Polibuda\SO\SO_zad4\SO_zad4\obj\Debug\SO_zad4.exe
 C:\Users\arkad\source\repos\Polibuda\SO\SO_zad4\SO_zad4\obj\Debug\SO_zad4.pdb
+C:\Users\arkad\Source\Repos\Polibuda\SO\SO_zad4\SO_zad4\obj\Debug\SO_zad4.csprojAssemblyReference.cache

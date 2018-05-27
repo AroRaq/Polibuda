@@ -8,23 +8,20 @@ namespace SO_zad4
 {
 	class Rowny : IAllocationAlgorithm
 	{
-		int pageCount;
-		Process[] processes;
+		int frameCount;
+		List<Process> processes = new List<Process>();
 
-		public void Initialize(int pageCount, Process[] processes)
+		public void Initialize(int frameCount, ICollection<Process> _processes)
 		{
-			this.pageCount = pageCount;
-			this.processes = processes;
-			for (int i = 0; i < processes.Length; i++)
-				processes[i] = new Process(processes[i]);
+			this.frameCount = frameCount;
+			foreach (Process p in _processes)
+				processes.Add(new Process(p));
 
 			///ASSIGN FRAMES
-			int Single = pageCount / processes.Length;
-			int Mod = pageCount % processes.Length;
-			for (int i = 0; i < Mod; i++)
-				processes[i].AssignFrames(Single + 1);
-			for (int i = Mod; i < processes.Length; i++)
-				processes[i].AssignFrames(Single);
+			int Single = (int)Math.Floor((double)frameCount / processes.Count);
+			foreach (Process p in processes)
+				p.AssignFrames(Single);
+			//System.Console.Out.WriteLine(Single);
 		}
 		
 		public int Run()
@@ -32,7 +29,7 @@ namespace SO_zad4
 			int PageFaults = 0;
 			foreach (Process p in processes)
 			{
-				PageFaults += p.Run();
+				PageFaults += p.Run2();
 			}
 			return PageFaults;
 		}

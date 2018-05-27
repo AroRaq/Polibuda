@@ -8,27 +8,53 @@ namespace SO_zad4
 {
 	class Strefowy : IAllocationAlgorithm
 	{
-		int pageCount;
-		Process[] processes;
-
-		public void Initialize(int pageCount, Process[] processes)
+		int frameCount;
+		List<Process> processes = new List<Process>();
+		HashSet<int> workingSet = new HashSet<int>();
+		int strefa = 1000;
+		int freeFrames;
+		public void Initialize(int frameCount, ICollection<Process> _processes)
 		{
-			this.pageCount = pageCount;
-			this.processes = processes;
-			for (int i = 0; i < processes.Length; i++)
-				processes[i] = new Process(processes[i]);
+			freeFrames = frameCount;
+			this.frameCount = frameCount;
+			foreach (Process p in _processes)
+				processes.Add(new Process(p));
 
 			///ASSIGN FRAMES
+			int count = 0;
 			foreach (Process p in processes)
-				p.AssignFrames(p.WorkingSet(0, 10));
+				count += p.Size;
+			foreach (Process p in processes)
+			{
+				int i = p.Size * frameCount / count;
+				i = i == 0 ? 1 : i;
+				p.AssignFrames(i);
+				freeFrames -= i; //System.Console.Out.WriteLine(freeFrames);
+
+			}
 		}
 		public int Run()
 		{
 			int PageFaults = 0;
-			foreach (Process p in processes)
+			bool finished = false;
+			for (int time = 0; !finished; time++)
 			{
-				PageFaults += p.Run();
+				finished = true;
+				foreach (Process p in processes)
+				{
+					if (!p.IsFinished)
+					{
+						finished = false;
+						p.MoveNext();
+						if (p.Time == strefa)
+						{
+							p.AssignFrames(p.WorkingSet());
+						}
+					}
+				}
 			}
+			foreach (Process p in processes)
+				PageFaults += p.PageFaults;
 			return PageFaults;
 		}
 	}
