@@ -17,14 +17,24 @@ namespace SO_zad4
 		private HashSet<int> workingSet = new HashSet<int>();
 		private int timeSinceReset = 0;
 		private int current;
-
 		private int size;
+
 		public int Size => size;
 		public bool IsFinished => isFinished;
 		public int PageFaults => pageFaults;
 		public int AssignedFrames => frames.Length;
 		public int Current => current;
 		public int Time => timeSinceReset;
+		public int WorkingSet 
+		{
+			get
+			{
+				int ret = workingSet.Count;
+				timeSinceReset = 0;
+				workingSet.Clear();
+				return ret;
+			}
+		}
 
 		public Process()
 		{
@@ -143,49 +153,8 @@ namespace SO_zad4
 			yield break;
 		}
 
-		public int Run2()
-		{
-			recent = new int[frames.Length];
-			for (int time = 0; requests.Any(); time++)
-			{
-				int page = requests.Dequeue();
-				workingSet.Add(page);
-				current = page;
-				int? frame = FindPage(page);
-				if (frame != null)
-				{
-					recent[(int)frame] = time;
-				}
-				else
-				{
-					pageFaults++;
-					frame = FindFreeFrame();
-					if (frame != null)
-					{
-						frames[(int)frame] = page;
-						recent[(int)frame] = time;
-					}
-					else
-					{
-						frame = FindLongest();
-						frames[(int)frame] = page;
-						recent[(int)frame] = time;
-					}
-				}
-			}
-			isFinished = true;
-			return pageFaults;
-		}
-
-		public void AddFrames(int count)
-		{
-			AssignFrames(AssignedFrames + count);
-		}
-
-		public void RemoveFrames(int count)
-		{
-			AssignFrames(AssignedFrames - count);
-		}
+		public void AddFrames(int count) => AssignFrames(AssignedFrames + count);
+		public void RemoveFrames(int count) => AssignFrames(AssignedFrames - count);
 
 		private int? FindPage(int reqest)
 		{
@@ -216,14 +185,6 @@ namespace SO_zad4
 				}
 			}
 			return LongestIdx;
-		}
-
-		public int WorkingSet()
-		{
-			int ret = workingSet.Count;
-			timeSinceReset = 0;
-			workingSet.Clear();
-			return ret;
 		}
 	}
 }

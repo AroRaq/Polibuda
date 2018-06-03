@@ -44,7 +44,7 @@ namespace SO_zad4
 						p.MoveNext();
 						if (p.Time == strefa)
 						{
-							int newFrames = p.WorkingSet() - p.AssignedFrames;
+							int newFrames = p.WorkingSet - p.AssignedFrames;
 							if (newFrames > freeFrames)
 								newFrames = freeFrames;
 							p.AddFrames(newFrames);

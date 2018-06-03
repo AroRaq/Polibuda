@@ -10,7 +10,7 @@ namespace SO_zad4
 		public static int PROCESS_COUNT = 10;
 		public static int REQUEST_COUNT = 2000;
 		public static int FRAME_COUNT	= 59;
-		public static int RADIUS		= 5;
+		public static int RADIUS		= 7;
 		public static int TESTS			= 100;
 		public static int MIN_SIZE		= 5;
 		public static int MAX_SIZE		= 300;

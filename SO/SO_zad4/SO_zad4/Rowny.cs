@@ -6,10 +6,12 @@ namespace SO_zad4
 	class Rowny : IAllocationAlgorithm
 	{
 		int frameCount;
+		int freeFrames;
 		List<Process> processes = new List<Process>();
 
 		public void Initialize(int frameCount, ICollection<Process> _processes)
 		{
+			this.freeFrames = frameCount;
 			this.frameCount = frameCount;
 			foreach (Process p in _processes)
 				processes.Add(new Process(p));
@@ -17,7 +19,12 @@ namespace SO_zad4
 			///ASSIGN FRAMES
 			int Single = (int)Math.Floor((double)frameCount / processes.Count);
 			foreach (Process p in processes)
+			{
+				if (Single > freeFrames)
+					Single = freeFrames;
 				p.AssignFrames(Single);
+				freeFrames -= Single;
+			}
 			//System.Console.Out.WriteLine(Single);
 		}
 		
@@ -26,9 +33,9 @@ namespace SO_zad4
 			int PageFaults = 0;
 			foreach (Process p in processes)
 			{
-				PageFaults += p.Run2();
+				PageFaults += p.Run();
 			}
-			return (int)(PageFaults * 1.5);
+			return PageFaults;
 		}
 	}
 }

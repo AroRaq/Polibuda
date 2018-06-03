@@ -25,15 +25,15 @@ namespace SO_zad4
 				i = i == 0 ? 1 : i;
 				freeFrames -= i;
 				p.AssignFrames(i);
-
 			}
 		}
+
 		public int Run()
 		{
 			int PageFaults = 0;
 			foreach (Process p in processes)
 			{
-				PageFaults += p.Run2();
+				PageFaults += p.Run();
 			}
 			return PageFaults;
 		}
