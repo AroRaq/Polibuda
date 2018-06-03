@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace SO_zad5
 {
 	public class Process
@@ -26,7 +21,7 @@ namespace SO_zad5
 		{
 			this.usage = other.usage;
 			this.time = other.time;
-			this.enterTime = other.time;
+			this.enterTime = other.enterTime;
 			this.processor = other.processor;
 		}
 

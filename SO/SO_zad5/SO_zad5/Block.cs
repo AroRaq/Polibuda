@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 namespace SO_zad5
 {
 	class Block : Button
@@ -21,23 +18,23 @@ namespace SO_zad5
 			this.Dock = DockStyle.Fill;
 			this.FlatStyle = FlatStyle.Flat;
 			this.Enabled = false;
+			this.Paint += OnPaint;
 		}
 
-		protected override void OnPaint(PaintEventArgs pevent)
+		protected void OnPaint(object sender, PaintEventArgs e)
 		{
-			base.OnPaint(pevent);
-			this.BackColor = Color.FromArgb(255, Math.Max(0, 255-(int)(2.5 * processor.Usage)), Math.Max(0, 255 - (int)(2.5 * processor.Usage)));
+			this.BackColor = Color.FromArgb((int)(2.5 * processor.Usage), Math.Max(0, 255-(int)(2.5 * processor.Usage)), 0);
 			Rectangle rect = ClientRectangle;
 			rect.Inflate(-5, -5);
 			using (StringFormat sf = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near })
 			{
 				using (Brush brush = new SolidBrush(ForeColor))
 				{
-					pevent.Graphics.DrawString(processor.Usage.ToString() + "%", font, brush, rect, sf);
-					/*
+					e.Graphics.DrawString(processor.Usage.ToString() + "%", font, brush, rect, sf);
+					
 					sf.Alignment = StringAlignment.Far;
-					pevent.Graphics.DrawString(TextType, font, brush, rect, sf);
-
+					e.Graphics.DrawString(processor.ProcessCount.ToString(), font, brush, rect, sf);
+					/*
 					sf.LineAlignment = StringAlignment.Far;
 					pevent.Graphics.DrawString(TextWeek, font, brush, rect, sf);
 

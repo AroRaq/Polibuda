@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SO_zad5
 {
 	public class Processor
 	{
 		private int currentUsage = 0;
+		private double avgUsage = 0d;
 		private List<Process> processes = new List<Process>();
 
 		public bool IsFull => currentUsage >= Results.THRESHOLD;
 		public int Usage => currentUsage;
+		public int ProcessCount => processes.Count;
+		public double AvgUsage => avgUsage;
 
 		public Processor()
 		{
@@ -20,43 +21,41 @@ namespace SO_zad5
 		}
 
 		public void AcceptA(Process p)
-		{
-			if (currentUsage + p.Usage > Results.THRESHOLD)
+		{		
+			for (int k = 0; k < Results.TRY_COUNT; k++)
 			{
-				for (int k = 0; k < Results.TRY_COUNT; k++)
+				Results.Requests[Results.currAlgorithm]++;
+				Processor proc = GetRandomProcessor();
+				if (!proc.IsFull)
 				{
-					Results.Requests1++;
-					Processor proc = GetRandomProcessor();
-					if (!proc.IsFull)
-					{
-						proc.AcceptA(p);
-						return;
-					}
+					Results.Moves[Results.currAlgorithm]++;
+					proc.Take(p);
+					return;
 				}
 			}
-			processes.Add(p);
-			currentUsage += p.Usage;
+			Take(p);
 		}
 
 		public void AcceptB(Process p)
 		{
-			if (currentUsage + p.Usage > Results.THRESHOLD)
+			if (currentUsage > Results.THRESHOLD)
 			{
 				while (true)
 				{
+					Results.Requests[Results.currAlgorithm]++;
 					Processor proc = GetRandomProcessor();
 					if (proc.currentUsage < currentUsage)
 					{
+						Results.Moves[Results.currAlgorithm]++;
 						proc.AcceptB(p);
 						return;
 					}
 				}
 			}
-			processes.Add(p);
-			currentUsage += p.Usage;
+			Take(p);
 		}
 
-		public void Update()
+		public void Update(int time)
 		{
 			for (int i = processes.Count - 1; i >= 0; i--)
 			{
@@ -67,26 +66,21 @@ namespace SO_zad5
 					processes.RemoveAt(i);
 				}
 			}
+			avgUsage += ((double)Usage - avgUsage) / time;
 		}
 
-		public void UpdateC()
+		public void UpdateC(int time)
 		{
-			for (int i = processes.Count - 1; i >= 0; i--)
+			Update(time);
+			if (Results.rand.NextDouble() < 0.01 && currentUsage < Results.MIN_THRESHOLD)
 			{
-				processes[i].Update();
-				if (processes[i].Finished)
+				Results.Requests[2]++;
+				Processor proc = GetRandomProcessor();
+				if (proc.IsFull)
 				{
-					currentUsage -= processes[i].Usage;
-					processes.RemoveAt(i);
-				}
-				if (Results.rand.NextDouble() < 0.01 && currentUsage < Results.MIN_THRESHOLD)
-				{
-					Processor proc = GetRandomProcessor();
-					if (proc.IsFull)
-					{
-						int diff = proc.currentUsage - this.currentUsage;
-						proc.Share(this, diff / 2);
-					}
+					Results.Moves[2]++;
+					int diff = proc.currentUsage - this.currentUsage;
+					proc.Share(this, diff / 2);
 				}
 			}
 		}
@@ -94,7 +88,7 @@ namespace SO_zad5
 		private void Share(Processor processor, int share)
 		{
 			List<Process> list = new List<Process>();
-			for (int i = processes.Count; i >= 0; i--)
+			for (int i = processes.Count - 1; i >= 0; i--)
 			{
 				if (processes[i].Usage < share)
 				{
@@ -112,10 +106,7 @@ namespace SO_zad5
 				share -= processes[i].Usage;
 				processes.RemoveAt(i);
 			}
-			foreach (Process p in list)
-			{
-				processor.Take(p);
-			}
+			list.ForEach(p => processor.Take(p));
 		}
 
 		public Processor GetRandomProcessor()
@@ -138,6 +129,7 @@ namespace SO_zad5
 		public void Reset()
 		{
 			currentUsage = 0;
+			avgUsage = 0d;
 			processes.Clear();
 		}
 	}

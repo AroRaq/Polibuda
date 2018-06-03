@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SO_zad5
@@ -39,15 +32,22 @@ namespace SO_zad5
 			}
 		}
 
-		private void MainForm_Load(object sender, EventArgs e)
-		{
-			
-		}
+		private void timeLabel_Paint(object sender, PaintEventArgs e) => timeLabel.Text = "Time: \n" + results.time;
 
-		private void MainForm_Paint(object sender, PaintEventArgs e)
-		{
-			//base.OnPaint(e);
-			timeLabel.Text = "Time: " + results.time;
-		}
+		private void labelAvgLoad1_Paint(object sender, PaintEventArgs e) => labelAvgLoad1.Text = "Obciążenie1: " + results.AvgLoad[0];
+		private void labelOdchylenie1_Paint(object sender, PaintEventArgs e) => labelOdchylenie1.Text = "Odchylenie1: " + results.AvgDeviation[0];
+		private void labelRequests1_Paint(object sender, PaintEventArgs e) => labelRequests1.Text = "Zapytania1: " + Results.Requests[0];
+		private void labelMoves1_Paint(object sender, PaintEventArgs e) => labelMoves1.Text = "Migracje1: " + Results.Moves[0];
+
+		private void labelAvgLoad2_Paint(object sender, PaintEventArgs e) => labelAvgLoad2.Text = "Obciążenie2: " + results.AvgLoad[1];
+		private void labelOdchylenie2_Paint(object sender, PaintEventArgs e) => labelOdchylenie2.Text = "Odchylenie2: " + results.AvgDeviation[1];
+		private void labelRequests2_Paint(object sender, PaintEventArgs e) => labelRequests2.Text = "Zapytania2: " + Results.Requests[1];
+		private void labelMoves2_Paint(object sender, PaintEventArgs e) => labelMoves2.Text = "Migracje2: " + Results.Moves[1];
+
+		private void labelAvgLoad3_Paint(object sender, PaintEventArgs e) => labelAvgLoad3.Text = "Obciążenie3: " + results.AvgLoad[2];
+		private void labelOdchylenie3_Paint(object sender, PaintEventArgs e) => labelOdchylenie3.Text = "Odchylenie3: " + results.AvgDeviation[2];
+		private void labelRequests3_Paint(object sender, PaintEventArgs e) => labelRequests3.Text = "Zapytania3: " + Results.Requests[2];
+		private void labelMoves3_Paint(object sender, PaintEventArgs e) => labelMoves3.Text = "Migracje3: " + Results.Moves[2];
+		
 	}
 }
