@@ -1,7 +1,0 @@
-C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_lab4\ASD_lab4\bin\Debug\ASD_lab4.exe.config
-C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_lab4\ASD_lab4\bin\Debug\ASD_lab4.exe
-C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_lab4\ASD_lab4\bin\Debug\ASD_lab4.pdb
-C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_lab4\ASD_lab4\obj\Debug\ASD_lab4.csprojResolveAssemblyReference.cache
-C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_lab4\ASD_lab4\obj\Debug\ASD_lab4.csproj.CoreCompileInputs.cache
-C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_lab4\ASD_lab4\obj\Debug\ASD_lab4.exe
-C:\Users\arkad\Documents\Visual Studio 2017\Projects\ASD_lab4\ASD_lab4\obj\Debug\ASD_lab4.pdb

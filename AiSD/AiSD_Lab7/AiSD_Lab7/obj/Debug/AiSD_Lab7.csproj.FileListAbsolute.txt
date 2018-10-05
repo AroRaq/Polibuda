@@ -1,7 +1,0 @@
-C:\Users\arkad\Source\Repos\AiSD\AiSD_Lab7\AiSD_Lab7\bin\Debug\AiSD_Lab7.exe.config
-C:\Users\arkad\Source\Repos\AiSD\AiSD_Lab7\AiSD_Lab7\bin\Debug\AiSD_Lab7.exe
-C:\Users\arkad\Source\Repos\AiSD\AiSD_Lab7\AiSD_Lab7\bin\Debug\AiSD_Lab7.pdb
-C:\Users\arkad\Source\Repos\AiSD\AiSD_Lab7\AiSD_Lab7\obj\Debug\AiSD_Lab7.csprojResolveAssemblyReference.cache
-C:\Users\arkad\Source\Repos\AiSD\AiSD_Lab7\AiSD_Lab7\obj\Debug\AiSD_Lab7.csproj.CoreCompileInputs.cache
-C:\Users\arkad\Source\Repos\AiSD\AiSD_Lab7\AiSD_Lab7\obj\Debug\AiSD_Lab7.exe
-C:\Users\arkad\Source\Repos\AiSD\AiSD_Lab7\AiSD_Lab7\obj\Debug\AiSD_Lab7.pdb
