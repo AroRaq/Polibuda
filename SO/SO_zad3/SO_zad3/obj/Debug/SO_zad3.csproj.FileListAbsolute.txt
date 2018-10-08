@@ -1,7 +1,0 @@
-C:\Users\arkad\Source\Repos\SO_zad3\SO_zad3\bin\Debug\SO_zad3.exe.config
-C:\Users\arkad\Source\Repos\SO_zad3\SO_zad3\bin\Debug\SO_zad3.exe
-C:\Users\arkad\Source\Repos\SO_zad3\SO_zad3\bin\Debug\SO_zad3.pdb
-C:\Users\arkad\Source\Repos\SO_zad3\SO_zad3\obj\Debug\SO_zad3.csprojResolveAssemblyReference.cache
-C:\Users\arkad\Source\Repos\SO_zad3\SO_zad3\obj\Debug\SO_zad3.csproj.CoreCompileInputs.cache
-C:\Users\arkad\Source\Repos\SO_zad3\SO_zad3\obj\Debug\SO_zad3.exe
-C:\Users\arkad\Source\Repos\SO_zad3\SO_zad3\obj\Debug\SO_zad3.pdb

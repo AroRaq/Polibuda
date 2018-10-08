@@ -1,7 +1,0 @@
-C:\Users\arkad\OneDrive\Visual Studio workspace\SO2\SO2\bin\Debug\SO2.exe.config
-C:\Users\arkad\OneDrive\Visual Studio workspace\SO2\SO2\bin\Debug\SO2.exe
-C:\Users\arkad\OneDrive\Visual Studio workspace\SO2\SO2\bin\Debug\SO2.pdb
-C:\Users\arkad\OneDrive\Visual Studio workspace\SO2\SO2\obj\Debug\SO2.csprojResolveAssemblyReference.cache
-C:\Users\arkad\OneDrive\Visual Studio workspace\SO2\SO2\obj\Debug\SO2.csproj.CoreCompileInputs.cache
-C:\Users\arkad\OneDrive\Visual Studio workspace\SO2\SO2\obj\Debug\SO2.exe
-C:\Users\arkad\OneDrive\Visual Studio workspace\SO2\SO2\obj\Debug\SO2.pdb
