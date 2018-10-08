@@ -8,6 +8,7 @@ main:
 	
 	#set seed
 	li $v0 40			#takes $a1 as seed
+	#li $a1 1
 	syscall
 	
 	#counter

@@ -9,6 +9,7 @@ namespace SO_zad5
 		private int currentUsage = 0;
 		private double avgUsage = 0d;
 		private List<Process> processes = new List<Process>();
+		private Queue<Process> que = new Queue<Process>();
 
 		public bool IsFull => currentUsage >= Results.THRESHOLD;
 		public int Usage => currentUsage;
@@ -40,14 +41,14 @@ namespace SO_zad5
 		{
 			if (currentUsage > Results.THRESHOLD)
 			{
-				while (true)
+				for (int i = 0; i < 50; i++)
 				{
 					Results.Requests[Results.currAlgorithm]++;
 					Processor proc = GetRandomProcessor();
-					if (proc.currentUsage < currentUsage)
+					if (!proc.IsFull)
 					{
 						Results.Moves[Results.currAlgorithm]++;
-						proc.AcceptB(p);
+						proc.Take(p);
 						return;
 					}
 				}
@@ -57,6 +58,8 @@ namespace SO_zad5
 
 		public void Update(int time)
 		{
+			if (que.Any())
+				AcceptB(que.Dequeue());
 			for (int i = processes.Count - 1; i >= 0; i--)
 			{
 				processes[i].Update();
@@ -72,15 +75,19 @@ namespace SO_zad5
 		public void UpdateC(int time)
 		{
 			Update(time);
-			if (Results.rand.NextDouble() < 0.01 && currentUsage < Results.MIN_THRESHOLD)
+			for (int i = 0; i < 25; i++)
 			{
-				Results.Requests[2]++;
-				Processor proc = GetRandomProcessor();
-				if (proc.IsFull)
+				if (Results.rand.NextDouble() < 0.04 && currentUsage < Results.MIN_THRESHOLD)
 				{
-					Results.Moves[2]++;
-					int diff = proc.currentUsage - this.currentUsage;
-					proc.Share(this, diff / 2);
+					Results.Requests[2]++;
+					Processor proc = GetRandomProcessor();
+					if (proc.IsFull)
+					{
+						Results.Moves[2]++;
+						int diff = proc.currentUsage - this.currentUsage;
+						proc.Share(this, diff / 2);
+						return;
+					}
 				}
 			}
 		}
@@ -121,9 +128,12 @@ namespace SO_zad5
 		public void Take(Process p)
 		{
 			if (currentUsage + p.Usage > 100)
-				throw new InsufficientMemoryException();
-			currentUsage += p.Usage;
-			processes.Add(p);
+				que.Enqueue(p);
+			else
+			{
+				currentUsage += p.Usage;
+				processes.Add(p);
+			}
 		}
 
 		public void Reset()

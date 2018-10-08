@@ -7,17 +7,17 @@ namespace SO_zad5
 {
 	public class Results
 	{
-		public static int THRESHOLD = 60;
+		public static int THRESHOLD = 50;
 		public static int TRY_COUNT = 5;
 		public static int MIN_THRESHOLD = 30;
-		public static int PROCESSOR_COUNT = 15;
+		public static int PROCESSOR_COUNT = 25;
 
-		public static int MIN_USAGE = 1;
-		public static int MAX_USAGE = 10;
+		public static int MIN_USAGE = 5;
+		public static int MAX_USAGE = 50;
 		public static int MIN_LENGTH = 30;
 		public static int MAX_LENGTH = 200;
 
-		private int delay = 1;
+		private int delay = 0;
 
 		public static Random rand = new Random();
 		public int time = 0;
@@ -41,16 +41,17 @@ namespace SO_zad5
 		{
 			processes = new List<Process>();
 			for (int i = 0; i < processors.Count; i++)
-				processes.Add(new Process(i, rand.Next(20, 40), 12000, 1));
+				processes.Add(new Process(i, rand.Next(5, 10), 12000, 1));
 			for (int i = 2; i < 10000; i += rand.Next(10))
 			{
 				processes.Add(new Process(rand.Next(PROCESSOR_COUNT), rand.Next(MIN_USAGE, MAX_USAGE), rand.Next(MIN_LENGTH, MAX_LENGTH), i));
-				if (rand.NextDouble() < 0.01)
+				if (rand.NextDouble() < 0.05)
 				{
 					for (int j = 0; j < rand.Next(2, 10); j++)
 					{
 						i++;
-						processes.Add(new Process(rand.Next(PROCESSOR_COUNT), rand.Next(MIN_USAGE, MAX_USAGE), rand.Next(MIN_LENGTH, MAX_LENGTH), i));
+						int proc = rand.Next(PROCESSOR_COUNT);
+						processes.Add(new Process(proc, rand.Next(MIN_USAGE, MAX_USAGE), rand.Next(MIN_LENGTH, MAX_LENGTH), i));
 					}
 				}
 			}
@@ -123,7 +124,7 @@ namespace SO_zad5
 			ResetProcessors();
 			Queue<Process> que = new Queue<Process>();
 			processes.ForEach(p => que.Enqueue(new Process(p)));
-
+			// || !processors.TrueForAll(p => p.Usage == 0)
 			for (time = 1; que.Any(); time++)
 			{
 				while (que.Any() && que.Peek().EnterTime <= time)
