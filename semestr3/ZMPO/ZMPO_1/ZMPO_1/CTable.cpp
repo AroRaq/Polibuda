@@ -77,6 +77,7 @@ int CTable::iGetElement(int n, int* excCode) {
 
 CTable* CTable::clone() {
 	CTable* cl = new CTable(*this);
+	return cl;
 }
 
 std::string CTable::sInfo() {
