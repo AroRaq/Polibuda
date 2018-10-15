@@ -1,44 +1,48 @@
 #include "CTable.h"
 
 CTable::CTable() {
-	s_name = new std::string("nazwa");
-	std::cout << "bezp: " << *s_name;
-	*i_length = DEFAULT_LENGTH;
-	table = new int[*i_length];
+	name = DEFAULT_NAME;
+	std::cout << "bezp: " << name << '\n';
+	length = DEFAULT_LENGTH;
+	table = new int[length];
+	for (int i = 0; i < length; i++)
+		table[i] = 0;
 }
 
-CTable::CTable(std::string sName, int iTableLen) {
-	*s_name = sName;
-	std::cout << "parametr: " << *s_name;
-	*i_length = iTableLen;
-	table = new int[*i_length];
+CTable::CTable(std::string tableName, int tableLen) {
+	name = tableName;
+	std::cout << "parametr: " << name << '\n';
+	length = tableLen;
+	table = new int[length];
+	for (int i = 0; i < length; i++)
+		table[i] = 0;
 }
 
-CTable::CTable(CTable& other) {
-	*s_name = *(other.s_name) + "_copy";
-	*i_length = *(other.i_length);
-	table = new int[*i_length];
-	for (int i = 0; i < *i_length; i++)
+CTable::CTable(const CTable& other) {
+	name = other.name + "_copy";
+	length = other.length;
+	table = new int[length];
+	for (int i = 0; i < length; i++)
 		table[i] = other.table[i];
-	std::cout << "kopiuj: " << *s_name;
+	std::cout << "kopiuj: " << name << '\n';
+	for (int i = 0; i < length; i++)
+		table[i] = 0;
 }
 
 CTable::~CTable() {
-	std::cout << "usuwam: " << *s_name;
+	std::cout << "usuwam: " << name << '\n';
 	delete[] table;
-	delete i_length;
-	delete s_name;
 }
 
-void CTable::vResize(int len, int* excCode) {
+void CTable::SetSize(int len, int* excCode) {
 	if (len < 0) {
 		*excCode = 1;
 		return;
 	}
-	if (len == *i_length)
+	if (len == length)
 		return;
-	if (len < *i_length) {
-		*i_length = len;
+	if (len < length) {
+		length = len;
 		int* newTab = new int[len];
 		for (int i = 0; i < len; i++)
 			newTab[i] = table[i];
@@ -46,44 +50,52 @@ void CTable::vResize(int len, int* excCode) {
 		table = newTab;
 	}
 	else {
-		*i_length = len;
+		length = len;
 		int* newTab = new int[len];
-		for (int i = 0; i < *i_length; i++)
+		for (int i = 0; i < length; i++)
 			newTab[i] = table[i];
 		delete[] table;
 		table = newTab;
 	}
 }
 
-void CTable::vSetName(std::string sName) {
-	*s_name = sName;
+void CTable::SetName(std::string sName) {
+	name = sName;
 }
 
-void CTable::vSetElement(int n, int val, int* excCode) {
-	if (n >= *i_length || n < 0) {
+void CTable::SetElement(int n, int val, int* excCode) {
+	if (n >= length || n < 0) {
 		*excCode = 1;
 		return;
 	}
 	table[n] = val;
 }
 
-int CTable::iGetElement(int n, int* excCode) {
-	if (n >= *i_length || n < 0) {
+int CTable::GetElement(int n, int* excCode) {
+	if (n >= length || n < 0) {
 		*excCode = 1;
 		return -1;
 	}
 	return table[n];
 }
 
-CTable* CTable::clone() {
-	CTable* cl = new CTable(*this);
-	return cl;
+int CTable::GetSize() {
+	return length;
 }
 
-std::string CTable::sInfo() {
+CTable* CTable::getClone() {
+	return new CTable(*this);
+}
+
+std::string CTable::toString() {
 	std::ostringstream o;
-	o << *s_name << "len: " << *i_length << "values: ";
-	for (int i = 0; i < *i_length; i++)
+	o << "name: " << name << "\tlen: " << length << "\tvalues: ";
+	for (int i = 0; i < length; i++)
 		o << table[i] << ", ";
+	o << '\n';
 	return o.str();
+}
+
+std::string CTable::GetName() {
+	return name;
 }

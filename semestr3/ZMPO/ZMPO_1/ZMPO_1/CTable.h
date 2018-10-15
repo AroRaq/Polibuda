@@ -3,26 +3,27 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "pch.h"
 
-static const int DEFAULT_LENGTH = 10;
-static const std::string str = "test";
+#define DEFAULT_LENGTH 10
+#define DEFAULT_NAME "new_CTable"
 
 class CTable {
 public:
 	CTable();
-	CTable(std::string sName, int iTableLen);
-	CTable(CTable& other);
+	CTable(std::string tableName, int tableLen = DEFAULT_LENGTH);
+	CTable(const CTable& other);
 	~CTable();
 
-	void vResize(int len, int* excCode);
-	void vSetName(std::string name);
-	void vSetElement(int n, int val, int* excCode);
-	int iGetElement(int n, int* excCode);
-	CTable* clone();
-	std::string sInfo();
+	void SetSize(int len, int* excCode);
+	void SetName(std::string name);
+	void SetElement(int n, int val, int* excCode);
+	int GetElement(int n, int* excCode);
+	int GetSize();
+	CTable* getClone();
+	std::string toString();
+	std::string GetName();
 private:
-	std::string* s_name;
+	std::string name;
 	int* table;
-	int* i_length;
+	int length;
 };

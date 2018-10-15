@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="CTable.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="UserInterface.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTable.cpp">
@@ -163,6 +164,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="UserInterface.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ZMPO_1.cpp" />
   </ItemGroup>
