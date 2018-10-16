@@ -9,6 +9,7 @@ def fibb(n: Int) : Int = {
         fibb(n-1) + fibb(n-2)
 }
 
+
 def fibb2(n: Int) : Int = {
   @tailrec
   def fibbTl(n: Int, curr: Int, last: Int): Int = {
@@ -30,12 +31,14 @@ def root3(a: Double, dx: Double, x: Double) : Double = {
         root3(a, dx, x + (a/(x*x) - x)/3)
 }
 
+
 def intSegment[A](xs: List[A], ys: List[A]) : Boolean = {
     if (xs == Nil)
       true
     else
       xs.head == ys.head && intSegment(xs.tail, ys.tail)
 }
+
 
 def replaceNth[A](xs: List[A], n: Int, rep: A) : List[A] = {
   if (n == 0)
@@ -45,12 +48,12 @@ def replaceNth[A](xs: List[A], n: Int, rep: A) : List[A] = {
 }
 
 
-
-
 val a = 46
-//fibb(a)
+fibb(a)
 fibb2(a)
-root3(9, Math.pow(10, -15), if (a > 1) a/3 else a)
+
+val b = 9;
+root3(b, Math.pow(10, -15), if (b > 1) b/3 else b)
 
 intSegment(1 :: 2 :: Nil, 1 :: 2 :: 3 :: 4 :: Nil)
 intSegment(Nil, 1 :: 2 :: Nil)
