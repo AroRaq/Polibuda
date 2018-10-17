@@ -5,18 +5,19 @@
 #define ERR_SPECIFY_IDX "Specify what table to remove\n"
 #define ERR_PARAMS "Wrong number of parameters\n"
 #define ERR_WRONG_COMMAND "Command doesn't exist\n"
+#define ERR_WRONG_VALUE "Wrong value\n"
 
-#define HELP	"list\t\t\t\tLists all created CTables\n" \
-				"create\t(NAME)\t(LENGTH)\tCreates a new CTable\n"  \
-				"delete\tID\t\t\tDeletes CTable with specified ID\n" \
-				"clone\tID\t\t\tCreates copy of CTable with specified ID and adds it to the container\n" \
-				"resize\tID\tNEWSIZE\t\tChanges the size of already existing CTable\n" \
-				"rename\tID\tNEWNAME\t\tChanges the name of already existing CTable\n" \
-				"size\tID\t\t\tDisplays the size of CTable with specified ID\n" \
-				"deleteall\t\t\tRemoves all CTables from the container and deletes them\n" \
-				"setval\tID\tIDX\tNEWVAL\tSets the value at \"idx\" to NEWVAL in specified CTable\n" \
-				"display\tID\t\t\tDisplays the information about specified CTable\n" \
-				"quit\t\t\t\tQuit the program\n"
+#define HELP	"list				Lists all created CTables\n" \
+				"create	(NAME)	(LENGTH)	Creates a new CTable\n"  \
+				"delete	ID			Deletes CTable with specified ID\n" \
+				"clone	ID			Creates copy of CTable with specified ID and adds it to the container\n" \
+				"resize	ID	NEWSIZE		Changes the size of already existing CTable\n" \
+				"rename	ID	NEWNAME		Changes the name of already existing CTable\n" \
+				"size	ID			Displays the size of CTable with specified ID\n" \
+				"deleteall			Removes all CTables from the container and deletes them\n" \
+				"setval	ID	IDX	NEWVAL	Sets the value at IDX to NEWVAL in specified CTable\n" \
+				"display	ID			Displays the information about specified CTable\n" \
+				"quit				Quit the program\n"
 
 class UserInterface {
 public:

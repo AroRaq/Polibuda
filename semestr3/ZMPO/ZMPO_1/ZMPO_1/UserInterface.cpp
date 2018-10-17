@@ -126,8 +126,13 @@ void UserInterface::CreateCTable(std::string name, int len)
 	CTable* newTab;
 	if (name == DEFAULT_NAME)
 		newTab = new CTable();
-	else 
-		newTab = new CTable(name, len);
+	else
+		if (len < 0) {
+			std::cout << ERR_WRONG_VALUE;
+			return;
+		}
+		else
+			newTab = new CTable(name, len);
 	ctVector.push_back(newTab);
 }
 
