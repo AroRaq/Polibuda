@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CTable.h"
 #include <unordered_map>
 
@@ -52,6 +54,9 @@ private:
 	void ShowCTableSize(int ID);
 	void SetValueCTable(int ID, int idx, int newVal);
 	void DisplayCTable(int ID);
+	
+	void Sum(CTable tab);
+	void Sum(CTable* ptrTab);
 
 	std::vector<CTable*> ctVector;
 	int excCode;

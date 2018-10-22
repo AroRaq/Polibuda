@@ -79,6 +79,19 @@ void UserInterface::Run() {
 			else
 				DisplayCTable(atoi(args[1].c_str()));
 		}
+		else if (args[0] == "sum") {
+			if (args.size() < 2)
+				std::cout << ERR_PARAMS;
+			else {
+				int idx = atoi(args[1].c_str());
+				if (idx < 0 || idx >= ctVector.size()) 
+					std::cout << ERR_OUT_OF_BOUNDS;
+				else {
+					Sum(*ctVector[idx]);
+					Sum(ctVector[idx]);
+				}
+			}
+		}
 		else if (args[0] == HELP) {
 			std::cout << HELP_MSG;
 		}
@@ -92,7 +105,7 @@ void UserInterface::Run() {
 }
 
 bool UserInterface::IsInBounds(int pos) {
-	return pos > 0 && pos < ctVector.size();
+	return pos >= 0 && pos < ctVector.size();
 }
 
 std::vector<std::string> UserInterface::ParseInput(std::string input)
@@ -138,7 +151,7 @@ void UserInterface::CreateCTable(std::string name, int len)
 
 void UserInterface::DeleteCTable(int ID)
 {
-	if (ID >= ctVector.size() || ID < 0)
+	if (!IsInBounds(ID))
 		std::cout << ERR_OUT_OF_BOUNDS;
 	else {
 		delete ctVector[ID];
@@ -148,7 +161,7 @@ void UserInterface::DeleteCTable(int ID)
 
 void UserInterface::CloneCTable(int ID)
 {
-	if (ID >= ctVector.size() || ID < 0)
+	if (!IsInBounds(ID))
 		std::cout << ERR_OUT_OF_BOUNDS;
 	else {
 		ctVector.push_back(new CTable(*ctVector[ID]));
@@ -157,7 +170,7 @@ void UserInterface::CloneCTable(int ID)
 
 void UserInterface::RenameCTable(int ID, std::string newName)
 {
-	if (ID >= ctVector.size() || ID < 0)
+	if (!IsInBounds(ID))
 		std::cout << ERR_OUT_OF_BOUNDS;
 	else {
 		ctVector[ID]->SetName(newName);
@@ -167,17 +180,17 @@ void UserInterface::RenameCTable(int ID, std::string newName)
 
 void UserInterface::ShowCTableSize(int ID)
 {
-	if (ID >= ctVector.size() || ID < 0)
+	if (!IsInBounds(ID))
 		std::cout << ERR_OUT_OF_BOUNDS;
 	else {
-		std::cout << ctVector[ID]->GetSize();
+		std::cout << ctVector[ID]->GetSize() << std::endl;
 	}
 
 }
 
 void UserInterface::SetValueCTable(int ID, int idx, int newVal)
 {
-	if (ID >= ctVector.size() || ID < 0)
+	if (!IsInBounds(ID))
 		std::cout << ERR_OUT_OF_BOUNDS;
 	else {
 		ctVector[ID]->SetElement(idx, newVal, &excCode);
@@ -190,7 +203,7 @@ void UserInterface::SetValueCTable(int ID, int idx, int newVal)
 
 void UserInterface::DisplayCTable(int ID)
 {
-	if (ID >= ctVector.size() || ID < 0)
+	if (!IsInBounds(ID))
 		std::cout << ERR_OUT_OF_BOUNDS;
 	else {
 		std::cout << ctVector[ID]->toString();
@@ -200,7 +213,7 @@ void UserInterface::DisplayCTable(int ID)
 
 void UserInterface::ResizeCTable(int ID, int newSize)
 {
-	if (ID >= ctVector.size() || ID < 0)
+	if (!IsInBounds(ID))
 		std::cout << ERR_OUT_OF_BOUNDS;
 	else {
 		ctVector[ID]->SetSize(newSize, &excCode);
@@ -210,4 +223,13 @@ void UserInterface::ResizeCTable(int ID, int newSize)
 		}
 	}
 
+}
+
+
+void UserInterface::Sum(CTable tab) {
+	std::cout << "Sum (object): " << tab.GetSum() << '\n';
+}
+
+void UserInterface::Sum(CTable* ptrTab) {
+	std::cout << "Sum (pointer): " << ptrTab->GetSum() << '\n';
 }

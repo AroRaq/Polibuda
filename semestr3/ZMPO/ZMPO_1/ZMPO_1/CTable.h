@@ -31,6 +31,7 @@ public:
 	std::string toString();
 	std::string GetName();
 	void AssignValues(const CTable& other);
+	int GetSum();
 private:
 	bool IsInBounds(int idx);
 

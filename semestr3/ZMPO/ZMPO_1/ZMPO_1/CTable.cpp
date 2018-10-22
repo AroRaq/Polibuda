@@ -25,8 +25,6 @@ CTable::CTable(const CTable& other) {
 	for (int i = 0; i < length; i++)
 		table[i] = other.table[i];
 	std::cout << KOPIUJ << name << std::endl;
-	for (int i = 0; i < length; i++)
-		table[i] = 0;
 }
 
 CTable::~CTable() {
@@ -107,3 +105,13 @@ void CTable::AssignValues(const CTable& other) {
 bool CTable::IsInBounds(int idx) {
 	return idx >= 0 && idx < length;
 }
+
+
+int CTable::GetSum() {
+	int sum = 0;
+	for (int i = 0; i < length; i++) {
+		sum += table[i];
+	}
+	return sum;
+}
+
