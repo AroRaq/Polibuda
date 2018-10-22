@@ -4,7 +4,7 @@
 
 class CMenuItem {
 public:
-	virtual void Run();
+	virtual void Run() = 0;
 protected:
 	std::string command;
 	std::string name;

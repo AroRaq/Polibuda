@@ -4,10 +4,11 @@ let rec fibb n =
   else (fibb (n-1)) + (fibb (n-2));;
 
 
-let rec fibb2 n = fibbIter(n, 1, 0)
-  and fibbIter (n, curr, last) = 
+let fibb2 n = 
+  let rec fibbIter (n, curr, last) = 
     if n = 1 then curr
-    else fibbIter (n-1, curr+last, curr);;
+    else fibbIter (n-1, curr+last, curr)
+  in fibbIter(n, 1, 0);;
 
   
 let rec root3 (a, dx, x) = 

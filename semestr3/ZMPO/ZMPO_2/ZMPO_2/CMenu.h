@@ -10,7 +10,7 @@
 class CMenu : public CMenuItem {
 public:
 	void Run();
-private:
+protected:
 	CMenuItem* GetItemFromCommand(std::string command);
 	std::vector<CMenuItem*> items;
 };
