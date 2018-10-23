@@ -8,7 +8,6 @@ def fibb(n: Int) : Int = {
   }
 }
 
-
 def fibb2(n: Int) : Int = {
   @tailrec
   def fibbTl(n: Int, curr: Int, last: Int): Int = {
@@ -17,10 +16,8 @@ def fibb2(n: Int) : Int = {
       case _ => fibbTl(n-1, curr + last, curr)
     }
   }
-
   fibbTl(n, 1, 0)
 }
-
 
 def root3(a: Double, dx: Double) : Double = {
   @tailrec
@@ -38,10 +35,9 @@ def initSegment[A](xs: List[A], ys: List[A]) : Boolean = {
   (xs, ys) match {
     case (Nil, _) => true
     case (_, Nil) => false
-    case _ => xs.head == ys.head && initSegment(xs.tail, ys.tail)
+    case (h1::t1, h2::t2) => h1 == h2 && initSegment(t1, t2)
   }
 }
-
 
 def replaceNth[A](xs: List[A], n: Int, rep: A) : List[A] = {
   (xs, n) match {
@@ -50,7 +46,6 @@ def replaceNth[A](xs: List[A], n: Int, rep: A) : List[A] = {
     case _ => xs.head :: replaceNth(xs.tail, n-1, rep)
   }
 }
-
 
 val a = 46
 fibb(a)
