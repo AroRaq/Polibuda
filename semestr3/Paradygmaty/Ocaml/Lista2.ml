@@ -10,28 +10,33 @@ let fibb2 n =
     else fibbIter (n-1, curr+last, curr)
   in fibbIter(n, 1, 0);;
 
-  
-let rec root3 (a, dx, x) = 
-  if abs_float(x*.x*.x -. a) < dx *. abs_float(a) then x
-  else root3(a, dx, x +. (a/.(x*.x)-.x)/.3.);;
+
+let root3 (a, dx) = 
+  let rec root3iter x = 
+    if abs_float(x*.x*.x -. a) < dx *. abs_float(a) then x
+    else root3iter(x +. (a/.(x*.x)-.x)/.3.)
+  in root3iter (if a > 1. then a/.3. else a);;
 
 
 let rec intSegment (xs, ys) = 
-  if xs = [] then true
-  else List.hd xs = List.hd ys && intSegment(List.tl xs, List.tl ys);;
+  match (xs, ys) with
+  ([], _) -> true
+  | (_, []) -> false
+  | (h1::t1, h2::t2) -> h1 = h2 && intSegment(t1, t2);;
 
 
 let rec replaceNth (xs, n, rep) = 
-  if n = 0 then rep :: List.tl xs
-  else List.hd xs :: replaceNth(List.tl xs, n-1, rep);;
+  match (xs, n) with
+  ([], _) -> []
+  | (_, 0) -> rep :: List.tl xs
+  | (h::t, _) -> h :: replaceNth(t, n-1, rep);;
 
   
 let a = 20;;
 fibb a;;
 fibb2 a;;
 
-let b = 9.;;
-root3 (b, 10. ** -15., if b > 1. then b/.3. else b);;
+root3 (9., 1e-15);;
 
 intSegment(1 :: 2 :: [], 1 :: 2 :: 3 :: 4 :: []);;
 intSegment([], 1 :: 2 :: []);;
