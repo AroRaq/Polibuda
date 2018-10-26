@@ -13,9 +13,7 @@ def fibb(n: Int) : Int = {
 def fibb2(n: Int) : Int = {
   @tailrec
   def fibbTl(n: Int, curr: Int, last: Int): Int = {
-    if (n == 1)
-      curr
-    else
+     (n == 1) ? curr
       fibbTl(n - 1, curr + last, curr)
   }
 
