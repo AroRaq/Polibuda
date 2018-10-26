@@ -12,8 +12,6 @@ binToDec [1; 1; 1; 1; 1; 1];;
 
 
 
-
-
 (*let rec filterListOfLists pred xss = 
   let rec correct xs = 
     if xs = [] then true
