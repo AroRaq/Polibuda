@@ -1,8 +1,15 @@
 #include "CMenuCommand.h"
 
+CMenuCommand::CMenuCommand(std::string name, std::string command, CCommand* commandPtr)
+{
+	CMenuCommand::name = name;
+	CMenuCommand::command = command;
+	CMenuCommand::commandPtr = commandPtr;
+}
+
 void CMenuCommand::Run() {
-	if (command == NULL)
+	if (commandPtr == NULL)
 		std::cout << EMPTY_COMMAND;
 	else
-		command->RunCommand();
+		commandPtr->RunCommand();
 }

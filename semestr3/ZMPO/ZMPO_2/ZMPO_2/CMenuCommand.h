@@ -7,7 +7,8 @@
 
 class CMenuCommand : public CMenuItem {
 public:
+	CMenuCommand(std::string name, std::string command, CCommand* commandPtr);
 	void Run();
 private:
-	CCommand* command;
+	CCommand* commandPtr;
 };

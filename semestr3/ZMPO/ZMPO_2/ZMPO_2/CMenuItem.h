@@ -4,6 +4,7 @@
 
 class CMenuItem {
 public:
+	friend class CMenu;
 	virtual void Run() = 0;
 protected:
 	std::string command;

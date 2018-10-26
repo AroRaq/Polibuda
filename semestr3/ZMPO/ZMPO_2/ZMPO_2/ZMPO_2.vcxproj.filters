@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{9656a54f-8853-46a2-b1d9-0210030f5a98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -30,6 +33,12 @@
     <ClInclude Include="CCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CCommand_Ala.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CCommand_Internet.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -46,6 +55,12 @@
     </ClCompile>
     <ClCompile Include="CMenuCommand.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCommand_Ala.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="CCommand_Internet.cpp">
+      <Filter>Classes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
