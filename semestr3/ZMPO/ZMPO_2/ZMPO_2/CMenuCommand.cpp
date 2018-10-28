@@ -1,5 +1,9 @@
 #include "CMenuCommand.h"
 
+CMenuCommand::~CMenuCommand() {
+	delete commandPtr;
+}
+
 CMenuCommand::CMenuCommand(std::string name, std::string command, CCommand* commandPtr)
 {
 	CMenuCommand::name = name;
