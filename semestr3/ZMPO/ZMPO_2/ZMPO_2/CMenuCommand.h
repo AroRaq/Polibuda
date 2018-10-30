@@ -9,7 +9,7 @@ class CMenuCommand : public CMenuItem {
 public:
 	~CMenuCommand();
 	CMenuCommand(std::string name, std::string command, CCommand* commandPtr);
-	void Run();
+	int Run();
 private:
 	CCommand* commandPtr;
 };

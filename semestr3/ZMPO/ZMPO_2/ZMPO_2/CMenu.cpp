@@ -1,15 +1,15 @@
 #include "CMenu.h"
 
-CMenu::~CMenu() {
-	for (int i = 0; i < items.size(); i++) {
-		delete items[i];
-	}
-}
-
 CMenu::CMenu(std::string name, std::string command)
 {
 	CMenu::name = name;
 	CMenu::command = command;
+}
+
+CMenu::~CMenu() {
+	for (int i = 0; i < items.size(); i++) {
+		delete items[i];
+	}
 }
 
 void CMenu::Add(CMenuItem* item)
@@ -26,7 +26,7 @@ void CMenu::Add(std::string path, CMenuItem* item) {
 	CMenu* target = this;
 	bool finished = false;
 	do {
-		std::size_t found = path.find("->");
+		std::size_t found = path.find(ARROW);
 		if (found == std::string::npos) {
 			target = (CMenu*)(target->GetItemByCommand(path));
 			if (target == NULL) {
@@ -58,13 +58,13 @@ void CMenu::Remove(std::string name) {
 	std::cout << NO_SUCH_POSITION;
 }
 
-void CMenu::Run() {
+int CMenu::Run() {
 	std::string input;
 	bool running = true;
 	do {
 		std::cout << std::endl << name << std::endl;
 		for (int i = 0; i < items.size(); i++) {
-			std::cout << i << ". " << items[i]->name << " (" << items[i]->command << ")" << std::endl;
+			std::cout << i << TERMINATOR << items[i]->name << LEFT_BRACKET << items[i]->command << RIGHT_BRACKET << std::endl;
 		}
 		std::cout << '#';
 		std::cin >> input;
@@ -73,15 +73,23 @@ void CMenu::Run() {
 			std::cout << SAME_OBJECT;
 		}
 		else if (item != NULL) {
-			item->Run();
+			if (item->Run() == 1) {
+				running = false;
+				return 1;
+			}
 		}
 		else if (input == BACK) {
 			running = false;
+		}
+		else if (input == EXIT) {
+			running = false;
+			return 1;
 		}
 		else {
 			std::cout << NO_SUCH_POSITION;
 		}
 	} while (running);
+	return 0;
 }
 
 CMenuItem* CMenu::GetItemByName(std::string name)

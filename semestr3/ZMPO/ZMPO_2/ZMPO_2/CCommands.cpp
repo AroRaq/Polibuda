@@ -1,7 +1,11 @@
 #include "CCommands.h"
 
+///BASE
+CCommand_CTable_Base::CCommand_CTable_Base(std::vector<CTable*>* tabs) { tables = tabs; }
+
+
 ///CREATE BEZP
-CCommand_Create_Bezp::CCommand_Create_Bezp(std::vector<CTable*>* tabs) : CCommand() {	tables = tabs; }
+CCommand_Create_Bezp::CCommand_Create_Bezp(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {};
 void CCommand_Create_Bezp::RunCommand()
 {
 	tables->push_back(new CTable());
@@ -9,11 +13,10 @@ void CCommand_Create_Bezp::RunCommand()
 
 
 ///CREATE PAR
-CCommand_Create_Par::CCommand_Create_Par(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_Create_Par::CCommand_Create_Par(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_Create_Par::RunCommand()
 {
-	std::vector<std::string> input = GetInput({ NAME, LENGTH });
-	CTable* newTab;
+	std::vector<std::string> input = GetInput({ NAME_, LENGTH });
 	if (atoi(input[1].c_str()) <= 0) {
 		Utils::DisplayError(WRONG_VALUE);
 		return;
@@ -23,7 +26,7 @@ void CCommand_Create_Par::RunCommand()
 
 
 ///LIST
-CCommand_List::CCommand_List(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_List::CCommand_List(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_List::RunCommand()
 {
 	std::cout << CONTENT;
@@ -34,7 +37,7 @@ void CCommand_List::RunCommand()
 
 
 ///DELETE
-CCommand_Delete::CCommand_Delete(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_Delete::CCommand_Delete(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_Delete::RunCommand()
 {
 	std::vector<std::string> input = GetInput({ INDEX });
@@ -50,8 +53,19 @@ void CCommand_Delete::RunCommand()
 }
 
 
+///DELETEALL
+CCommand_DeleteAll::CCommand_DeleteAll(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
+void CCommand_DeleteAll::RunCommand()
+{
+	for (int i = 0; i < tables->size(); i++) {
+		tables->erase(tables->begin() + i);
+	}
+	tables->clear();
+}
+
+
 ///CLONE
-CCommand_Clone::CCommand_Clone(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_Clone::CCommand_Clone(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_Clone::RunCommand()
 {
 	std::vector<std::string> input = GetInput({ INDEX });
@@ -67,7 +81,7 @@ void CCommand_Clone::RunCommand()
 
 
 ///RENAME
-CCommand_Rename::CCommand_Rename(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_Rename::CCommand_Rename(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_Rename::RunCommand()
 {
 	std::vector<std::string> input = GetInput({ INDEX, NEW_NAME });
@@ -83,7 +97,7 @@ void CCommand_Rename::RunCommand()
 
 
 ///RESIZE
-CCommand_Resize::CCommand_Resize(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_Resize::CCommand_Resize(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_Resize::RunCommand()
 {
 	std::vector<std::string> input = GetInput({ INDEX, NEW_LENGTH });
@@ -100,7 +114,7 @@ void CCommand_Resize::RunCommand()
 
 
 ///SETVAL
-CCommand_SetVal::CCommand_SetVal(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_SetVal::CCommand_SetVal(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_SetVal::RunCommand()
 {
 	std::vector<std::string> input = GetInput({ INDEX_TABLE, INDEX_ELEMENT, NEW_VALUE });
@@ -117,7 +131,7 @@ void CCommand_SetVal::RunCommand()
 
 
 ///DISPLAY
-CCommand_Display::CCommand_Display(std::vector<CTable*>* tabs) : CCommand() { tables = tabs; }
+CCommand_Display::CCommand_Display(std::vector<CTable*>* tabs) : CCommand_CTable_Base(tabs) {}
 void CCommand_Display::RunCommand()
 {
 	std::vector<std::string> input = GetInput({ INDEX });
@@ -130,3 +144,4 @@ void CCommand_Display::RunCommand()
 		std::cout << tables->at(idx)->toString();
 	}
 }
+

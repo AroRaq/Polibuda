@@ -42,11 +42,11 @@
     <ClInclude Include="CCommand_Internet.h">
       <Filter>Commands</Filter>
     </ClInclude>
-    <ClInclude Include="CCommands.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CCommands.h">
+      <Filter>Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,11 +74,11 @@
     <ClCompile Include="CCommand_Internet.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
-    <ClCompile Include="CCommands.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCommands.cpp">
+      <Filter>Commands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
