@@ -4,11 +4,28 @@ CMenuCommand::~CMenuCommand() {
 	delete commandPtr;
 }
 
-CMenuCommand::CMenuCommand(std::string name, std::string command, CCommand* commandPtr)
+CMenuCommand::CMenuCommand(std::string name, std::string command, std::string help, CCommand* commandPtr)
 {
 	this->name = name;
-	CMenuCommand::command = command;
-	CMenuCommand::commandPtr = commandPtr;
+	this->command = command;
+	this->help = help;
+	this->commandPtr = commandPtr;
+	root = NULL;
+}
+
+CMenuCommand::CMenuCommand(std::string serialized)
+{
+	std::vector<std::string> vec;
+	if (Utils::SplitBy(serialized, ",,", vec, '[', ']')) {
+		name = vec[0];
+		command = vec[1];
+		help = vec[2];
+	}
+	else {
+		name = "error";
+		command = "error";
+		help = "error";
+	}
 }
 
 int CMenuCommand::Run() {
@@ -17,4 +34,13 @@ int CMenuCommand::Run() {
 	else
 		commandPtr->RunCommand();
 	return 0;
+}
+
+void CMenuCommand::ShowHelp() {
+	std::cout << help;
+}
+
+std::string CMenuCommand::ToString()
+{
+	return "['" + name + "','" + command + "','" + help + "']";
 }

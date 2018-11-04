@@ -22,6 +22,7 @@ public:
 	static bool IsInBounds(int idx, std::vector<T>& vec);
 	static bool IsInBounds(int idx, CTable& tab);
 	static void DisplayError(errorCode errCode);
+	static bool SplitBy(std::string str, std::string splitters, std::vector<std::string>& result, char startWith, char endWith);
 };
 
 template<typename T>

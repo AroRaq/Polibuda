@@ -2,8 +2,39 @@
 
 CMenu::CMenu(std::string name, std::string command)
 {
-	CMenu::name = name;
-	CMenu::command = command;
+	this->name = name;
+	this->command = command;
+	root = NULL;
+}
+
+CMenu::CMenu(std::string serialized)
+{
+	std::vector<std::string> vec;
+	if (Utils::SplitBy(serialized, ",;", vec, '(', ')')) {
+		name = vec[0];
+		command = vec[1];
+		std::cout << name << '\n';
+		std::cout << command << '\n';
+		while (std::size_t s = vec[2].find(',')) {
+			if (vec[2][0] == '(')
+				Add(new CMenu(vec[2].substr(0, s)));
+			else if (vec[2][0] == '[') 
+				Add(new CMenuCommand(vec[2].substr(0, s)));
+			else
+				std::cout << "Error: expected ( or [";
+			vec[2] = vec[2].substr(0, s);
+		}
+		if (vec[2][0] == '(')
+			Add(new CMenu(vec[2]));
+		else if (vec[2][0] == '[') {}
+		//Add(new CMenuC)
+		else
+			std::cout << "Error: expected ( or [";
+	}
+	else {
+		name = "error";
+		command = "error";
+	}
 }
 
 CMenu::~CMenu() {
@@ -20,9 +51,11 @@ void CMenu::Add(CMenuItem* item)
 		}
 	}
 	items.push_back(item);
+	item->SetRoot(this);
 }
 
 void CMenu::Add(std::string path, CMenuItem* item) {
+	std::string wholePath = path;
 	CMenu* target = this;
 	bool finished = false;
 	do {
@@ -30,7 +63,7 @@ void CMenu::Add(std::string path, CMenuItem* item) {
 		if (found == std::string::npos) {
 			target = (CMenu*)(target->GetItemByCommand(path));
 			if (target == NULL) {
-				std::cout << NO_SUCH_PATH;
+				std::cout << NO_SUCH_PATH << wholePath << std::endl;
 				return;
 			}
 			target->Add(item);
@@ -39,7 +72,7 @@ void CMenu::Add(std::string path, CMenuItem* item) {
 		else {
 			target = (CMenu*)(target->GetItemByCommand(path.substr(0, found)));
 			if (target == NULL) {
-				std::cout << NO_SUCH_PATH;
+				std::cout << NO_SUCH_PATH << wholePath << std::endl;
 				return;
 			}
 			path = path.substr(found + 2);
@@ -85,11 +118,65 @@ int CMenu::Run() {
 			running = false;
 			return 1;
 		}
+		else if (input == HELP) {
+			std::cin >> input;
+			CMenuItem* item = GetItemByCommand(input);
+			if (item != NULL)
+				item->ShowHelp();
+			else
+				std::cout << NO_COMMAND;
+		}
+		else if (input == SEARCH) {
+			std::cin >> input;
+			Search(input);
+		}
 		else {
 			std::cout << NO_SUCH_POSITION;
 		}
 	} while (running);
 	return 0;
+}
+
+void CMenu::ShowHelp() {
+	std::cout << NO_HELP;
+}
+
+void CMenu::Search(std::string command)
+{
+	if (root != NULL) {
+		((CMenu*)root)->Search(command);
+		return;
+	}
+	bool found = false;
+	std::queue<CMenuItem*> que;
+	que.push(this);
+	while (!que.empty()) {
+		if (CMenu* d = dynamic_cast<CMenu*>(que.front())) {
+			for (int i = 0; i < d->items.size(); i++) {
+				que.push(d->items[i]);
+			}
+		}
+		if (que.front()->command == command) {
+			std::cout << que.front()->GetPath() << std::endl;
+			found = true;
+		}
+		que.pop();	
+	}
+	if (!found)
+		std::cout << NO_COMMAND;
+}
+
+std::string CMenu::ToString()
+{
+	std::string ret = "('" + name + "','" + command + "';";
+	if (items.size() > 0) {
+		for (int i = 0; i < items.size() - 1; i++) {
+			ret += items[i]->ToString() + ",";
+		}
+		ret += items[items.size() - 1]->ToString();
+	}
+	ret += ")";
+	return ret;
 }
 
 CMenuItem* CMenu::GetItemByName(std::string name)

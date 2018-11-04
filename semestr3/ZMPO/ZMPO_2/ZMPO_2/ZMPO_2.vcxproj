@@ -169,6 +169,7 @@
     <ClCompile Include="CCommand_Internet.cpp" />
     <ClCompile Include="CMenu.cpp" />
     <ClCompile Include="CMenuCommand.cpp" />
+    <ClCompile Include="CMenuItem.cpp" />
     <ClCompile Include="CTable.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -80,5 +80,8 @@
     <ClCompile Include="CCommands.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
+    <ClCompile Include="CMenuItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
