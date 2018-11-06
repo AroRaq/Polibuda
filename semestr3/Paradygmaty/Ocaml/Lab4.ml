@@ -16,3 +16,16 @@ let rec prod_tree tree =
   match tree with 
   Empty -> 0
   | Node(v, l, r) -> v * sum_tree l * sum_tree r;;
+
+
+type expression = Value of int 
+                | Plus of expression * expression
+                | Negative of expression;;
+
+let rec calculate expr = 
+  match expr with
+  Value(x) -> x
+  | Plus(x, y) -> (calculate x) + (calculate y)
+  | Negative(x) -> -(calculate x);;
+
+calculate (Plus(Negative(Value(10)), Value(100)));;

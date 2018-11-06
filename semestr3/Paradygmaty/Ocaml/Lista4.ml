@@ -28,11 +28,11 @@ let scZew root =
   in f root 0;;
 
 let depthSearch (Graph g) start =
-  let rec f neighbours visited = 
-    match (neighbours, stack) with
-    ([], []) -> []
-    | ([], h::t) -> f (g h) (h::visited) t
-    | (h::t)
+  let rec f stack visited = 
+    match (stack) with
+    [] -> []
+    | h::t -> if List.mem h visited then [] else h :: f ((g h)@t) (h::visited)
+  in f [start] [];;
 
 let tt = Node(1,
               Node(2,
