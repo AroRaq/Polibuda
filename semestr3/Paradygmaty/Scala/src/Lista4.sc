@@ -6,19 +6,18 @@ sealed trait Graphs[A]
 case class Graph[A](succ: A=>List[A]) extends Graphs[A]
 
 
-def breadthBT[A](root: BT[A]) : List[A] = {
-  def f(thisLevel: List[BT[A]], nextLevel: List[BT[A]]) : List[A] = {
-    (thisLevel, nextLevel) match {
-      case (Nil, Nil) => Nil
-      case (Nil, nextLevel) => f(nextLevel, Nil)
-      case (Node(v, l, r)::t, nextLevel) => v::f(t, l::r::nextLevel)
-      case (Empty::t, nextLevel) => f(t, nextLevel)
+def bfs_BT[A](root: BT[A]) : List[A] = {
+  def f(queue: List[BT[A]]) : List[A] = {
+    queue match {
+      case Nil => Nil
+      case Node(v, l, r)::t => v :: f(t ++ List(l, r))
+      case Empty::t => f(t)
     }
   }
-  f(List(root), Nil);
+  f(List(root));
 }
 
-def intPath[A](root: BT[A]) : Int = {
+def intPathLength[A](root: BT[A]) : Int = {
   def f(node: BT[A], level: Int) : Int = {
     node match {
       case Empty => 0
@@ -28,7 +27,7 @@ def intPath[A](root: BT[A]) : Int = {
   f(root, 0)
 }
 
-def excPath[A](root: BT[A]) : Int = {
+def extPathLength[A](root: BT[A]) : Int = {
   def f(node: BT[A], level: Int) : Int = {
     node match {
       case Empty => level
@@ -38,7 +37,7 @@ def excPath[A](root: BT[A]) : Int = {
   f(root, 0)
 }
 
-def depthSearch[A](graph: Graph[A], start: A) : List[A] = {
+def dfs_G[A](graph: Graph[A], start: A) : List[A] = {
   def search(visited: List[A], stack: List[A]) : List[A] = {
     stack match {
       case Nil => Nil
@@ -50,22 +49,3 @@ def depthSearch[A](graph: Graph[A], start: A) : List[A] = {
   search(Nil, List(start))
 }
 
-val tt = Node(1,
-  Node(2,
-    Node(4,
-      Empty,
-      Empty
-    ),
-    Empty
-  ),
-  Node(3,
-    Node(5,
-      Empty,
-      Node(6,
-        Empty,
-        Empty
-      )
-    ),
-    Empty
-  )
-)

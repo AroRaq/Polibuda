@@ -1,38 +1,31 @@
-let rec f x = f x;;
-
 type 'a bt = Empty | Node of 'a * 'a bt * 'a bt;;
 type 'a graph = Graph of ('a -> 'a list);;
 
-let breadthBT root =
-  let rec f thisLevel nextLevel = 
-    match (thisLevel, nextLevel) with
-    ([], []) -> []
-    | ([], nextLevel) -> f nextLevel []
-    | (Node(v, l, r)::t, _) -> v :: f t (l::r::nextLevel)
-    | (Empty::t, _) -> f t nextLevel
-  in f [root] [];;
-
-let scWew root = 
-  let rec f n level = 
-    match n with 
-    Empty -> 0
-    | Node(v, l, r) -> level + f l (level + 1) + f r (level + 1)
-  in f root 0;;
-
-  
-let scZew root = 
-  let rec f n level = 
-    match n with 
-    Empty -> level
-    | Node(v, l, r) -> f l (level + 1) + f r (level + 1)
-  in f root 0;;
-
-let depthSearch (Graph g) start =
-  let rec f stack visited = 
-    match (stack) with
+let bfs_BT root =
+  let rec f = function
     [] -> []
-    | h::t -> if List.mem h visited then [] else h :: f ((g h)@t) (h::visited)
-  in f [start] [];;
+    | Empty::t -> f t
+    | Node(v, l, r)::t -> v :: f (t @ [l; r])
+  in f [root];;
+
+let intPathLength root = 
+  let rec f level = function
+    Empty -> 0
+    | Node(_, l, r) -> level + f (level + 1) l + f (level + 1) r
+  in f 0 root;;
+
+let extPathLength root = 
+  let rec f level = function
+    Empty -> level
+    | Node(_, l, r) -> f (level + 1) l + f (level + 1) r
+  in f 0 root;;
+
+let dfs_G (Graph g) start =
+  let rec f visited = function
+    [] -> []
+    | h::t -> if List.mem h visited then f visited t
+              else h :: f (h::visited) ((g h) @ t)
+  in f [] [start];;
 
 let tt = Node(1,
               Node(2,
@@ -54,16 +47,15 @@ let tt = Node(1,
                   )
                 );;
 
-let g1 = Graph
-(function
-0 -> [3]
-| 1 -> [0;2;4]
-| 2 -> [1]
-| 3 -> []
-| 4 -> [0;2]
-| n -> failwith ("Graph g: node "^string_of_int n^" doesn't exist")
-);;
+let g = Graph (function
+  0 -> [3]
+  | 1 -> [0;2;4]
+  | 2 -> [1]
+  | 3 -> []
+  | 4 -> [0;2]
+  | n -> failwith ("Graph g: node "^string_of_int n^" doesn't exist") );;
 
-depthSearch g1 4;;
-
-breadthBT tt;;
+bfs_BT tt;;
+intPathLength tt;;
+extPathLength tt;;
+dfs_G g 4;;
