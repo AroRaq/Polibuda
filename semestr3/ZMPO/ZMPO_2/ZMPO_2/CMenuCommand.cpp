@@ -13,18 +13,65 @@ CMenuCommand::CMenuCommand(std::string name, std::string command, std::string he
 	root = NULL;
 }
 
-CMenuCommand::CMenuCommand(std::string serialized)
+CMenuCommand::CMenuCommand(std::string& serialized, size_t& index)
 {
-	std::vector<std::string> vec;
-	if (Utils::SplitBy(serialized, ",,", vec, '[', ']')) {
-		name = vec[0];
-		command = vec[1];
-		help = vec[2];
+	//Begin reading
+	if (serialized[index++] != '(') {
+		std::cout << "Expected ( at " << index - 1 << std::endl;
+		return;
 	}
-	else {
-		name = "error";
-		command = "error";
-		help = "error";
+	//Read Name
+	if (serialized[index++] != '\'') {
+		std::cout << "Expected name declaration at " << index - 1 << std::endl;
+		return;
+	}
+	size_t len = serialized.find(index, '\'') - index;
+	if (len == std::string::npos) {
+		std::cout << "Expected end of name declaration after " << index << std::endl;
+		return;
+	}
+	//check if , 
+	name = serialized.substr(index + 1, len - 1);
+	index += len + 1;
+	if (serialized[index++] != ',') {
+		std::cout << "Expected , at " << index - 1 << std::endl;
+		return;
+	}
+	//read command
+	if (serialized[index++] != '\'') {
+		std::cout << "Expected command declaration at " << index - 1 << std::endl;
+		return;
+	}
+	len = serialized.find(index, '\'') - index;
+	if (len == std::string::npos) {
+		std::cout << "Expected end of command declaration after " << index << std::endl;
+		return;
+	}
+	command = serialized.substr(index + 1, len - 1);
+	index += len + 1;
+	//check if , 
+	name = serialized.substr(index + 1, len - 1);
+	index += len + 1;
+	if (serialized[index++] != ',') {
+		std::cout << "Expected , at " << index - 1 << std::endl;
+		return;
+	}
+	//read help
+	if (serialized[index++] != '\'') {
+		std::cout << "Expected descriptiion declaration at " << index - 1 << std::endl;
+		return;
+	}
+	len = serialized.find(index, '\'') - index;
+	if (len == std::string::npos) {
+		std::cout << "Expected end of description declaration after " << index << std::endl;
+		return;
+	}
+	help = serialized.substr(index + 1, len - 1);
+	index += len + 1;
+	//check if )
+	if (serialized[index++] != ']') {
+		std::cout << "Expected end of CMenuCommand declaration ( ']' ) at " << index - 1 << std::endl;
+		return;
 	}
 }
 

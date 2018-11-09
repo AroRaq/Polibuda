@@ -28,7 +28,7 @@
 class CMenu : public CMenuItem {
 public:
 	CMenu(std::string name, std::string command);
-	CMenu(std::string serialized);
+	CMenu(std::string& serialized, size_t& index);
 	~CMenu();
 	void Add(CMenuItem* item);
 	void Add(std::string path, CMenuItem* item);
