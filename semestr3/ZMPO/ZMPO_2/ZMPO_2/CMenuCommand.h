@@ -10,7 +10,7 @@ class CMenuCommand : public CMenuItem {
 public:
 	~CMenuCommand();
 	CMenuCommand(std::string name, std::string command, std::string help, CCommand* commandPtr);
-	CMenuCommand(std::string serialized);
+	CMenuCommand(std::string& serialized, size_t& index);
 	int Run() override;
 	void ShowHelp() override;
 	std::string ToString() override;

@@ -7,33 +7,59 @@ CMenu::CMenu(std::string name, std::string command)
 	root = NULL;
 }
 
-CMenu::CMenu(std::string serialized)
+CMenu::CMenu(std::string& serialized, size_t& index)
 {
-	std::vector<std::string> vec;
-	if (Utils::SplitBy(serialized, ",;", vec, '(', ')')) {
-		name = vec[0];
-		command = vec[1];
-		std::cout << name << '\n';
-		std::cout << command << '\n';
-		while (std::size_t s = vec[2].find(',')) {
-			if (vec[2][0] == '(')
-				Add(new CMenu(vec[2].substr(0, s)));
-			else if (vec[2][0] == '[') 
-				Add(new CMenuCommand(vec[2].substr(0, s)));
-			else
-				std::cout << "Error: expected ( or [";
-			vec[2] = vec[2].substr(0, s);
-		}
-		if (vec[2][0] == '(')
-			Add(new CMenu(vec[2]));
-		else if (vec[2][0] == '[') {}
-		//Add(new CMenuC)
-		else
-			std::cout << "Error: expected ( or [";
+	//Begin reading
+	if (serialized[index++] != '(') {
+		std::cout << "Expected ( at " << index - 1 << std::endl;
+		return;
 	}
-	else {
-		name = "error";
-		command = "error";
+	//Read Name
+	if (serialized[index++] != '\'') {
+		std::cout << "Expected name declaration at " << index - 1 << std::endl;
+		return;
+	}
+	size_t len = serialized.find(index, '\'') - index;
+	if (len == std::string::npos) {
+		std::cout << "Expected end of name declaration after " << index << std::endl;
+		return;
+	}
+	//check if , 
+	name = serialized.substr(index + 1, len - 1);
+	index += len + 1;
+	if (serialized[index++] != ',') {
+		std::cout << "Expected , at " << index - 1 << std::endl;
+		return;
+	}
+	//read command
+	if (serialized[index++] != '\'') {
+		std::cout << "Expected command declaration at " << index - 1 << std::endl;
+		return;
+	}
+	len = serialized.find(index, '\'') - index;
+	if (len == std::string::npos) {
+		std::cout << "Expected end of command declaration after " << index << std::endl;
+		return;
+	}
+	command = serialized.substr(index + 1, len - 1);
+	index += len + 1;
+	//check if , 
+	name = serialized.substr(index + 1, len - 1);
+	index += len + 1;
+	if (serialized[index++] != ',') {
+		std::cout << "Expected , at " << index - 1 << std::endl;
+		return;
+	}
+	while (serialized[index] != ')') {
+		if (serialized[index] == '(') {
+			Add(new CMenu(serialized, index));
+		}
+		else if (serialized[index] == '[') {
+			Add(new CMenuCommand(serialized, index));
+		}
+		else {
+			std::cout << "Expected new item declaration ( '(' or '[' ) or end of item ')' at " << index << std::endl;
+		}
 	}
 }
 
