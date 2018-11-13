@@ -21,14 +21,20 @@
 #define EXPECTED "Error reading data: expected: "
 
 #define ARROW "->"
-#define LEFT_BRACKET " ("
-#define RIGHT_BRACKET ")"
+#define SPACE_LEFT_BRACKET " ("
 #define TERMINATOR ". "
+
+#define LEFT_BRACKET '('
+#define RIGHT_BRACKET ')'
+#define LEFT_CRACKET_SQ '['
+#define COMMA ','
+#define SEMICOLON ';'
+#define HASH '#'
 
 class CMenu : public CMenuItem {
 public:
 	CMenu(std::string name, std::string command);
-	CMenu(std::string& serialized, size_t& index);
+	CMenu(std::string& serialized, size_t& index, errorCode* errCode);
 	~CMenu();
 	void Add(CMenuItem* item);
 	void Add(std::string path, CMenuItem* item);

@@ -4,63 +4,46 @@ CMenu::CMenu(std::string name, std::string command)
 {
 	this->name = name;
 	this->command = command;
-	root = NULL;
+	parent = NULL;
 }
 
-CMenu::CMenu(std::string& serialized, size_t& index)
+CMenu::CMenu(std::string& serialized, size_t& index, errorCode* errCode)
 {
-	//Begin reading
-	if (serialized[index++] != '(') {
-		std::cout << "Expected ( at " << index - 1 << std::endl;
+	if (serialized[index] != LEFT_BRACKET) {
+		*errCode = EXPECTED_BRACKET_LEFT;
 		return;
 	}
-	//Read Name
-	if (serialized[index++] != '\'') {
-		std::cout << "Expected name declaration at " << index - 1 << std::endl;
+
+	name = Utils::ReadFromQuotes(serialized, ++index, errCode);
+
+	if (serialized[index] != COMMA) {
+		*errCode = EXPECTED_COMMA;	
 		return;
 	}
-	size_t len = serialized.find(index, '\'') - index;
-	if (len == std::string::npos) {
-		std::cout << "Expected end of name declaration after " << index << std::endl;
+
+	command = Utils::ReadFromQuotes(serialized, ++index, errCode);
+
+	if (serialized[index] != SEMICOLON) {
+		*errCode = EXPECTED_SEMICOLON;
 		return;
 	}
-	//check if , 
-	name = serialized.substr(index + 1, len - 1);
-	index += len + 1;
-	if (serialized[index++] != ',') {
-		std::cout << "Expected , at " << index - 1 << std::endl;
-		return;
-	}
-	//read command
-	if (serialized[index++] != '\'') {
-		std::cout << "Expected command declaration at " << index - 1 << std::endl;
-		return;
-	}
-	len = serialized.find(index, '\'') - index;
-	if (len == std::string::npos) {
-		std::cout << "Expected end of command declaration after " << index << std::endl;
-		return;
-	}
-	command = serialized.substr(index + 1, len - 1);
-	index += len + 1;
-	//check if , 
-	name = serialized.substr(index + 1, len - 1);
-	index += len + 1;
-	if (serialized[index++] != ',') {
-		std::cout << "Expected , at " << index - 1 << std::endl;
-		return;
-	}
-	while (serialized[index] != ')') {
-		if (serialized[index] == '(') {
-			Add(new CMenu(serialized, index));
+	index++;
+	while (serialized[index] != RIGHT_BRACKET) {
+		if (serialized[index] == LEFT_BRACKET) {
+			Add(new CMenu(serialized, index, errCode));
 		}
-		else if (serialized[index] == '[') {
-			Add(new CMenuCommand(serialized, index));
+		else if (serialized[index] == LEFT_CRACKET_SQ) {
+			Add(new CMenuCommand(serialized, index, errCode));
 		}
+		else if (serialized[index] == COMMA)
+			index++;
 		else {
-			std::cout << "Expected new item declaration ( '(' or '[' ) or end of item ')' at " << index << std::endl;
+			*errCode = EXPECTED_BRACKET_RIGHT;
 		}
+		if (*errCode != NO_ERROR)
+			return;
 	}
+	index++;
 }
 
 CMenu::~CMenu() {
@@ -77,7 +60,7 @@ void CMenu::Add(CMenuItem* item)
 		}
 	}
 	items.push_back(item);
-	item->SetRoot(this);
+	item->SetParent(this);
 }
 
 void CMenu::Add(std::string path, CMenuItem* item) {
@@ -123,9 +106,9 @@ int CMenu::Run() {
 	do {
 		std::cout << std::endl << name << std::endl;
 		for (int i = 0; i < items.size(); i++) {
-			std::cout << i << TERMINATOR << items[i]->name << LEFT_BRACKET << items[i]->command << RIGHT_BRACKET << std::endl;
+			std::cout << i << TERMINATOR << items[i]->name << SPACE_LEFT_BRACKET << items[i]->command << RIGHT_BRACKET << std::endl;
 		}
-		std::cout << '#';
+		std::cout << HASH;
 		std::cin >> input;
 		CMenuItem* item = GetItemByCommand(input);
 		if (item == this) {
@@ -169,8 +152,8 @@ void CMenu::ShowHelp() {
 
 void CMenu::Search(std::string command)
 {
-	if (root != NULL) {
-		((CMenu*)root)->Search(command);
+	if (parent != NULL) {
+		((CMenu*)parent)->Search(command);
 		return;
 	}
 	bool found = false;
@@ -194,15 +177,18 @@ void CMenu::Search(std::string command)
 
 std::string CMenu::ToString()
 {
-	std::string ret = "('" + name + "','" + command + "';";
+	std::ostringstream o;
+	o << LEFT_BRACKET << 
+		QUOTE_MARK << name << QUOTE_MARK << COMMA <<
+		QUOTE_MARK << command << QUOTE_MARK << SEMICOLON;
 	if (items.size() > 0) {
 		for (int i = 0; i < items.size() - 1; i++) {
-			ret += items[i]->ToString() + ",";
+			o << items[i]->ToString() << COMMA;
 		}
-		ret += items[items.size() - 1]->ToString();
+		o << items[items.size() - 1]->ToString();
 	}
-	ret += ")";
-	return ret;
+	o << RIGHT_BRACKET;
+	return o.str();
 }
 
 CMenuItem* CMenu::GetItemByName(std::string name)

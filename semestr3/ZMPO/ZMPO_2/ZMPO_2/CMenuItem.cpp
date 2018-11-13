@@ -1,15 +1,15 @@
 #include "CMenuItem.h"
 
-void CMenuItem::SetRoot(CMenuItem * root)
+void CMenuItem::SetParent(CMenuItem * parent)
 {
-	this->root = root;
+	this->parent = parent;
 }
 
 std::string CMenuItem::GetPath()
 {
-	if (root == NULL)
+	if (parent == NULL)
 		return "";
-	if (root->root == NULL)
-		return root->command;
-	return root->GetPath() + ARROW + root->command;
+	if (parent->parent == NULL)
+		return parent->command;
+	return parent->GetPath() + ARROW + parent->command;
 }

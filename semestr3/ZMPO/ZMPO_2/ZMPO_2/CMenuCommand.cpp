@@ -10,69 +10,43 @@ CMenuCommand::CMenuCommand(std::string name, std::string command, std::string he
 	this->command = command;
 	this->help = help;
 	this->commandPtr = commandPtr;
-	root = NULL;
+	parent = NULL;
 }
 
-CMenuCommand::CMenuCommand(std::string& serialized, size_t& index)
+CMenuCommand::CMenuCommand(std::string& serialized, size_t& index, errorCode* errCode)
 {
-	//Begin reading
-	if (serialized[index++] != '(') {
-		std::cout << "Expected ( at " << index - 1 << std::endl;
+	if (serialized[index] != LEFT_BRACKET_SQ) {
+		*errCode = EXPECTED_BRACKET_LEFT;
 		return;
 	}
-	//Read Name
-	if (serialized[index++] != '\'') {
-		std::cout << "Expected name declaration at " << index - 1 << std::endl;
+
+	name = Utils::ReadFromQuotes(serialized, ++index, errCode);
+	if (*errCode != NO_ERROR)
+		return;
+
+	if (serialized[index] != COMMA) {
+		*errCode = EXPECTED_COMMA;
 		return;
 	}
-	size_t len = serialized.find(index, '\'') - index;
-	if (len == std::string::npos) {
-		std::cout << "Expected end of name declaration after " << index << std::endl;
+
+	command = Utils::ReadFromQuotes(serialized, ++index, errCode);
+	if (*errCode != NO_ERROR)
+		return;
+
+	if (serialized[index] != COMMA) {
+		*errCode = EXPECTED_COMMA;
 		return;
 	}
-	//check if , 
-	name = serialized.substr(index + 1, len - 1);
-	index += len + 1;
-	if (serialized[index++] != ',') {
-		std::cout << "Expected , at " << index - 1 << std::endl;
+
+	help = Utils::ReadFromQuotes(serialized, ++index, errCode);
+	if (*errCode != NO_ERROR)
+		return;
+
+	if (serialized[index] != RIGHT_BRACKET_SQ) {
+		*errCode = EXPECTED_BRACKET_RIGHT;
 		return;
 	}
-	//read command
-	if (serialized[index++] != '\'') {
-		std::cout << "Expected command declaration at " << index - 1 << std::endl;
-		return;
-	}
-	len = serialized.find(index, '\'') - index;
-	if (len == std::string::npos) {
-		std::cout << "Expected end of command declaration after " << index << std::endl;
-		return;
-	}
-	command = serialized.substr(index + 1, len - 1);
-	index += len + 1;
-	//check if , 
-	name = serialized.substr(index + 1, len - 1);
-	index += len + 1;
-	if (serialized[index++] != ',') {
-		std::cout << "Expected , at " << index - 1 << std::endl;
-		return;
-	}
-	//read help
-	if (serialized[index++] != '\'') {
-		std::cout << "Expected descriptiion declaration at " << index - 1 << std::endl;
-		return;
-	}
-	len = serialized.find(index, '\'') - index;
-	if (len == std::string::npos) {
-		std::cout << "Expected end of description declaration after " << index << std::endl;
-		return;
-	}
-	help = serialized.substr(index + 1, len - 1);
-	index += len + 1;
-	//check if )
-	if (serialized[index++] != ']') {
-		std::cout << "Expected end of CMenuCommand declaration ( ']' ) at " << index - 1 << std::endl;
-		return;
-	}
+	index++;
 }
 
 int CMenuCommand::Run() {
@@ -89,5 +63,10 @@ void CMenuCommand::ShowHelp() {
 
 std::string CMenuCommand::ToString()
 {
-	return "['" + name + "','" + command + "','" + help + "']";
+	std::ostringstream o;
+	o << LEFT_BRACKET_SQ <<
+		QUOTE_MARK << name << QUOTE_MARK << COMMA <<
+		QOUTE_MARK << command << QUOTE_MARK << COMMA <<
+		QUOTE_MARK << help << QUOTE_MARK << RIGHT_BRACKET_SQ;
+	return o.str();
 }

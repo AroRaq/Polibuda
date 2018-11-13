@@ -11,28 +11,29 @@ void Utils::DisplayError(errorCode errCode)
 	case NO_ERROR : break;
 	case OUT_OF_BOUNDS: std::cout << ERR_OUT_OF_BOUNDS; break;
 	case WRONG_VALUE: std::cout << ERR_WRONG_VALUE; break;
+
+	case EXPECTED_BRACKET_LEFT: std::cout << ERR_EXPECTED_BRACKET_LEFT; break;
+	case EXPECTED_BRACKET_RIGHT: std::cout << ERR_EXPECTED_BRACKET_RIGHT; break;
+	case EXPECTED_STRING: std::cout << ERR_EXPECTED_STRING; break;
+	case EXPECTED_COMMA: std::cout << ERR_EXPECTED_COMMA; break;
+	case EXPECTED_SEMICOLON: std::cout << ERR_EXPECTED_SEMICOLON; break;
+	case EXPECTED_QUOTE_LEFT: std::cout << ERR_EXPECTED_QUOTE_LEFT; break;
+	case EXPECTED_QUOTE_RIGHT: std::cout << ERR_EXPECTED_QUOTE_RIGHT; break;
 	}
 }
 
-bool Utils::SplitBy(std::string str, std::string splitters, std::vector<std::string>& result, char startWith, char endWith)
+std::string Utils::ReadFromQuotes(std::string& source, size_t& index, errorCode* errCode)
 {
-	if (str[0] != startWith) {
-		std::cout << "Error: Expected " << startWith << std::endl;
-		return false;
+	if (source[index] != QUOTE_MARK) {
+		*errCode = EXPECTED_QUOTE_LEFT;
+		return std::string();
 	}
-	if (str[str.length()-1] != endWith) {
-		std::cout << "Error: Expected " << endWith << std::endl;
-		return false;
+	size_t len = source.find(QUOTE_MARK, ++index) - index;
+	if (len == std::string::npos) {
+		*errCode = EXPECTED_QUOTE_RIGHT;
+		return std::string();
 	}
-	str = str.substr(1, str.length() - 2);
-	for (int i = 0; i < splitters.length(); i++) {
-		std::size_t s = str.find(splitters[i]);
-		if (s == std::string::npos) {
-			std::cout << "Error: expected " << splitters[i];
-			return false;
-		}
-		result.push_back(str.substr(0, s));
-		str = str.substr(s + 1);
-	}
-	result.push_back(str);
+	std::string ret = source.substr(index, len);
+	index += len + 1;
+	return ret;
 }

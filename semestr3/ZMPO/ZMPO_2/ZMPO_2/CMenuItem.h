@@ -9,12 +9,12 @@ class CMenuItem {
 public:
 	virtual int Run() = 0;
 	virtual void ShowHelp() = 0;
-	void SetRoot(CMenuItem* root);
+	void SetParent(CMenuItem* parent);
 	std::string GetPath();
 	virtual std::string ToString() = 0;
 protected:
 	std::string command;
 	std::string name;
 	std::string help;
-	CMenuItem* root;
+	CMenuItem* parent;
 };
