@@ -6,7 +6,7 @@ CMenu::CMenu(std::string name, std::string command)
 	this->command = command;
 	parent = NULL;
 }
-
+/*
 CMenu::CMenu(std::string& serialized, size_t& index, errorCode* errCode)
 {
 	if (serialized[index] != LEFT_BRACKET) {
@@ -15,6 +15,8 @@ CMenu::CMenu(std::string& serialized, size_t& index, errorCode* errCode)
 	}
 
 	name = Utils::ReadFromQuotes(serialized, ++index, errCode);
+	if (*errCode != NO_ERROR)
+		return;
 
 	if (serialized[index] != COMMA) {
 		*errCode = EXPECTED_COMMA;	
@@ -22,6 +24,8 @@ CMenu::CMenu(std::string& serialized, size_t& index, errorCode* errCode)
 	}
 
 	command = Utils::ReadFromQuotes(serialized, ++index, errCode);
+	if (*errCode != NO_ERROR)
+		return;
 
 	if (serialized[index] != SEMICOLON) {
 		*errCode = EXPECTED_SEMICOLON;
@@ -45,6 +49,69 @@ CMenu::CMenu(std::string& serialized, size_t& index, errorCode* errCode)
 	}
 	index++;
 }
+
+*/
+CMenu::CMenu(std::string& serialized, size_t& index, errorCode* errCode)
+{
+	if (serialized[index] != LEFT_BRACKET) {
+		*errCode = EXPECTED_BRACKET_LEFT;
+		return;
+	}
+
+	name = Utils::ReadFromQuotes(serialized, ++index, errCode);
+	if (*errCode != NO_ERROR)
+		return;
+
+	if (serialized[index] != COMMA) {
+		*errCode = EXPECTED_COMMA;
+		return;
+	}
+
+	command = Utils::ReadFromQuotes(serialized, ++index, errCode);
+	if (*errCode != NO_ERROR)
+		return;
+
+	if (serialized[index] != SEMICOLON) {
+		*errCode = EXPECTED_SEMICOLON;
+		return;
+	}
+	index++;
+	while (serialized[index] != RIGHT_BRACKET) {
+		if (serialized[index] == LEFT_BRACKET) {
+			CMenuItem* child = new CMenu(serialized, index, errCode);
+			Add(child);
+			if (serialized[index] != COMMA) {
+				*errCode = EXPECTED_COMMA;
+				return;
+			}
+			if (Utils::ReadFromQuotes(serialized, ++index, errCode) != child->command) {
+				*errCode = DIFFERENT_COMMAND;
+				return;
+			}
+		}
+		else if (serialized[index] == LEFT_CRACKET_SQ) {
+			CMenuItem* child = new CMenuCommand(serialized, index, errCode);
+			Add(child);
+			if (serialized[index] != COMMA) {
+				*errCode = EXPECTED_COMMA;
+				return;
+			}
+			if (Utils::ReadFromQuotes(serialized, ++index, errCode) != child->command) {
+				*errCode = DIFFERENT_COMMAND;
+				return;
+			}
+		}
+		else if (serialized[index] == COMMA)
+			index++;
+		else {
+			*errCode = EXPECTED_BRACKET_RIGHT;
+		}
+		if (*errCode != NO_ERROR)
+			return;
+	}
+	index++;
+}
+
 
 CMenu::~CMenu() {
 	for (int i = 0; i < items.size(); i++) {

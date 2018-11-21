@@ -1,6 +1,6 @@
 #include "CMenuItem.h"
 
-void CMenuItem::SetParent(CMenuItem * parent)
+void CMenuItem::SetParent(CMenuItem* parent)
 {
 	this->parent = parent;
 }
