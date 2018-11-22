@@ -1,3 +1,2 @@
-let f x = "whatever";;
-
-f (lazy (1/0));;
+let rec clist = 1::2::3::clist;;
+let c = clist @ 5::6::[];;

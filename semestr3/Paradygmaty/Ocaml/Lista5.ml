@@ -2,11 +2,6 @@ type 'a llist = LNil | LCons of 'a * (unit -> 'a llist);;
 type 'a lBT = LEmpty | LNode of 'a * (unit ->'a lBT) * (unit -> 'a lBT);;
 
 
-let rec (@$) ll1 ll2 = 
-  match ll1 with
-  LNil -> ll2
-  | LCons(x, xf) -> LCons(x, function() -> (xf()) @$ ll2);;
-
 let rec toLazyList = function
   [] -> LNil
   | h::t -> LCons(h, function () -> toLazyList t);;
@@ -15,11 +10,6 @@ let rec toList = function
   LNil -> []
   | LCons(x, xf) -> x :: (toList (xf()));;
 
-let rec lrepeat k xs =
-  match k with
-  0 -> LNil
-  | k -> xs @$ lrepeat (k-1) xs;;
-
 let rec ltake = function
   (0, _) -> []
   | (_, LNil) -> []
@@ -27,9 +17,16 @@ let rec ltake = function
 
 
 
+let rec lrepeat k xs =
+  let rec f = function
+    (LNil, _) -> LNil
+    | (LCons(_, yf), 0) -> f (yf(), k)
+    | (LCons(y, _) as el, n) -> LCons(y, fun() -> f (el, n-1))
+  in f (xs, k);;
+  
 let lfib = 
   let rec f a b = LCons(a, function() -> f b (a+b))
-  in f 1 1;;
+  in f 0 1;;
 
 let lBFS root = 
   let rec f = function
@@ -42,5 +39,8 @@ let rec lTree n = LNode(n, (function() -> lTree (n*2)), function() -> lTree (n*2
 
 
 let x = [1;2;3;4;5;6;7];;
-toList (lrepeat 5 (toLazyList x));;
+toList (lrepeat 3 (toLazyList x));;
+
+ltake (10, lfib);;
+
 ltake (10, lBFS (lTree 1));;
