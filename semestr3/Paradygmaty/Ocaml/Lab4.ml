@@ -1,4 +1,3 @@
-
 type 'a bt = Empty | Node of 'a * 'a bt * 'a bt;;
 type int_tree = int bt;;
 
@@ -14,25 +13,35 @@ let rec sum_tree tree =
 
 let rec prod_tree tree = 
   match tree with 
-  Empty -> 0
-  | Node(v, l, r) -> v * sum_tree l * sum_tree r;;
+  Empty -> 1
+  | Node(v, l, r) -> v * prod_tree l * prod_tree r;;
 
 
-type expression = Value of int 
-                | Plus of expression * expression
-                | Negative of expression;;
+let tt = Node(5,
+  Node(3,
+      Node(1,
+          Empty,
+          Empty
+          ),
+      Empty
+      ),
+  Node(8,
+      Node(6,
+          Empty,
+          Node(7,
+                Empty,
+                Empty
+              )
+          ),
+      Empty
+      )
+    );;
 
-let rec calculate expr = 
-  match expr with
-  Value(x) -> x
-  | Plus(x, y) -> (calculate x) + (calculate y)
-  | Negative(x) -> -(calculate x);;
 
-calculate (Plus(Negative(Value(10)), Value(100)));;
+let rec range a b =
+  if a > b then []
+  else a :: range (a+1) b;;
 
-let rec containsComponent x = function
-  [] -> false
-  | h::t -> h = x || containsComponent x t;;
-
-
-containsComponent 10 [1; 2; 3; 4; 5; 10; 12; 11; 24];;
+List.filter (contains tt) (range 1 10);;
+sum_tree tt;;
+prod_tree tt;;

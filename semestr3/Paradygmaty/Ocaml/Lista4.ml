@@ -27,6 +27,9 @@ let dfs_G (Graph g) start =
               else h :: f (h::visited) ((g h) @ t)
   in f [] [start];;
 
+
+
+let f x = Not_found
 let tt = Node(1,
               Node(2,
                   Node(4,
@@ -54,8 +57,3 @@ let g = Graph (function
   | 3 -> []
   | 4 -> [0;2]
   | n -> failwith ("Graph g: node "^string_of_int n^" doesn't exist") );;
-
-bfs_BT tt;;
-intPathLength tt;;
-extPathLength tt;;
-dfs_G g 4;;

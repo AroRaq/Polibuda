@@ -17,6 +17,9 @@ let rec ltake = function
 
 
 
+
+  
+
 let rec lrepeat k xs =
   let rec f = function
     (LNil, _) -> LNil
@@ -36,6 +39,9 @@ let lBFS root =
   in f [root];;
 
 let rec lTree n = LNode(n, (function() -> lTree (n*2)), function() -> lTree (n*2+1));;
+
+
+
 
 
 let x = [1;2;3;4;5;6;7];;
