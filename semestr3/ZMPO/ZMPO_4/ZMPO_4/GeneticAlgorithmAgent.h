@@ -1,19 +1,24 @@
 #pragma once
 
 #include <vector>
-#include "Item.h"
 #include "Creature.h"
+#include "Problem.h"
 
 class GeneticAlgorithmAgent {
 public:
-	GeneticAlgorithmAgent(int popSize, int crossProb, int multProb);
+	GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem* problem);
 	void RunGeneration();
 	void GenerateRandomPopulation();
+	void CrossPopulation();
+	void Mutate();
+	double GetBestFitness();
 private:
+	Problem* problem;
 	int generation;
 	int popSize;
-	float crossProb;
-	float multProb;
-	std::vector<Item> items;
-	std::vector<Creature*> population;
+	double crossProb;
+	double mutProb;
+	std::vector<Creature*> currentPopulation;
+	std::vector<Creature*> nextPopulation;
+	Creature* bestCreature;
 };

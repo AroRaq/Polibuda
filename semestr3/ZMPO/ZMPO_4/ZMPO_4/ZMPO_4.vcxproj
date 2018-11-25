@@ -153,14 +153,15 @@
   <ItemGroup>
     <ClInclude Include="Creature.h" />
     <ClInclude Include="GeneticAlgorithmAgent.h" />
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="KnapsackProblem.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Problem.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="GeneticAlgorithmAgent.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="KnapsackProblem.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

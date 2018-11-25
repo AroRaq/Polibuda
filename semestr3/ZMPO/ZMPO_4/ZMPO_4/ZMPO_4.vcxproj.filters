@@ -18,9 +18,6 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GeneticAlgorithmAgent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -28,6 +25,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Problem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KnapsackProblem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,9 +41,6 @@
     <ClCompile Include="ZMPO_4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneticAlgorithmAgent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KnapsackProblem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -28,6 +28,27 @@ struct
   let toList q = q 
 end;;
 
+
+module QueueTwoLists1 = 
+struct 
+  type 'a t = 'a list * 'a list
+  exception Empty of string
+  let empty = function() -> ([], [])
+  let enqueue (e, q) = let (xs, ys) = q in if xs = [] then ([e], ys) else (xs, e::ys)
+  let dequeue = function
+    (h::[], ys) -> (List.rev ys, [])
+    | (h::t, ys) -> (t, ys)
+    | ([], _) -> ([], [])
+  let first = function
+    (h::_, _) -> h
+    | ([], _) -> raise (Empty "module QueueTwoLists: first")
+  let isEmpty = function
+    (h::_, _) -> false
+    | _ -> true
+  let toList q = let (xs, ys) = q in xs@(List.rev ys)
+end;;
+
+
 module QueueTwoLists : QUEUE_FUN = 
 struct 
   type 'a t = 'a list * 'a list
