@@ -12,6 +12,7 @@ public:
 	void CrossPopulation();
 	void Mutate();
 	double GetBestFitness();
+
 private:
 	Problem* problem;
 	int generation;

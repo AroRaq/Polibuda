@@ -23,19 +23,19 @@ Creature* Creature::CrossWith(const Creature* other)
 	Creature* child = new Creature(genotype.size());
 	for (int i = 0; i < divAt; i++)
 		child->genotype[i] = genotype[i];
-	for (int i = divAt; i < genotype.size(); i++)
+	for (unsigned int i = divAt; i < genotype.size(); i++)
 		child->genotype[i] = other->genotype[i];
 	return child;
 }
 
 void Creature::Mutate(double probability)
 {
-	for (int i = 0; i < genotype.size(); i++)
+	for (unsigned int i = 0; i < genotype.size(); i++)
 		if (Utils::Chance(probability))
 			genotype[i] = !genotype[i];
 }
 
-std::vector<bool>& Creature::GetGenotype()
+std::vector<int>& Creature::GetGenotype()
 {
 	return genotype;
 }

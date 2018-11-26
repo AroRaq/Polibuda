@@ -15,7 +15,7 @@ GeneticAlgorithmAgent::GeneticAlgorithmAgent(int popSize, double crossProb, doub
 void GeneticAlgorithmAgent::RunGeneration()
 {
 	generation++;
-	for (int i = 0; i < currentPopulation.size(); i++) {
+	for (unsigned int i = 0; i < currentPopulation.size(); i++) {
 		problem->CalculateFitness(currentPopulation[i]);
 		if (currentPopulation[i]->GetFitness() > bestCreature->GetFitness()) {
 			delete bestCreature;
@@ -25,7 +25,7 @@ void GeneticAlgorithmAgent::RunGeneration()
 	while (nextPopulation.size() < popSize)
 		CrossPopulation();
 	Mutate();
-	for (int i = 0; i < currentPopulation.size(); i++)
+	for (unsigned int i = 0; i < currentPopulation.size(); i++)
 		delete currentPopulation[i];
 	currentPopulation = nextPopulation;
 	nextPopulation.clear();
@@ -33,7 +33,7 @@ void GeneticAlgorithmAgent::RunGeneration()
 
 void GeneticAlgorithmAgent::GenerateRandomPopulation()
 {
-	for (int i = 0; i < currentPopulation.size(); i++)
+	for (unsigned int i = 0; i < currentPopulation.size(); i++)
 		delete currentPopulation[i];
 	currentPopulation.clear();
 	for (int i = 0; i < popSize; i++)
@@ -65,7 +65,7 @@ void GeneticAlgorithmAgent::CrossPopulation()
 
 void GeneticAlgorithmAgent::Mutate()
 {
-	for (int i = 0; i < nextPopulation.size(); i++)
+	for (unsigned int i = 0; i < nextPopulation.size(); i++)
 		nextPopulation[i]->Mutate(mutProb);
 }
 

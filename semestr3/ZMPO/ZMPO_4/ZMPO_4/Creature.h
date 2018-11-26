@@ -10,8 +10,8 @@ public:
 	double GetFitness();
 	Creature* CrossWith(const Creature* other);
 	void Mutate(double probability);
-	std::vector<bool>& GetGenotype();
+	std::vector<int>& GetGenotype();
 private:
-	std::vector<bool> genotype;
+	std::vector<int> genotype;
 	double fitness;
 };

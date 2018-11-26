@@ -1,5 +1,8 @@
 #pragma once
 #include "Problem.h"
+#include <fstream>
+#include <iostream>
+#include <string>
 
 class KnapsackProblem : public Problem {
 	class Item {
@@ -18,6 +21,7 @@ public:
 	int GetProblemSize() override;
 	void Initiate(int capacity, int itemCount);
 	void SetProblem();
+	void ReadFromFile(std::string path);
 private:
 	int capacity;
 	std::vector<Item*> items;
