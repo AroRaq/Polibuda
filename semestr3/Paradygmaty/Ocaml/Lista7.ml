@@ -92,6 +92,8 @@ sig
  val isFull: 'a t -> bool
  (* [isFull q] returns [true] if queue [q] is full,
  otherwise returns [false]. *)
+
+ val toArray: 'a t -> 'a option array
 end;;
 
 
@@ -100,23 +102,23 @@ struct
   type 'a t = {mutable tab: 'a option array; mutable f: int; mutable r: int}
   exception Empty of string
   exception Full of string
-  let length q = if q.f < q.r then q.r - q.f else Array.length q.tab - q.f + q.r
+  let length q = if q.r >= q.f then q.r - q.f else q.r + Array.length q.tab - q.f
   let isFull q = length q = Array.length q.tab - 1
-  let isEmpty q = q.r = q.f
+  let isEmpty q = q.f = q.r
   let empty n = {tab = Array.make (n+1) None; f = 0; r = 0}
-  let enqueue(x, q) = if isFull q then raise (Full "module QueueCycleArray: enqueue")
-    else begin 
-      if q.r = Array.length q.tab then q.r <- 0;
-      q.tab.(q.r) <- Some x;
-      q.r <- q.r+1
-    end
-  let dequeue q = if not (isEmpty q) then 
-    q.r <- if q.r <> 0 then q.r-1 
-           else Array.length q.tab - 1
-  let first q = if isEmpty q then raise (Empty "module QueueCycleArray: first")
-    else match q.tab.(q.f) with
-    Some e -> e
-    | None -> failwith "module QueueCycleArray: first (implementation error)"
+  let enqueue(x, q) = 
+        if isFull q then raise (Full "") else
+        begin
+          q.tab.(q.r) <- Some(x);
+          q.r <- (q.r + 1) mod (Array.length q.tab)
+        end
+  let dequeue q = 
+      if isEmpty q then raise (Empty "") 
+      else q.f <- (q.f + 1) mod (Array.length q.tab)
+
+  let first q = if isEmpty q then raise (Empty "") else let Some(v) = q.tab.(q.f) in v
+
+  let toArray q = q.tab;;
 end;;
 
 let que = QueueTwoLists.empty();;
@@ -128,3 +130,26 @@ let que = QueueTwoLists.dequeue que;;
 let que = QueueTwoLists.dequeue que;;
 let que = QueueTwoLists.dequeue que;;
 QueueTwoLists.toList que;;
+
+let que1 = QueueCycleArray.empty(3);;
+QueueCycleArray.enqueue(1, que1);;
+QueueCycleArray.enqueue(2, que1);;
+QueueCycleArray.enqueue(3, que1);;
+QueueCycleArray.toArray que1;;
+QueueCycleArray.dequeue que1;;
+QueueCycleArray.enqueue(4, que1);;
+QueueCycleArray.first que1;;
+QueueCycleArray.dequeue que1;;
+QueueCycleArray.enqueue(5, que1);;
+QueueCycleArray.toArray(que1);;
+QueueCycleArray.isEmpty(que1);;
+QueueCycleArray.first que1;;
+QueueCycleArray.dequeue que1;;
+QueueCycleArray.enqueue(5, que1);;
+QueueCycleArray.dequeue que1;;
+QueueCycleArray.enqueue(5, que1);;
+QueueCycleArray.dequeue que1;;
+QueueCycleArray.enqueue(5, que1);;
+QueueCycleArray.dequeue que1;;
+QueueCycleArray.enqueue(5, que1);;
+QueueCycleArray.toArray que1;;

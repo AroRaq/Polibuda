@@ -44,3 +44,4 @@ toList (snd k);;
 let l = podziel(toWeirdList(1::2::3::4::5::6::7::[]));;
 toList2 (fst l);;
 toList2 (snd l);;
+
