@@ -8,65 +8,78 @@ GeneticAlgorithmAgent::GeneticAlgorithmAgent(int popSize, double crossProb, doub
 	this->crossProb = crossProb;
 	this->mutProb = mutProb;
 	this->problem = problem;
+	currentPopulation = new std::vector<Creature*>();
+	nextPopulation = new std::vector<Creature*>();
 	GenerateRandomPopulation();
-	bestCreature = new Creature(*currentPopulation[0]);
+	bestCreature = new Creature(*currentPopulation->at(0));
+}
+
+GeneticAlgorithmAgent::~GeneticAlgorithmAgent()
+{
+	for (size_t i = 0; i < currentPopulation->size(); i++)
+		delete currentPopulation->at(i);
+	for (size_t i = 0; i < nextPopulation->size(); i++)
+		delete nextPopulation->at(i);
+	delete currentPopulation;
+	delete nextPopulation;
 }
 
 void GeneticAlgorithmAgent::RunGeneration()
 {
 	generation++;
-	for (unsigned int i = 0; i < currentPopulation.size(); i++) {
-		problem->CalculateFitness(currentPopulation[i]);
-		if (currentPopulation[i]->GetFitness() > bestCreature->GetFitness()) {
+	///Calculate fitness and set best creature
+	for (unsigned int i = 0; i < currentPopulation->size(); i++) {
+		problem->CalculateFitness(currentPopulation->at(i));
+		if (currentPopulation->at(i)->GetFitness() > bestCreature->GetFitness()) {
 			delete bestCreature;
-			bestCreature = new Creature(*currentPopulation[i]);
+			bestCreature = new Creature(*currentPopulation->at(i));
 		}
 	}
-	while (nextPopulation.size() < popSize)
-		CrossPopulation();
+	///Create next generation
+	while (nextPopulation->size() < popSize) {
+		if (Utils::Chance(crossProb)) {
+			CrossTwoCreatures();
+		}
+		else {
+			nextPopulation->push_back(new Creature(*Utils::RandElement(currentPopulation)));
+			nextPopulation->push_back(new Creature(*Utils::RandElement(currentPopulation)));
+		}
+	}
 	Mutate();
-	for (unsigned int i = 0; i < currentPopulation.size(); i++)
-		delete currentPopulation[i];
+	for (size_t i = 0; i < currentPopulation->size(); i++)
+		delete currentPopulation->at(i);
+	delete currentPopulation;
 	currentPopulation = nextPopulation;
-	nextPopulation.clear();
+	nextPopulation = new std::vector<Creature*>();
 }
 
 void GeneticAlgorithmAgent::GenerateRandomPopulation()
 {
-	for (unsigned int i = 0; i < currentPopulation.size(); i++)
-		delete currentPopulation[i];
-	currentPopulation.clear();
+	for (unsigned int i = 0; i < currentPopulation->size(); i++)
+		delete currentPopulation->at(i);
+	currentPopulation->clear();
 	for (int i = 0; i < popSize; i++)
-		currentPopulation.push_back(new Creature(problem->GetProblemSize()));
+		currentPopulation->push_back(new Creature(problem->GetProblemSize()));
 }
 
-void GeneticAlgorithmAgent::CrossPopulation()
+void GeneticAlgorithmAgent::CrossTwoCreatures()
 {
 	Creature* c1 = Utils::RandElement(currentPopulation);
-	Creature* c2;
-	do {
-		c2 = Utils::RandElement(currentPopulation);
-	} while (c1 == c2);
+	Creature* c2 = Utils::RandElement(currentPopulation);
 	Creature* p1 = c1->GetFitness() > c2->GetFitness() ? c1 : c2;
 
 	c1 = Utils::RandElement(currentPopulation);
-	do {
-		c2 = Utils::RandElement(currentPopulation);
-	} while (c1 == c2);
+	c2 = Utils::RandElement(currentPopulation);
 	Creature* p2 = c1->GetFitness() > c2->GetFitness() ? c1 : c2;
 
-	if (Utils::Chance(crossProb)) {
-		if (Utils::Chance(0.5))
-			nextPopulation.push_back(p1->CrossWith(p2));
-		else
-			nextPopulation.push_back(p2->CrossWith(p1));
-	}
+	nextPopulation->push_back(p1->CrossWith(p2));
+	nextPopulation->push_back(p2->CrossWith(p1));
 }
 
 void GeneticAlgorithmAgent::Mutate()
 {
-	for (unsigned int i = 0; i < nextPopulation.size(); i++)
-		nextPopulation[i]->Mutate(mutProb);
+	for (unsigned int i = 0; i < nextPopulation->size(); i++)
+		nextPopulation->at(i)->Mutate(mutProb);
 }
 
 double GeneticAlgorithmAgent::GetBestFitness()

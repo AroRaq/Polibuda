@@ -8,7 +8,7 @@ public:
 	static bool Chance(double probability);
 	static int RandInt(int from, int to);
 	template <typename T>
-	static T RandElement(const std::vector<T>& vec);
+	static T RandElement(const std::vector<T>* vec);
 
 private:
 	static std::random_device rd;
@@ -16,7 +16,7 @@ private:
 };
 
 template<typename T>
-inline T Utils::RandElement(const std::vector<T>& vec)
+inline T Utils::RandElement(const std::vector<T>* vec)
 {
-	return vec[RandInt(0, vec.size() - 1)];
+	return vec->at(RandInt(0, (int)vec->size() - 1));
 }

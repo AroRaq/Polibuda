@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Creature.h"
 
-Creature::Creature(int genotypeLength)
+Creature::Creature(size_t genotypeLength)
 {
 	for (int i = 0; i < genotypeLength; i++)
 		genotype.push_back(Utils::Chance(0.5));
@@ -19,7 +19,7 @@ double Creature::GetFitness()
 
 Creature* Creature::CrossWith(const Creature* other)
 {
-	int divAt = Utils::RandInt(1, genotype.size() - 1);
+	int divAt = Utils::RandInt(1, (int)genotype.size() - 1);
 	Creature* child = new Creature(genotype.size());
 	for (int i = 0; i < divAt; i++)
 		child->genotype[i] = genotype[i];

@@ -5,7 +5,7 @@
 
 class Creature {
 public:
-	Creature(int genotypeLength);
+	Creature(size_t genotypeLength);
 	void SetFitness(double fitness);
 	double GetFitness();
 	Creature* CrossWith(const Creature* other);
