@@ -28,7 +28,7 @@ void GeneticAlgorithmAgent::RunGeneration()
 {
 	generation++;
 	///Calculate fitness and set best creature
-	for (unsigned int i = 0; i < currentPopulation->size(); i++) {
+	for (size_t i = 0; i < currentPopulation->size(); i++) {
 		problem->CalculateFitness(currentPopulation->at(i));
 		if (currentPopulation->at(i)->GetFitness() > bestCreature->GetFitness()) {
 			delete bestCreature;
@@ -55,7 +55,7 @@ void GeneticAlgorithmAgent::RunGeneration()
 
 void GeneticAlgorithmAgent::GenerateRandomPopulation()
 {
-	for (unsigned int i = 0; i < currentPopulation->size(); i++)
+	for (size_t i = 0; i < currentPopulation->size(); i++)
 		delete currentPopulation->at(i);
 	currentPopulation->clear();
 	for (int i = 0; i < popSize; i++)
@@ -72,13 +72,15 @@ void GeneticAlgorithmAgent::CrossTwoCreatures()
 	c2 = Utils::RandElement(currentPopulation);
 	Creature* p2 = c1->GetFitness() > c2->GetFitness() ? c1 : c2;
 
-	nextPopulation->push_back(p1->CrossWith(p2));
-	nextPopulation->push_back(p2->CrossWith(p1));
+	std::pair<Creature*, Creature*> c = p1->CrossWith(p2);
+
+	nextPopulation->push_back(c.first);
+	nextPopulation->push_back(c.second);
 }
 
 void GeneticAlgorithmAgent::Mutate()
 {
-	for (unsigned int i = 0; i < nextPopulation->size(); i++)
+	for (size_t i = 0; i < nextPopulation->size(); i++)
 		nextPopulation->at(i)->Mutate(mutProb);
 }
 

@@ -8,7 +8,7 @@ double KnapsackProblem::CalculateFitness(Creature* creature)
 	std::vector<int> genotype = creature->GetGenotype();
 	if (genotype.size() != items.size())
 		throw std::invalid_argument(IMPLEMENTATION_PROBLEM);
-	for (unsigned int i = 0; i < items.size(); i++) {
+	for (size_t i = 0; i < items.size(); i++) {
 		if (genotype[i]) {
 			currValue += items[i]->GetValue();
 			currWeight += items[i]->GetWeight();
@@ -49,5 +49,4 @@ void KnapsackProblem::ReadFromFile(std::string path) {
 	}
 	weights.close();
 	values.close();
-
 }
