@@ -4,7 +4,14 @@
 #include <iostream>
 #include <string>
 
+#define CAPACITY_EXTENSION "_c.txt"
+#define WEIGHTS_EXTENSION "_w.txt"
+#define VALUES_EXTENSION "_p.txt"
+#define IMPLEMENTATION_PROBLEM "B³¹d implementacji: d³ugoœci genotypów nie s¹ takie same"
+
+
 class KnapsackProblem : public Problem {
+
 	class Item {
 	public:
 		Item(int weight, int value) : weight(weight), value(value) {}
@@ -18,9 +25,8 @@ class KnapsackProblem : public Problem {
 
 public:
 	double CalculateFitness(Creature* creature) override;
-	int GetProblemSize() override;
+	size_t GetProblemSize() override;
 	void Initiate(int capacity, int itemCount);
-	void SetProblem();
 	void ReadFromFile(std::string path);
 private:
 	int capacity;

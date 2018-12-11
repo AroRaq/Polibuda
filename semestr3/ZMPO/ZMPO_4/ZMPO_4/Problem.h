@@ -5,7 +5,7 @@
 class Problem {
 public:
 	virtual double CalculateFitness(Creature* creature) = 0;
-	virtual int GetProblemSize() = 0;
+	virtual size_t GetProblemSize() = 0;
 protected:
 
 };

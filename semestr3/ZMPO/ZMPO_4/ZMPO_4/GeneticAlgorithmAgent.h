@@ -7,9 +7,10 @@
 class GeneticAlgorithmAgent {
 public:
 	GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem* problem);
+	~GeneticAlgorithmAgent();
 	void RunGeneration();
 	void GenerateRandomPopulation();
-	void CrossPopulation();
+	void CrossTwoCreatures();
 	void Mutate();
 	double GetBestFitness();
 
@@ -19,7 +20,7 @@ private:
 	int popSize;
 	double crossProb;
 	double mutProb;
-	std::vector<Creature*> currentPopulation;
-	std::vector<Creature*> nextPopulation;
+	std::vector<Creature*>* currentPopulation;
+	std::vector<Creature*>* nextPopulation;
 	Creature* bestCreature;
 };
