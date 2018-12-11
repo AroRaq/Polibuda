@@ -33,7 +33,7 @@ def lBFS[A](tree: lBT[A]) : Stream[A] = {
       case LNode(el, lf, rf)::t => Stream.cons(el, f(t ++ List(lf(), rf())))
     }
   }
-  f(List(tree));
+  f(List(tree))
 }
 
 def lTree(n: Int) : lBT[Int] = {
