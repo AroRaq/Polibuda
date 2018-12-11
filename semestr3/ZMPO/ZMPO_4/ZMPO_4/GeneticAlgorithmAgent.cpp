@@ -1,8 +1,12 @@
 #include "pch.h"
 #include "GeneticAlgorithmAgent.h"
 
-GeneticAlgorithmAgent::GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem* problem)
+GeneticAlgorithmAgent::GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem* problem, errorCode* errCode)
 {
+	if (popSize <= 0 || crossProb < 0 || crossProb > 1 || mutProb < 0 || mutProb > 1) {
+		*errCode = WRONG_PARAMETER;
+		return;
+	}
 	generation = 0;
 	this->popSize = popSize;
 	this->crossProb = crossProb;

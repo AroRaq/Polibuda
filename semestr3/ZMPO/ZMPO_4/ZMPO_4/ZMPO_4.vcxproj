@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Creature.h" />
+    <ClInclude Include="Error.h" />
     <ClInclude Include="GeneticAlgorithmAgent.h" />
     <ClInclude Include="KnapsackProblem.h" />
     <ClInclude Include="pch.h" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Creature.cpp" />
+    <ClCompile Include="Error.cpp" />
     <ClCompile Include="GeneticAlgorithmAgent.cpp" />
     <ClCompile Include="KnapsackProblem.cpp" />
     <ClCompile Include="pch.cpp">

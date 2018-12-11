@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "Error.h"
 
 #define CAPACITY_EXTENSION "_c.txt"
 #define WEIGHTS_EXTENSION "_w.txt"
@@ -26,8 +27,8 @@ class KnapsackProblem : public Problem {
 public:
 	double CalculateFitness(Creature* creature) override;
 	size_t GetProblemSize() override;
-	void Initiate(int capacity, int itemCount);
-	void ReadFromFile(std::string path);
+	void Initiate(int capacity, int itemCount, errorCode* errCode);
+	void ReadFromFile(std::string path, errorCode* errCode);
 private:
 	int capacity;
 	std::vector<Item*> items;

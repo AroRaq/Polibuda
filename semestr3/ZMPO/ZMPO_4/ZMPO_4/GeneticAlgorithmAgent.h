@@ -3,10 +3,11 @@
 #include <vector>
 #include "Creature.h"
 #include "Problem.h"
+#include "Error.h"
 
 class GeneticAlgorithmAgent {
 public:
-	GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem* problem);
+	GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem* problem, errorCode* errCode);
 	~GeneticAlgorithmAgent();
 	void RunGeneration();
 	void GenerateRandomPopulation();

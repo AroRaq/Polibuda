@@ -27,17 +27,25 @@ size_t KnapsackProblem::GetProblemSize()
 	return items.size();
 }
 
-void KnapsackProblem::Initiate(int capacity, int itemCount) 
+void KnapsackProblem::Initiate(int capacity, int itemCount, errorCode* errCode) 
 {
+	if (itemCount <= 0) {
+		*errCode = NOT_ENOUGH_ITEMS;
+		return;
+	}
 	this->capacity = capacity;
 	for (int i = 0; i < itemCount; i++)
 		items.push_back(new Item(Utils::RandInt(1, 100), Utils::RandInt(0, 100)));
 }
 
-void KnapsackProblem::ReadFromFile(std::string path) {
+void KnapsackProblem::ReadFromFile(std::string path, errorCode* errCode) {
 	std::ifstream fcapacity(path + CAPACITY_EXTENSION);
 	std::ifstream weights(path + WEIGHTS_EXTENSION);
 	std::ifstream values(path + VALUES_EXTENSION);
+	if (!fcapacity.is_open() || !weights.is_open() || !values.is_open()) {
+		*errCode = FILE_NOT_FOUND;
+		return;
+	}
 	fcapacity >> capacity;
 	fcapacity.close();
 
@@ -49,4 +57,7 @@ void KnapsackProblem::ReadFromFile(std::string path) {
 	}
 	weights.close();
 	values.close();
+	if (items.size() == 0) {
+		*errCode = NOT_ENOUGH_ITEMS;
+	}
 }
