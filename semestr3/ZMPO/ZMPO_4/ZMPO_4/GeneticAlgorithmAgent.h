@@ -12,7 +12,7 @@ public:
 	void RunGeneration();
 	void GenerateRandomPopulation();
 	void CrossTwoCreatures();
-	void Mutate();
+	void MutateAll();
 	double GetBestFitness();
 
 private:

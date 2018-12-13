@@ -2,8 +2,9 @@
 
 #include <iostream>
 
-#define ERR_FILE_NOT_FOUND "File not found"
-#define ERR_WRONG_PARAMETER "File not found"
+#define ERR_FILE_NOT_FOUND "File not found\n"
+#define ERR_WRONG_PARAMETER "Wrong parameters\n"
+#define ERR_NOT_ENOUGH_ITEMS "Not enough items for the problem\n"
 
 
 enum errorCode {

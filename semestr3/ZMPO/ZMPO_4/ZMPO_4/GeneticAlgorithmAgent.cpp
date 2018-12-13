@@ -26,6 +26,7 @@ GeneticAlgorithmAgent::~GeneticAlgorithmAgent()
 		delete nextPopulation->at(i);
 	delete currentPopulation;
 	delete nextPopulation;
+	delete bestCreature;
 }
 
 void GeneticAlgorithmAgent::RunGeneration()
@@ -49,7 +50,7 @@ void GeneticAlgorithmAgent::RunGeneration()
 			nextPopulation->push_back(new Creature(*Utils::RandElement(currentPopulation)));
 		}
 	}
-	Mutate();
+	MutateAll();
 	for (size_t i = 0; i < currentPopulation->size(); i++)
 		delete currentPopulation->at(i);
 	delete currentPopulation;
@@ -82,7 +83,7 @@ void GeneticAlgorithmAgent::CrossTwoCreatures()
 	nextPopulation->push_back(c.second);
 }
 
-void GeneticAlgorithmAgent::Mutate()
+void GeneticAlgorithmAgent::MutateAll()
 {
 	for (size_t i = 0; i < nextPopulation->size(); i++)
 		nextPopulation->at(i)->Mutate(mutProb);
