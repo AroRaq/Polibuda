@@ -11,7 +11,7 @@
 #define IMPLEMENTATION_PROBLEM "B³¹d implementacji: d³ugoœci genotypów nie s¹ takie same"
 
 
-class KnapsackProblem : public Problem {
+class KnapsackProblem : public Problem<bool> {
 
 	class Item {
 	public:
@@ -25,7 +25,7 @@ class KnapsackProblem : public Problem {
 
 
 public:
-	double CalculateFitness(Creature* creature) override;
+	double CalculateFitness(std::vector<bool> genotype) override;
 	size_t GetProblemSize() override;
 	void Initiate(int capacity, int itemCount, errorCode* errCode);
 	void ReadFromFile(std::string path, errorCode* errCode);

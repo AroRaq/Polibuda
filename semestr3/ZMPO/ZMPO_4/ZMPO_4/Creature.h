@@ -3,6 +3,7 @@
 #include <vector>
 #include "Utils.h"
 
+template <class T>
 class Creature {
 public:
 	Creature(size_t genotypeLength);
@@ -10,8 +11,12 @@ public:
 	double GetFitness() const;
 	std::pair<Creature*, Creature*> CrossWith(const Creature* other) const;
 	void Mutate(double probability);
-	std::vector<int> GetGenotype() const;
+	std::vector<T> GetGenotype() const;
 private:
-	std::vector<int> genotype;
+	std::vector<T> genotype;
 	double fitness;
 };
+
+
+
+

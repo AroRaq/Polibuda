@@ -1,23 +1,27 @@
-#include "pch.h"
 #include "Creature.h"
 
-Creature::Creature(size_t genotypeLength)
+
+template <class T>
+Creature<T>::Creature(size_t genotypeLength)
 {
 	for (int i = 0; i < genotypeLength; i++)
 		genotype.push_back(Utils::Chance(0.5));
 }
 
-void Creature::SetFitness(double fitness)
+template <class T>
+void Creature<T>::SetFitness(double fitness)
 {
 	this->fitness = fitness;
 }
 
-double Creature::GetFitness() const
+template <class T>
+double Creature<T>::GetFitness() const
 {
 	return fitness;
 }
 
-std::pair<Creature*, Creature*> Creature::CrossWith(const Creature* other) const
+template <class T>
+std::pair<Creature<T>*, Creature<T>*> Creature<T>::CrossWith(const Creature<T>* other) const
 {
 	int divAt = Utils::RandInt(1, (int)genotype.size() - 2);
 	Creature* child1 = new Creature(*this);
@@ -37,14 +41,41 @@ std::pair<Creature*, Creature*> Creature::CrossWith(const Creature* other) const
 	return std::make_pair(child1, child2);
 }
 
-void Creature::Mutate(double probability)
+template <>
+void Creature<bool>::Mutate(double probability) {
+	for (size_t i = 0; i < genotype.size(); i++)
+		if (Utils::Chance(probability))
+			genotype[i] = !genotype[i];
+}
+
+template <>
+void Creature<int>::Mutate(double probability) {
+	for (size_t i = 0; i < genotype.size(); i++)
+		if (Utils::Chance(probability))
+			genotype[i] = !genotype[i];
+}
+
+template <>
+void Creature<double>::Mutate(double probability) {
+	for (size_t i = 0; i < genotype.size(); i++)
+		if (Utils::Chance(probability))
+			genotype[i] = !genotype[i];
+}
+
+template <class T>
+void Creature<T>::Mutate(double probability)
 {
 	for (size_t i = 0; i < genotype.size(); i++)
 		if (Utils::Chance(probability))
 			genotype[i] = !genotype[i];
 }
 
-std::vector<int> Creature::GetGenotype() const
+template <class T>
+std::vector<T> Creature<T>::GetGenotype() const
 {
 	return genotype;
 }
+
+template class Creature<bool>;
+template class Creature<int>;
+template class Creature<double>;

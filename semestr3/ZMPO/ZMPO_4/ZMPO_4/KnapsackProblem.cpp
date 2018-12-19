@@ -1,11 +1,10 @@
 #include "pch.h"
 #include "KnapsackProblem.h"
 
-double KnapsackProblem::CalculateFitness(Creature* creature)
+double KnapsackProblem::CalculateFitness(std::vector<bool> genotype)
 {
 	int currValue = 0;
 	int currWeight = 0;
-	std::vector<int> genotype = creature->GetGenotype();
 	//if (genotype.size() != items.size())
 	//	throw std::invalid_argument(IMPLEMENTATION_PROBLEM);
 	for (size_t i = 0; i < items.size(); i++) {
@@ -13,12 +12,10 @@ double KnapsackProblem::CalculateFitness(Creature* creature)
 			currValue += items[i]->GetValue();
 			currWeight += items[i]->GetWeight();
 			if (currWeight > capacity) {
-				creature->SetFitness(0);
 				return 0;
 			}
 		}
 	}
-	creature->SetFitness(currValue);
 	return currValue;
 }
 
