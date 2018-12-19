@@ -1,7 +1,15 @@
 #include "pch.h"
 #include "KnapsackProblem.h"
 
-double KnapsackProblem::CalculateFitness(std::vector<bool> genotype)
+template <class T>
+KnapsackProblem<T>::~KnapsackProblem()
+{
+	for (int i = 0; i < items.size(); i++)
+		delete items[i];
+}
+
+template <class T>
+double KnapsackProblem<T>::CalculateFitness(std::vector<T> genotype)
 {
 	int currValue = 0;
 	int currWeight = 0;
@@ -19,12 +27,14 @@ double KnapsackProblem::CalculateFitness(std::vector<bool> genotype)
 	return currValue;
 }
 
-size_t KnapsackProblem::GetProblemSize()
+template <class T>
+size_t KnapsackProblem<T>::GetProblemSize()
 {
 	return items.size();
 }
 
-void KnapsackProblem::Initiate(int capacity, int itemCount, errorCode* errCode) 
+template <class T>
+void KnapsackProblem<T>::Initiate(int capacity, int itemCount, errorCode* errCode) 
 {
 	if (itemCount <= 0) {
 		*errCode = NOT_ENOUGH_ITEMS;
@@ -35,7 +45,8 @@ void KnapsackProblem::Initiate(int capacity, int itemCount, errorCode* errCode)
 		items.push_back(new Item(Utils::RandInt(1, 100), Utils::RandInt(0, 100)));
 }
 
-void KnapsackProblem::ReadFromFile(std::string path, errorCode* errCode) {
+template <class T>
+void KnapsackProblem<T>::ReadFromFile(std::string path, errorCode* errCode) {
 	std::ifstream fcapacity(path + CAPACITY_EXTENSION);
 	std::ifstream weights(path + WEIGHTS_EXTENSION);
 	std::ifstream values(path + VALUES_EXTENSION);
@@ -58,3 +69,7 @@ void KnapsackProblem::ReadFromFile(std::string path, errorCode* errCode) {
 		*errCode = NOT_ENOUGH_ITEMS;
 	}
 }
+
+template class KnapsackProblem<bool>;
+template class KnapsackProblem<int>;
+template class KnapsackProblem<double>;

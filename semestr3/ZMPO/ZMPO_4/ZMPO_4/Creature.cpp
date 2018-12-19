@@ -2,10 +2,25 @@
 
 
 template <class T>
-Creature<T>::Creature(size_t genotypeLength)
+Creature<T>::Creature(size_t genotypeLength, double crossProbability)
 {
 	for (int i = 0; i < genotypeLength; i++)
 		genotype.push_back(Utils::Chance(0.5));
+	this->crossProbability = crossProbability;
+}
+
+template<class T>
+void Creature<T>::operator++(int)
+{
+	Mutate();
+}
+
+template<class T>
+Creature<T>* Creature<T>::operator+(Creature & other)
+{
+	std::pair<Creature*, Creature*> p = CrossWith(other);
+	delete p.second;
+	return p.first;
 }
 
 template <class T>
@@ -21,20 +36,20 @@ double Creature<T>::GetFitness() const
 }
 
 template <class T>
-std::pair<Creature<T>*, Creature<T>*> Creature<T>::CrossWith(const Creature<T>* other) const
+std::pair<Creature<T>*, Creature<T>*> Creature<T>::CrossWith(const Creature<T>& other) const
 {
 	int divAt = Utils::RandInt(1, (int)genotype.size() - 2);
 	Creature* child1 = new Creature(*this);
-	Creature* child2 = new Creature(*other);
+	Creature* child2 = new Creature(other);
 	if (divAt > genotype.size() / 2) {
 		for (size_t i = divAt; i < genotype.size(); i++) {
-			child1->genotype[i] = other->genotype[i];
+			child1->genotype[i] = other.genotype[i];
 			child2->genotype[i] = genotype[i];
 		}
 	}
 	else {
 		for (size_t i = 0; i < divAt; i++) {
-			child1->genotype[i] = other->genotype[i];
+			child1->genotype[i] = other.genotype[i];
 			child2->genotype[i] = genotype[i];
 		}
 	}
@@ -42,31 +57,31 @@ std::pair<Creature<T>*, Creature<T>*> Creature<T>::CrossWith(const Creature<T>* 
 }
 
 template <>
-void Creature<bool>::Mutate(double probability) {
+void Creature<bool>::Mutate() {
 	for (size_t i = 0; i < genotype.size(); i++)
-		if (Utils::Chance(probability))
+		if (Utils::Chance(crossProbability))
 			genotype[i] = !genotype[i];
 }
 
 template <>
-void Creature<int>::Mutate(double probability) {
+void Creature<int>::Mutate() {
 	for (size_t i = 0; i < genotype.size(); i++)
-		if (Utils::Chance(probability))
+		if (Utils::Chance(crossProbability))
 			genotype[i] = !genotype[i];
 }
 
 template <>
-void Creature<double>::Mutate(double probability) {
+void Creature<double>::Mutate() {
 	for (size_t i = 0; i < genotype.size(); i++)
-		if (Utils::Chance(probability))
+		if (Utils::Chance(crossProbability))
 			genotype[i] = !genotype[i];
 }
 
 template <class T>
-void Creature<T>::Mutate(double probability)
+void Creature<T>::Mutate()
 {
 	for (size_t i = 0; i < genotype.size(); i++)
-		if (Utils::Chance(probability))
+		if (Utils::Chance(crossProbability))
 			genotype[i] = !genotype[i];
 }
 

@@ -10,8 +10,8 @@
 #define VALUES_EXTENSION "_p.txt"
 #define IMPLEMENTATION_PROBLEM "B³¹d implementacji: d³ugoœci genotypów nie s¹ takie same"
 
-
-class KnapsackProblem : public Problem<bool> {
+template <class T>
+class KnapsackProblem : public Problem<T> {
 
 	class Item {
 	public:
@@ -25,7 +25,8 @@ class KnapsackProblem : public Problem<bool> {
 
 
 public:
-	double CalculateFitness(std::vector<bool> genotype) override;
+	~KnapsackProblem();
+	double CalculateFitness(std::vector<T> genotype) override;
 	size_t GetProblemSize() override;
 	void Initiate(int capacity, int itemCount, errorCode* errCode);
 	void ReadFromFile(std::string path, errorCode* errCode);
