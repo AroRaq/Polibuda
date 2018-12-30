@@ -12,6 +12,12 @@ bool Utils::Chance(double probability)
 
 int Utils::RandInt(int from, int to)
 {
-	std::uniform_int_distribution<int> dis(from, to);
+	std::uniform_int_distribution<> dis(from, to);
+	return dis(gen);
+}
+
+double Utils::RandDouble(double from, double to)
+{
+	std::uniform_real_distribution<> dis(from, to);
 	return dis(gen);
 }

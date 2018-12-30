@@ -1,12 +1,32 @@
 #include "Creature.h"
 
 
-template <class T>
-Creature<T>::Creature(size_t genotypeLength, double crossProbability)
+template <>
+Creature<bool>::Creature(size_t genotypeLength, double crossProbability, bool left, bool right)
 {
 	for (int i = 0; i < genotypeLength; i++)
 		genotype.push_back(Utils::Chance(0.5));
 	this->crossProbability = crossProbability;
+}
+
+template <>
+Creature<int>::Creature(size_t genotypeLength, double crossProbability, int left, int right)
+{
+	for (int i = 0; i < genotypeLength; i++)
+		genotype.push_back(Utils::RandInt(left, right));
+	this->crossProbability = crossProbability;
+	leftBound = left;
+	rightBound = right;
+}
+
+template <>
+Creature<double>::Creature(size_t genotypeLength, double crossProbability, double left, double right)
+{
+	for (int i = 0; i < genotypeLength; i++)
+		genotype.push_back(Utils::RandDouble(left, right));
+	this->crossProbability = crossProbability;
+	leftBound = left;
+	rightBound = right;
 }
 
 template<class T>
@@ -67,22 +87,14 @@ template <>
 void Creature<int>::Mutate() {
 	for (size_t i = 0; i < genotype.size(); i++)
 		if (Utils::Chance(crossProbability))
-			genotype[i] = !genotype[i];
+			genotype[i] = Utils::RandInt(leftBound, rightBound);
 }
 
 template <>
 void Creature<double>::Mutate() {
 	for (size_t i = 0; i < genotype.size(); i++)
 		if (Utils::Chance(crossProbability))
-			genotype[i] = !genotype[i];
-}
-
-template <class T>
-void Creature<T>::Mutate()
-{
-	for (size_t i = 0; i < genotype.size(); i++)
-		if (Utils::Chance(crossProbability))
-			genotype[i] = !genotype[i];
+			genotype[i] = Utils::RandDouble(leftBound, rightBound);
 }
 
 template <class T>

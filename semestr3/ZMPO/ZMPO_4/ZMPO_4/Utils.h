@@ -7,6 +7,7 @@ class Utils {
 public:
 	static bool Chance(double probability);
 	static int RandInt(int from, int to);
+	static double RandDouble(double from, double to);
 	template <typename T>
 	static T RandElement(const std::vector<T>* vec);
 	template <typename T>
