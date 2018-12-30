@@ -4,7 +4,7 @@
 template <>
 Creature<bool>::Creature(size_t genotypeLength, double crossProbability, bool left, bool right)
 {
-	for (int i = 0; i < genotypeLength; i++)
+	for (size_t i = 0; i < genotypeLength; i++)
 		genotype.push_back(Utils::Chance(0.5));
 	this->crossProbability = crossProbability;
 }
@@ -12,7 +12,7 @@ Creature<bool>::Creature(size_t genotypeLength, double crossProbability, bool le
 template <>
 Creature<int>::Creature(size_t genotypeLength, double crossProbability, int left, int right)
 {
-	for (int i = 0; i < genotypeLength; i++)
+	for (size_t i = 0; i < genotypeLength; i++)
 		genotype.push_back(Utils::RandInt(left, right));
 	this->crossProbability = crossProbability;
 	leftBound = left;
@@ -22,7 +22,7 @@ Creature<int>::Creature(size_t genotypeLength, double crossProbability, int left
 template <>
 Creature<double>::Creature(size_t genotypeLength, double crossProbability, double left, double right)
 {
-	for (int i = 0; i < genotypeLength; i++)
+	for (size_t i = 0; i < genotypeLength; i++)
 		genotype.push_back(Utils::RandDouble(left, right));
 	this->crossProbability = crossProbability;
 	leftBound = left;
@@ -61,7 +61,7 @@ std::pair<Creature<T>*, Creature<T>*> Creature<T>::CrossWith(const Creature<T>& 
 	int divAt = Utils::RandInt(1, (int)genotype.size() - 2);
 	Creature* child1 = new Creature(*this);
 	Creature* child2 = new Creature(other);
-	if (divAt > genotype.size() / 2) {
+	if (divAt > (int)genotype.size() / 2) {
 		for (size_t i = divAt; i < genotype.size(); i++) {
 			child1->genotype[i] = other.genotype[i];
 			child2->genotype[i] = genotype[i];
