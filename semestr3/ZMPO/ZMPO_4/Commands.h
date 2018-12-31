@@ -11,7 +11,13 @@
 
 #define FILE_NAME "p08"
 #define CONSOLE_OUTPUT "Generation %d best: %d\n"
-#define RUN_TIME_SECONDS 10
+#define IN_TIME "Time to run (secs)"
+#define IN_PROBLEM_SIZE "Problem size"
+
+#define POP_SIZE 10
+#define CROSS_PROB 0.25
+#define MUT_PROB 0.1
+
 
 class CommandRunKnapBool : public CCommand {
 public:

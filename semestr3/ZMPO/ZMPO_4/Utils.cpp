@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Utils.h"
 
 std::random_device Utils::rd;

@@ -20,11 +20,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{684FF40C-6D5D-4FBB-A3B2-BF372562412F}</ProjectGuid>
+    <ProjectGuid>{33A3DE52-8345-4A64-B51F-3F8D5BAB0EC7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>MenuLibrary</RootNamespace>
+    <RootNamespace>ZMPO4</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>MenuLibrary</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,7 +40,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -85,17 +84,19 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\Users\arkad\source\repos\Polibuda\semestr3\ZMPO\MenuLibrary\MenuLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);C:\Users\arkad\source\repos\Polibuda\semestr3\ZMPO\MenuLibrary\x64\Debug\MenuLibrary.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,10 +108,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>C:\Users\arkad\source\repos\Polibuda\semestr3\ZMPO\MenuLibrary</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\arkad\source\repos\Polibuda\semestr3\ZMPO\ZMPO_2_copy\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);"C:\Users\arkad\source\repos\Polibuda\semestr3\ZMPO\x64\Debug\MenuLibrary.lib"</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -134,7 +138,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -152,17 +156,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CCommand.h" />
-    <ClInclude Include="CMenu.h" />
-    <ClInclude Include="CMenuCommand.h" />
-    <ClInclude Include="CMenuItem.h" />
-    <ClInclude Include="Utils1.h" />
+    <ClInclude Include="Commands.h" />
+    <ClInclude Include="Creature.h" />
+    <ClInclude Include="Error.h" />
+    <ClInclude Include="GeneticAlgorithmAgent.h" />
+    <ClInclude Include="KnapsackProblem.h" />
+    <ClInclude Include="LeadingOnesProblem.h" />
+    <ClInclude Include="OneMaxProblem.h" />
+    <ClInclude Include="Problem.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CCommand.cpp" />
-    <ClCompile Include="CMenu.cpp" />
-    <ClCompile Include="CMenuCommand.cpp" />
-    <ClCompile Include="CMenuItem.cpp" />
+    <ClCompile Include="Commands.cpp" />
+    <ClCompile Include="Creature.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Error.cpp" />
+    <ClCompile Include="GeneticAlgorithmAgent.cpp" />
+    <ClCompile Include="KnapsackProblem.cpp" />
+    <ClCompile Include="LeadingOnesProblem.cpp" />
+    <ClCompile Include="OneMaxProblem.cpp" />
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="ZMPO_4.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
