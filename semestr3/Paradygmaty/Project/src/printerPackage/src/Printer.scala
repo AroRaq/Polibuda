@@ -5,4 +5,5 @@ trait Printer {
   def canPrint(format: Format) : Boolean
   def canPrint(file: File) : Boolean
   def isEmpty : Boolean
+  def hasPaper : Boolean
 }

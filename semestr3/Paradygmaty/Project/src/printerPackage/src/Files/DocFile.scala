@@ -1,5 +1,5 @@
 package Files
 
-class DocFile (name: String, size: Int) extends File(name, size) with Printable {
+case class DocFile (fileName: String, fileSize: Int) extends File(fileName, fileSize) with Printable {
   override def printInColour: Boolean = false
 }

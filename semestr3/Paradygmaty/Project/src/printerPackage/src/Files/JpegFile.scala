@@ -1,5 +1,5 @@
 package Files
 
-class JpegFile(name: String, size: Int) extends File(name, size) with Printable {
+case class JpegFile(fileName: String, fileSize: Int) extends File(fileName, fileSize) with Printable {
   override def printInColour: Boolean = true
 }

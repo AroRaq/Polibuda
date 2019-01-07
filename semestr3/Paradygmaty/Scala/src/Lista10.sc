@@ -40,7 +40,7 @@ object MyQueue {
 }
 
 
-def copy[A](dest: collection.mutable.Seq[A], src: collection.mutable.Seq[A]) : Unit = {
+def copy[A](dest: collection.mutable.Seq[_>:A], src: collection.mutable.Seq[A]) : Unit = {
   require(src.length <= dest.length)
   var i = 0
   src.foreach(a => {dest.update(i, a); i+=1})
