@@ -6,7 +6,7 @@
 template <class T>
 class Creature {
 public:
-	Creature(size_t genotypeLength, double crossProbability);
+	Creature(size_t genotypeLength, double crossProbability, T left, T right);
 
 	void operator++(int);
 	Creature* operator+(Creature& other);
@@ -17,6 +17,7 @@ public:
 	void Mutate();
 	std::vector<T> GetGenotype() const;
 private:
+	T leftBound, rightBound;
 	std::vector<T> genotype;
 	double fitness;
 	double crossProbability;

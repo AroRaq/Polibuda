@@ -2,8 +2,10 @@
 
 
 template <class T>
-GeneticAlgorithmAgent<T>::GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem<T>* problem, errorCode* errCode)
+GeneticAlgorithmAgent<T>::GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem<T>* problem, errorCode* errCode, T left, T right)
 {
+	leftBound = left;
+	rightBound = right;
 	if (popSize <= 0 || crossProb < 0 || crossProb > 1 || mutProb < 0 || mutProb > 1) {
 		*errCode = WRONG_PARAMETER;
 		return;
@@ -62,7 +64,7 @@ void GeneticAlgorithmAgent<T>::GenerateRandomPopulation()
 		delete currentPopulation->at(i);
 	currentPopulation->clear();
 	for (int i = 0; i < popSize; i++)
-		currentPopulation->push_back(new Creature<T>(problem->GetProblemSize(), crossProb));
+		currentPopulation->push_back(new Creature<T>(problem->GetProblemSize(), crossProb, leftBound, rightBound));
 }
 
 template <class T>
@@ -92,7 +94,6 @@ double GeneticAlgorithmAgent<T>::GetBestFitness()
 {
 	return bestCreature->GetFitness();
 }
-
 
 template GeneticAlgorithmAgent<bool>;
 template GeneticAlgorithmAgent<int>;

@@ -8,7 +8,7 @@
 template <class T>
 class GeneticAlgorithmAgent {
 public:
-	GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem<T>* problem, errorCode* errCode);
+	GeneticAlgorithmAgent(int popSize, double crossProb, double mutProb, Problem<T>* problem, errorCode* errCode, T left, T right);
 	~GeneticAlgorithmAgent();
 	void RunGeneration();
 	double GetBestFitness();
@@ -28,6 +28,7 @@ private:
 	std::vector<Creature<T>*>* currentPopulation;
 	std::vector<Creature<T>*>* nextPopulation;
 	Creature<T>* bestCreature;
+	T leftBound, rightBound;
 };
 
 

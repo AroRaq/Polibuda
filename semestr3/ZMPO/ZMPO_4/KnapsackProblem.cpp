@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "KnapsackProblem.h"
 
 template <class T>
@@ -8,13 +7,11 @@ KnapsackProblem<T>::~KnapsackProblem()
 		delete items[i];
 }
 
-template <class T>
-double KnapsackProblem<T>::CalculateFitness(std::vector<T> genotype)
+template<>
+double KnapsackProblem<bool>::CalculateFitness(std::vector<bool> genotype)
 {
 	int currValue = 0;
 	int currWeight = 0;
-	//if (genotype.size() != items.size())
-	//	throw std::invalid_argument(IMPLEMENTATION_PROBLEM);
 	for (size_t i = 0; i < items.size(); i++) {
 		if (genotype[i]) {
 			currValue += items[i]->GetValue();
@@ -22,6 +19,36 @@ double KnapsackProblem<T>::CalculateFitness(std::vector<T> genotype)
 			if (currWeight > capacity) {
 				return 0;
 			}
+		}
+	}
+	return currValue;
+}
+
+template<>
+double KnapsackProblem<int>::CalculateFitness(std::vector<int> genotype)
+{
+	int currValue = 0;
+	int currWeight = 0;
+	for (size_t i = 0; i < items.size(); i++) {
+		currValue += genotype[i] * items[i]->GetValue();
+		currWeight += genotype[i] * items[i]->GetWeight();
+		if (currWeight > capacity) {
+			return 0;
+		}
+	}
+	return currValue;
+}
+
+template<>
+double KnapsackProblem<double>::CalculateFitness(std::vector<double> genotype)
+{
+	double currValue = 0;
+	double currWeight = 0;
+	for (size_t i = 0; i < items.size(); i++) {
+		currValue += genotype[i] * items[i]->GetValue();
+		currWeight += genotype[i] * items[i]->GetWeight();
+		if (currWeight > capacity) {
+			return 0;
 		}
 	}
 	return currValue;
