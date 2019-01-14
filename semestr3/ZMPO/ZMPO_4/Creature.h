@@ -8,8 +8,9 @@ class Creature {
 public:
 	Creature(size_t genotypeLength, double crossProbability, T left, T right);
 
-	void operator++(int);
+	Creature& operator++(int);
 	Creature* operator+(Creature& other);
+	Creature* operator-(Creature& other);
 
 	void SetFitness(double fitness);
 	double GetFitness() const;

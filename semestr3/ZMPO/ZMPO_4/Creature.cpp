@@ -30,17 +30,54 @@ Creature<double>::Creature(size_t genotypeLength, double crossProbability, doubl
 }
 
 template<class T>
-void Creature<T>::operator++(int)
+Creature<T>& Creature<T>::operator++(int)
 {
 	Mutate();
+	return *this;
 }
 
 template<class T>
-Creature<T>* Creature<T>::operator+(Creature & other)
+Creature<T>* Creature<T>::operator+(Creature& other)
 {
 	std::pair<Creature*, Creature*> p = CrossWith(other);
 	delete p.second;
 	return p.first;
+}
+
+template<>
+Creature<bool>* Creature<bool>::operator-(Creature& other)
+{
+	Creature* child = new Creature(*this);
+	for (int i = 0; i < child->genotype.size(); i++) {
+		child->genotype[i] = genotype[i] ^ other.genotype[i];
+	}
+	return child;
+}
+
+template<>
+Creature<int>* Creature<int>::operator-(Creature& other)
+{
+	Creature* child = new Creature(*this);
+	for (int i = 0; i < child->genotype.size(); i++) {
+		child->genotype[i] = std::max(0, other.genotype[i] - child->genotype[i]);
+	}
+	return child;
+}
+
+template<>
+Creature<double>* Creature<double>::operator-(Creature& other)
+{
+	Creature* child = new Creature(*this);
+	for (int i = 0; i < child->genotype.size(); i++) {
+		child->genotype[i] = std::max(0., other.genotype[i] - child->genotype[i]);
+	}
+	return child;
+}
+
+template<class T>
+Creature<T>* Creature<T>::operator-(Creature & other)
+{
+	return nullptr;
 }
 
 template <class T>

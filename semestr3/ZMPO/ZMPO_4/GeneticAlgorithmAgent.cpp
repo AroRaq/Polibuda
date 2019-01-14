@@ -70,8 +70,7 @@ void GeneticAlgorithmAgent<T>::GenerateRandomPopulation()
 template <class T>
 void GeneticAlgorithmAgent<T>::CrossTwoCreatures()
 {
-	
-	nextPopulation->push_back(*DrawParent() + *DrawParent());
+	nextPopulation->push_back(*DrawParent() - *DrawParent());
 }
 
 template <class T>
