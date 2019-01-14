@@ -1,4 +1,3 @@
-import Exceptions._
 import Files._
 
 class BasicPrinter extends Printer {
@@ -7,23 +6,26 @@ class BasicPrinter extends Printer {
     var capacity = 50
     var sheets = 50
     override def hasPaper(format: Format): Boolean = sheets > 0
-    override def restock(format: Format, number: Int): Unit =
+    override def restock(number: Int): Unit = 0
   }
 
   override def print(file: File, format: Format): Unit = {
-    if (!file.isInstanceOf[Printable])
-      throw new FileNotPrintableException
-    if (!canPrint(format))
-      throw new FormatNotSupported
-    val p = file.asInstanceOf[Printable]
-    if (p.printInColour)
-      throw new PrinterNotColourException
+    if (!file.isInstanceOf[Printable]){
+      printf("File format not suitable for printing.")
+    }
+    else if (!canPrint(format)) {
+      printf("Printer doesn't support this file format.")
+    }
+    else if (file.asInstanceOf[Printable].printInColour) {
+      printf("This printer can't print in colour")
+    }
     else {
-      if (file.size.toFloat / 100 > inkLevel)
-        throw new NotEnoughInkException
+      if (file.size.toFloat / 100 > inkLevel) {
+        printf("Not enough ink to print that file.");
+      }
       else {
         // druknij to
-        printf("Wydrukowano %s.", file.name)
+        printf("Successfully printed %s.", file.name)
         inkLevel -= file.size.toFloat / 100
       }
     }
@@ -36,7 +38,8 @@ class BasicPrinter extends Printer {
     }
   }
 
-  override def isEmpty : Boolean = inkLevel == 0
+  override def isEmptyBlack : Boolean = inkLevel == 0
+  override def isEmptyColour : Boolean = true
 
   override def hasPaper : Boolean = ???
 
@@ -45,4 +48,13 @@ class BasicPrinter extends Printer {
       case DocFile(_, _) => true
       case _ => false
     }
+
+  override def isColour = false
+
+  override def InkStatus = "Black ink container is " + inkLevel*100 + "% full"
+
+  override def refill: Unit = {
+    inkLevel = 1
+    printf("Refilled black ink")
+  }
 }
