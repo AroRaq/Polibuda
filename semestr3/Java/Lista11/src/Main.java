@@ -3,11 +3,11 @@ import java.util.concurrent.Semaphore;
 class IntCell {
     private final Semaphore available = new Semaphore(1, true);
     private int n = 0;
-    public int getN() {
+    public int getN() throws InterruptedException {
+        available.acquire();
         return n;
     }
     public void setN(int n) {
-        available.tryAcquire();
         this.n = n;
         available.release();
     }
@@ -18,7 +18,12 @@ class Count extends Thread {
     @Override public void run() {
         int temp;
         for (int i = 0; i < 200000; i++) {
-            n.setN(n.getN() + 1);
+            try {
+                temp = n.getN();
+                n.setN(temp + 1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
     public static void main(String[] args) {
@@ -29,8 +34,9 @@ class Count extends Thread {
         try {
             p.join();
             q.join();
+            System.out.println("The value of n is " + n.getN());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        catch (InterruptedException e) { }
-        System.out.println("The value of n is " + n.getN());
     }
 }

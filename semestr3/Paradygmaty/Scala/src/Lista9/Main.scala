@@ -1,5 +1,5 @@
 package Lista9
-
+/*
 object Main {
   def main(args: Array[String]): Unit = {
     try
@@ -38,3 +38,4 @@ at Lista9.Main$.metoda2(Main.scala:21)
 at Lista9.Main$.metoda1(Main.scala:16)
 at Lista9.Main$.main(Main.scala:6)
 at Lista9.Main.main(Main.scala)
+*/

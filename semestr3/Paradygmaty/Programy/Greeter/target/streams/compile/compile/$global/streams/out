@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0mD:\repos\Polibuda\semestr3\Paradygmaty\Programy\Greeter\src\main\scala\Player1.scala:11:40: scala.util.Random does not take parameters[0m
+[0m[[0m[31merror[0m] [0m[0m      while (r == num) r = Player1.rand(players.length)[0m
+[0m[[0m[31merror[0m] [0m[0m                                       ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
