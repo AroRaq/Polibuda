@@ -1,7 +1,7 @@
 import java.util.concurrent.Semaphore;
 
 class IntCell {
-    private final Semaphore available = new Semaphore(1, true);
+    private final Semaphore available = new Semaphore(1);
     private int n = 0;
     public int getN() throws InterruptedException {
         available.acquire();

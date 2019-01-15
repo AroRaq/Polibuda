@@ -30,7 +30,7 @@ class Taker(val b: BankAccount) extends Thread {
 }
 class Putter(val b: BankAccount) extends Thread {
   private var sum = 0
-  private var rand = new Random()
+  private val rand = new Random()
   override def run(): Unit = {
     for (i <- 0 to 10) {
       val ac = b.Get()

@@ -1,4 +1,5 @@
-[0m[[0m[31merror[0m] [0m[0mD:\repos\Polibuda\semestr3\Paradygmaty\Programy\Greeter\src\main\scala\Player1.scala:11:40: scala.util.Random does not take parameters[0m
-[0m[[0m[31merror[0m] [0m[0m      while (r == num) r = Player1.rand(players.length)[0m
-[0m[[0m[31merror[0m] [0m[0m                                       ^[0m
+[0m[[0m[31merror[0m] [0m[0mD:\repos\Polibuda\semestr3\Paradygmaty\Programy\Greeter\src\main\scala\Player1.scala:31:21: not enough arguments for constructor Player1: (num: Int, players: Array[akka.actor.ActorRef])src.main.scala.Player1.[0m
+[0m[[0m[31merror[0m] [0m[0mUnspecified value parameter players.[0m
+[0m[[0m[31merror[0m] [0m[0m    actorArray(i) = new Player1(Props(classOf[Player1], i, actorArray))[0m
+[0m[[0m[31merror[0m] [0m[0m                    ^[0m
 [0m[[0m[31merror[0m] [0m[0mone error found[0m
