@@ -3,9 +3,6 @@ abstract class Sequence[+A] {
 }
 
 
-
-
-
 class MyQueue[A] private (private val xs: List[A], private val ys: List[A]) {
   def enqueue[B>:A](el: B) : MyQueue[B] = {
     if (xs == Nil)
@@ -38,24 +35,12 @@ class MyQueue[A] private (private val xs: List[A], private val ys: List[A]) {
 
   override def toString: String = toList.toString()
 }
-
 object MyQueue {
   def apply[T](xs: T*) = new MyQueue[T](xs.toList, Nil)
 }
 
-var q = MyQueue(1, 2)
-q.first
-q = q.dequeue()
-q.first
-q = q.dequeue()
-q = q.dequeue()
-var q1 = q.enqueue(3.5)
-q1.first
 
-
-
-
-def copy[A](dest: collection.mutable.Seq[A], src: collection.mutable.Seq[A]) : Unit = {
+def copy[A](dest: collection.mutable.Seq[_>:A], src: collection.mutable.Seq[A]) : Unit = {
   require(src.length <= dest.length)
   var i = 0
   src.foreach(a => {dest.update(i, a); i+=1})

@@ -57,19 +57,10 @@ class Time2b(h: Int, m: Int) {
 }
 
 
-class Pojazd(private val p: String, private val m: String,
-             private val r: Int = -1, private var n: String = "") {
-
+class Pojazd(val prod: String, val model: String, val rok: Int = -1, var num: String = "") {
   def this(p: String, m: String, n: String) = this(p,m,-1,n)
-  def producent= p
-  def model = m
-  def rokProdukcji = r
-  def nrRejestracyjny = n
-  def nrRejestracyjny_= (x: String) = {
-    n = x
-  }
 }
 object Pojazd {
-  def apply(p: String, m: String, r: Int = -1, n: String = "") = new Pojazd(p,m,r,n)
-  def apply(p: String, m: String, n: String) = new Pojazd(p,m,-1,n)
+  def apply(prod: String, model: String, rok: Int = -1, num: String = "") = new Pojazd(prod,model,rok,num)
+  def apply(prod: String, model: String, num: String) = new Pojazd(prod,model,-1,num)
 }
