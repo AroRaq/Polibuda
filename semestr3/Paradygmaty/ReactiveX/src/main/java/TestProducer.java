@@ -11,7 +11,11 @@ public class TestProducer extends Flowable<Integer> {
     }
 
     private synchronized int Produce() {
-        for (int i = 0; i < 1000000; i++);
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return productNum++;
     }
 
@@ -28,7 +32,7 @@ public class TestProducer extends Flowable<Integer> {
                 working = true;
                 while (requests-- > 0) {
                     subscriber.onNext(Produce());
-                    System.out.println(requests);
+                    //System.out.println(requests);
                 }
                 working = false;
             }

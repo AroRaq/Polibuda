@@ -10,7 +10,8 @@ public class TestConsumer extends DefaultSubscriber<Integer> {
 
     @Override
     protected void onStart() {
-        request(100);
+        System.out.println("Consumer " + num + " started");
+        request(1);
         requestsLeft--;
     }
 
