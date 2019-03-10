@@ -57,7 +57,8 @@
             android:id="@+id/button" android:layout_marginTop="32dp"
             app:layout_constraintTop_toBottomOf="@+id/heightInput" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="16dp"
+            android:onClick="onCalculateClick"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
