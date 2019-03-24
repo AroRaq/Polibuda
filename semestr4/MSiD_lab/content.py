@@ -17,7 +17,7 @@ def mean_squared_error(x, y, w):
     :param y: ciąg wyjsciowy Nx1
     :param w: parametry modelu (M+1)x1
     :return: błąd średniokwadratowy pomiędzy wyjściami y oraz wyjściami
-     uzyskanymi z wielowamiu o parametrach w dla wejść x
+    uzyskanymi z wielowamiu o parametrach w dla wejść x
     """
     return np.sum((y - polynomial(x, w)) ** 2) / np.shape(y)[0]
 
@@ -75,10 +75,10 @@ def model_selection(x_train, y_train, x_val, y_val, M_values):
     val_err = np.inf
     train_err = np.inf
     for m in M_values:
-        (w, err) = least_squares(x_val, y_val, m)
-        if (err < val_err):
-            (val_err, best_w) = (err, w)
-            (_, train_err) = least_squares(x_train, y_train, m)
+        (w, t_err) = least_squares(x_train, y_train, m)
+        v_err = mean_squared_error(x_val, y_val, w)
+        if (v_err < val_err):
+            (best_w, train_err, val_err) = (w, t_err, v_err)
     return (best_w, train_err, val_err)
 
 
@@ -97,14 +97,13 @@ def regularized_model_selection(x_train, y_train, x_val, y_val, M, lambda_values
     na ciągach treningowym i walidacyjnym. regularization_lambda to najlepsza
     wartość parametru regularyzacji
     """
-    best_w = 0
+    best_w = np.empty(0)
     val_err = np.inf
     train_err = np.inf
-    regularization_lambda = 0
+    reg_lambda = np.inf
     for l in lambda_values:
-        (w, err) = regularized_least_squares(x_val, y_val, M, l)
-        if (err < val_err):
-            (val_err, best_w) = (err, w)
-            (_, train_err) = regularized_least_squares(x_train, y_train, M, l)
-            regularization_lambda = l
-    return (best_w, train_err, val_err, regularization_lambda)
+        (w, t_err) = regularized_least_squares(x_train, y_train, M, l)
+        v_err = mean_squared_error(x_val, y_val, w)
+        if (v_err < val_err):
+            (best_w, train_err, val_err, reg_lambda) = (w, t_err, v_err, l)
+    return (best_w, train_err, val_err, reg_lambda)

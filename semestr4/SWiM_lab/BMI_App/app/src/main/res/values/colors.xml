@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="darkblue">#003366</color>
-    <color name="lapislazuli">#26619c</color>
+    <color name="colorPrimary">#3366cc</color>
+    <color name="colorPrimaryDark">#003366</color>
+    <color name="colorAccent">#b80000</color>
+    <color name="colorBackground">#f0f8ff</color>
+
+    <color name="lapislazuli">#3366cc</color>
     <color name="grynszpan">#00A693</color>
     <color name="orange">#FFA500</color>
     <color name="rozpompejanski">#B80000</color>
+    <color name="violet">#8a2be2</color>
 </resources>

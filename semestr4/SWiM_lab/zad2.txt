@@ -1,0 +1,9 @@
+pamiêtanie 10 ostatnich wpisów bmi w liœcie (kryteria, dane u¿ytkownika)
+-w 3 kropki
+-wyszarzona jak brak
+-pojawia siê ekran z wynikami (masa z jednostkami, wzrost, data, godzina, wynik bmi)
+na niedzielê 31
+setError
+ListView be
+RecycledView ye
+SheredPreferences

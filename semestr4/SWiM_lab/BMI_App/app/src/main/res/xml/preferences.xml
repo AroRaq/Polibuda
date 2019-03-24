@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <ListPreference
-            android:title="List preference" android:entries="@array/settings_units"
-            android:entryValues="@array/settings_units" android:key="list_preference_1"
-            android:defaultValue="true"/>
-</PreferenceScreen>
+            app:title="Choose units"
+            app:entries="@array/units_entries"
+            app:entryValues="@array/units_entryValues"
+            app:summary="%s"
+            app:key="units_preference"
+            app:defaultValue="metric"
+            app:icon="@drawable/ic_units"/>
+
+</androidx.preference.PreferenceScreen>

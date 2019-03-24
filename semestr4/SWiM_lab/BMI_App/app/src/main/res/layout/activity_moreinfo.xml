@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" >
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@drawable/img_bmi"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/bmiImage"
+                tools:ignore="ContentDescription"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:layout_below="@id/bmiImage"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/bmi_margin_between_categories"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/descriptionText"
+                android:layout_below="@+id/bmiImage"
+                android:text="@string/description_normal"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="false"
+                android:layout_toEndOf="@id/textView"
+                android:layout_marginStart="@dimen/bmi_margin_between_categories"
+                android:layout_marginTop="@dimen/bmi_margin_between_categories"/>
+    </RelativeLayout>
+</ScrollView>
