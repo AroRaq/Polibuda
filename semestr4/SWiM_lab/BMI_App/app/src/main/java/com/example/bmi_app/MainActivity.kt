@@ -52,6 +52,8 @@ class MainActivity : AppCompatActivity() {
        // Toast.makeText(this, "Registered Listener", Toast.LENGTH_SHORT).show()
         sharedPreferences.registerOnSharedPreferenceChangeListener { sp, s ->
             setUnits(sp.getString(s, ""))
+            weightInput.setText("")
+            heightInput.setText("")
         }
     }
 
@@ -71,7 +73,12 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, AboutActivity::class.java)
                 startActivity(intent)
                 true
-            }
+            }/*
+            R.id.History -> {
+                val intent = Intent(this, HistoryActivity::class.java)
+                startActivity(intent)
+                true
+            }*/
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -108,10 +115,19 @@ class MainActivity : AppCompatActivity() {
             bmiText.visibility = View.VISIBLE
 
             infoButton.visibility = View.VISIBLE
+
+            saveToHistory(weight, height, currUnits, bmiValue, bmiValue)
         }
         catch (e: IllegalArgumentException) {
             Snackbar.make(view, "Enter correct data", Snackbar.LENGTH_SHORT).show()
         }
+    }
+
+    private fun saveToHistory(weight: Double, height: Double, currUnits: String, bmiValue: Double, bmiValue1: Double) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        //with (sharedPreferences.edit()) {
+            //put
+        //}
     }
 
     private fun getColorFromBMI(bmi: Double): Int {
