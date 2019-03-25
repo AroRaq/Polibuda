@@ -1,6 +1,7 @@
 package com.example.bmi_app
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,22 +15,45 @@ import com.example.bmi_app.logic.BMI_lbsin
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //SET UNITS ON APP STARTUP
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setUpSharedPreferences()
         setUnits(sharedPrefs.getString("units_preference", "metric"))
 
+        //HIDE MAIN IMAGE IF PHONE FLIPPED
         val orientation = resources.configuration.orientation
         mainImage.visibility = if (orientation == Configuration.ORIENTATION_PORTRAIT) View.VISIBLE else View.GONE
+
+        //CREATE PREFERENCE LISTENER
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        //DELETE PREFERENCE LISTENER
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .unregisterOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        when (key) {
+            "units_preference" -> {
+                setUnits(sharedPreferences?.getString(key, "metric"))
+                weightInput.setText("")
+                heightInput.setText("")
+            }
+            else -> Unit
+        }
     }
 
     private fun setUnits(units: String?) {
-        //Toast.makeText(this, "Units changed", Toast.LENGTH_SHORT).show()
         when (units) {
             "metric" -> {
                 currUnits = units
@@ -44,16 +68,6 @@ class MainActivity : AppCompatActivity() {
             else -> {
                 Toast.makeText(this, "Something went wrong (units fetching) $units", Toast.LENGTH_LONG).show()
             }
-        }
-    }
-
-    private fun setUpSharedPreferences() {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-       // Toast.makeText(this, "Registered Listener", Toast.LENGTH_SHORT).show()
-        sharedPreferences.registerOnSharedPreferenceChangeListener { sp, s ->
-            setUnits(sp.getString(s, ""))
-            weightInput.setText("")
-            heightInput.setText("")
         }
     }
 
@@ -93,6 +107,8 @@ class MainActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         weightInput.setText(savedInstanceState?.getString("weightInput"))
         heightInput.setText(savedInstanceState?.getString("heightInput"))
+
+        //PERFORM CLICK TO AVOID SAVING INFO ABOUT BMI VALUE, COLORS, ETC
         calculateButton.performClick()
     }
 
@@ -101,21 +117,26 @@ class MainActivity : AppCompatActivity() {
         val weight = if (weightInput.text.toString().isEmpty()) 0.0 else weightInput.text.toString().toDouble()
         val height = if (heightInput.text.toString().isEmpty()) 0.0 else heightInput.text.toString().toDouble()
         val calculator = when (currUnits) {
-            "metric" -> BMI_kgcm(weight, height)
-            else -> BMI_lbsin(weight, height)
+            "imperial" -> BMI_lbsin(weight, height)
+            else -> BMI_kgcm(weight, height)
         }
         try {
             bmiValue = calculator.calcBMI()
             val (message, color) = Pair(getMessageFromBMI(bmiValue), getColorFromBMI(bmiValue))
+
+            //DISPLAY BMI AND CHANGE COLOR ACCOARDING TO ITS VALUE
             bmiRating.visibility = View.VISIBLE
             bmiRating.text = String.format("%.2f", bmiValue)
             bmiRating.setTextColor(color)
 
+            //DISPLAY BMI AS DESCRIPTION
             bmiText.text = message
             bmiText.visibility = View.VISIBLE
 
+            //SHOW BUTTON THAT TAKES USER TO MORE INFO SCREEN
             infoButton.visibility = View.VISIBLE
 
+            //WIP: SAVE ENTRY TO SHARED PREFERENCES
             saveToHistory(weight, height, currUnits, bmiValue, bmiValue)
         }
         catch (e: IllegalArgumentException) {
