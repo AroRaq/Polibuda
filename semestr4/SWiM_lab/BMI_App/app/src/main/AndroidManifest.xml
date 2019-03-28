@@ -11,7 +11,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".HistoryActivity">
+        <activity
+                android:name=".HistoryActivity"
+                android:label="Entry history"
+                android:parentActivityName=".MainActivity">
         </activity>
         <activity
                 android:name=".AboutActivity"

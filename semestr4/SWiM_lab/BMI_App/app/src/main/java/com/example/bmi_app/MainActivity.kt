@@ -10,12 +10,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import com.example.bmi_app.logic.BMI_kgcm
-import com.example.bmi_app.logic.BMI_lbsin
+import com.example.bmi_app.`class`.HistoryEntry
+import com.example.bmi_app.logic.*
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    inline fun <reified T> Gson.fromJson(json: String) = this.fromJson<T>(json, object: TypeToken<T>() {}.type)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,61 +51,65 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         when (key) {
             "units_preference" -> {
                 setUnits(sharedPreferences?.getString(key, "metric"))
-                weightInput.setText("")
-                heightInput.setText("")
+                weightInput.text = null
+                heightInput.text = null
+            }
+            "entryHistory" -> {
+                optionsMenu.findItem(R.id.History).isEnabled = sharedPreferences?.contains("entryHistory") ?: false
             }
             else -> Unit
         }
     }
 
-    private fun setUnits(units: String?) {
-        when (units) {
-            "metric" -> {
-                currUnits = units
-                weightLabel.setText(R.string.weight_metric)
-                heightLabel.setText(R.string.height_metric)
-            }
-            "imperial" -> {
-                currUnits = units
-                weightLabel.setText(R.string.weight_imperial)
-                heightLabel.setText(R.string.height_imperial)
-            }
-            else -> {
-                Toast.makeText(this, "Something went wrong (units fetching) $units", Toast.LENGTH_LONG).show()
-            }
+    private fun setUnits(units: String?) = when (units) {
+        "metric" -> {
+            currUnits = units
+            weightLabel.setText(R.string.weight_metric)
+            heightLabel.setText(R.string.height_metric)
+        }
+        "imperial" -> {
+            currUnits = units
+            weightLabel.setText(R.string.weight_imperial)
+            heightLabel.setText(R.string.height_imperial)
+        }
+        else -> {
+            Toast.makeText(this, "Something went wrong (units fetching) $units", Toast.LENGTH_LONG).show()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.optionsmenu, menu)
+        optionsMenu = menu!!
+
+        //DEACTIVATE HISTORY BUTTON IF NO ENTRIES
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        optionsMenu.findItem(R.id.History).isEnabled = sharedPrefs.contains("entryHistory")
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.Settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            R.id.About -> {
-                val intent = Intent(this, AboutActivity::class.java)
-                startActivity(intent)
-                true
-            }/*
-            R.id.History -> {
-                val intent = Intent(this, HistoryActivity::class.java)
-                startActivity(intent)
-                true
-            }*/
-            else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem?) = when (item?.itemId) {
+        R.id.Settings -> {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            true
         }
+        R.id.About -> {
+            val intent = Intent(this, AboutActivity::class.java)
+            startActivity(intent)
+            true
+        }
+        R.id.History -> {
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putString("weightInput", weightInput.text.toString())
-        outState?.putString("heightInput", heightInput.text.toString())
+        outState.putString("weightInput", weightInput.text.toString())
+        outState.putString("heightInput", heightInput.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -122,7 +131,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
         try {
             bmiValue = calculator.calcBMI()
-            val (message, color) = Pair(getMessageFromBMI(bmiValue), getColorFromBMI(bmiValue))
+            val (message, color) = Pair(BMI.toMessage(bmiValue), BMI.toColor(this, bmiValue))
 
             //DISPLAY BMI AND CHANGE COLOR ACCOARDING TO ITS VALUE
             bmiRating.visibility = View.VISIBLE
@@ -137,47 +146,40 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             infoButton.visibility = View.VISIBLE
 
             //WIP: SAVE ENTRY TO SHARED PREFERENCES
-            saveToHistory(weight, height, currUnits, bmiValue, bmiValue)
+            saveToHistory(weight, height, currUnits, bmiValue)
         }
         catch (e: IllegalArgumentException) {
             Snackbar.make(view, "Enter correct data", Snackbar.LENGTH_SHORT).show()
         }
     }
 
-    private fun saveToHistory(weight: Double, height: Double, currUnits: String, bmiValue: Double, bmiValue1: Double) {
+    private fun saveToHistory(weight: Double, height: Double, currUnits: String, bmiValue: Double) {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        //with (sharedPreferences.edit()) {
-            //put
-        //}
-    }
 
-    private fun getColorFromBMI(bmi: Double): Int {
-        return resources.getColor(when {
-            bmi < 18.5 -> R.color.lapislazuli
-            bmi < 25 -> R.color.grynszpan
-            bmi < 30 -> R.color.orange
-            bmi < 35 -> R.color.rozpompejanski
-            else -> R.color.violet
-        }, theme)
-    }
+        //RETRIEVE LIST OF ENTRIES FROM SETTINGS
+        val serializedList = sharedPreferences.getString("entryHistory", "")
+        val entryList = Gson().fromJson(serializedList) ?: LinkedList<HistoryEntry>()
 
-    private fun getMessageFromBMI(bmi: Double): String {
-        return when {
-            bmi < 18.5 -> "Underweight"
-            bmi < 25 -> "Normal"
-            bmi < 30 -> "Overweight"
-            bmi < 35 -> "Obese"
-            else -> "Extremely Obese"
+        //ADD NEW ENTRY AND REMOVE EXCESS
+        entryList.addFirst(HistoryEntry(weight, height, bmiValue, Calendar.getInstance().time, currUnits))
+        if (entryList.size > 10) entryList.removeLast()
+
+        //WRITE LIST BACK TO SHARED PREFERENCES
+        with (sharedPreferences.edit()) {
+            putString("entryHistory", Gson().toJson(entryList))
+                .apply()
         }
     }
 
     fun onMoreInfoButtonClick(view: View) {
         val intent = Intent(this, MoreInfoActivity::class.java)
         intent.putExtra("bmiValue", bmiValue)
-        intent.putExtra("bmiText", getMessageFromBMI(bmiValue))
+        intent.putExtra("bmiText", BMI.toMessage(bmiValue))
         startActivity(intent)
     }
 
     private var bmiValue = 0.0
     private var currUnits = "metric"
+
+    private lateinit var optionsMenu: Menu
 }

@@ -3,5 +3,8 @@
     <item android:id="@+id/About"
           android:title="@string/title_aboutme"/>
     <item android:id="@+id/Settings"
-          android:title="@string/title_settings" />
+          android:title="@string/title_settings"/>
+    <item android:id="@+id/History"
+          android:title="@string/title_history"
+            android:enabled="false"/>
 </menu>
