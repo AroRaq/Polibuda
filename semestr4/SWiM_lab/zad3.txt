@@ -1,0 +1,18 @@
+tieto junior android
+
+lista zdjêæ
+z internetu (lib picasso)
+wyœwietla karty(recycled)
+karta:
+-zdj¹tko (string z urlem)
+-tytu³ (string)
+-data (date)
+-tagi (stringArray)
++swipe usuwa element
+
+
+przycisk dodania zdjêcia
+u¿ytkownik wprowadza url i resztê
+dane nie musz¹ byæ zapisywane po wy³¹czeniu aplikacji
+rzeczy zapisywane w klasie zewnetrznej
+wyswietlac max 3 tagi

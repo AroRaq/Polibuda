@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/About"
+          android:title="@string/title_aboutme"/>
     <item android:id="@+id/Settings"
-          android:title="Settings" />
+          android:title="@string/title_settings"/>
+    <item android:id="@+id/History"
+          android:title="@string/title_history"
+            android:enabled="false"/>
 </menu>

@@ -1,79 +1,37 @@
 <resources>
-    <string name="app_name">BMI_App</string>
-    <string name="text_weight_label">Weight[kg]</string>
+    <string name="app_name">BMI Calculator</string>
+    <string name="title_aboutme">About me</string>
+    <string name="title_settings">Settings</string>
+    <string name="text_weight_label">Weight</string>
     <string name="button_calculate">Calculate</string>
-    <string name="text_height_label">Height[cm]</string>
+    <string name="text_height_label">Height</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_history">History</string>
+
+    <!-- Strings related to units -->
+    <string name="height_metric">height [cm]</string>
+    <string name="weight_metric">weight [kg]</string>
+    <string name="height_imperial">height [in]</string>
+    <string name="weight_imperial">weight [lbs]</string>
 
     <!-- Strings related to Settings -->
-
-    <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact based on your message
-        history
+    <string name="description_underweight">Being underweight could be a sign you\'re not eating enough or you may be
+        ill.
+        If you\'re underweight, your GP can help.
+    </string>
+    <string name="description_normal">Keep up the good work!</string>
+    <string name="description_overweight">The best way to lose weight if you\'re overweight is through a combination
+        of diet and exercise. The BMI calculator will give you a personal calorie allowance to help you achieve a
+        healthy weight safely.
+    </string>
+    <string name="description_obese">The best way to lose weight if you\'re obese is through a combination of diet and
+        exercise, and, in some cases, medication. Contact your GP for help and advice.
+    </string>
+    <string name="description_extremelyobese">Your health may be at risk if you do not lose weight. You are recommended
+        to talk to your doctor or a dietitian for advice.
     </string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value"/>
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="myGithub">
+        <a href="https://github.com/arkadR">My Github</a>
+    </string>
 </resources>

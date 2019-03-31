@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bmi_side_margin">8dp</dimen>
+    <dimen name="bmi_topbottom_margin">8dp</dimen>
+    <dimen name="bmi_margin_between_textfield_label">8dp</dimen>
+    <dimen name="bmi_margin_between_categories">24dp</dimen>
+</resources>
