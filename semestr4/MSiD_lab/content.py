@@ -1,109 +1,142 @@
 # --------------------------------------------------------------------------
 # ------------  Metody Systemowe i Decyzyjne w Informatyce  ----------------
 # --------------------------------------------------------------------------
-#  Zadanie 1: Regresja liniowa
+#  Zadanie 2: k-NN i Naive Bayes
 #  autorzy: A. Gonczarek, J. Kaczmar, S. Zareba
 #  2017
 # --------------------------------------------------------------------------
 
+from __future__ import division
 import numpy as np
 
-from utils import polynomial
 
 
-def mean_squared_error(x, y, w):
+def hamming_distance(X, X_train):
     """
-    :param x: ciąg wejściowy Nx1
-    :param y: ciąg wyjsciowy Nx1
-    :param w: parametry modelu (M+1)x1
-    :return: błąd średniokwadratowy pomiędzy wyjściami y oraz wyjściami
-    uzyskanymi z wielowamiu o parametrach w dla wejść x
+    :param X: zbior porownwanych obiektow N1xD
+    :param X_train: zbior obiektow do ktorych porownujemy N2xD
+    Funkcja wyznacza odleglosci Hamminga obiektow ze zbioru X od
+    obiektow X_train. ODleglosci obiektow z jednego i drugiego
+    zbioru zwrocone zostana w postaci macierzy
+    :return: macierz odleglosci pomiedzy obiektami z X i X_train N1xN2
     """
-    return np.sum((y - polynomial(x, w)) ** 2) / np.shape(y)[0]
+    XX = X.toarray()
+    XX_train = X_train.toarray()
+    return (~XX).astype(int) @ np.transpose(XX_train) + XX.astype(int) @ ~np.transpose(XX_train)
 
+def sort_train_labels_knn(Dist, y):
+    """
+    Funkcja sortujaca etykiety klas danych treningowych y
+    wzgledem prawdopodobienstw zawartych w macierzy Dist.
+    Funkcja zwraca macierz o wymiarach N1xN2. W kazdym
+    wierszu maja byc posortowane etykiety klas z y wzgledem
+    wartosci podobienstw odpowiadajacego wiersza macierzy
+    Dist
+    :param Dist: macierz odleglosci pomiedzy obiektami z X
+    i X_train N1xN2
+    :param y: wektor etykiet o dlugosci N2
+    :return: macierz etykiet klas posortowana wzgledem
+    wartosci podobienstw odpowiadajacego wiersza macierzy
+    Dist. Uzyc algorytmu mergesort.
+    """
 
-def design_matrix(x_train, M):
-    """
-    :param x_train: ciąg treningowy Nx1
-    :param M: stopień wielomianu 0,1,2,...
-    :return: funkcja wylicza Design Matrix Nx(M+1) dla wielomianu rzędu M
-    """
-    return np.transpose([np.squeeze(x_train) ** i for i in range(0, M+1)])
+    indices = np.argsort(Dist, kind='mergesort')
+    return [y[np.array(indices[i])] for i in range(np.shape(indices)[0])]
 
+def p_y_x_knn(y, k):
+    """
+    Funkcja wyznacza rozklad prawdopodobienstwa p(y|x) dla
+    kazdej z klas dla obiektow ze zbioru testowego wykorzystujac
+    klasfikator KNN wyuczony na danych trenningowych
+    :param y: macierz posortowanych etykiet dla danych treningowych N1xN2
+    :param k: liczba najblizszuch sasiadow dla KNN
+    :return: macierz prawdopodobienstw dla obiektow z X
+    """
+    E = np.unique(y[0])
+    return np.transpose([[np.count_nonzero(row[:k] == e) for row in y] for e in E] / k)
 
-def least_squares(x_train, y_train, M):
+def classification_error(p_y_x, y_true):
     """
-    :param x_train: ciąg treningowy wejśćia Nx1
-    :param y_train: ciąg treningowy wyjscia Nx1
-    :param M: rzad wielomianu
-    :return: funkcja zwraca krotkę (w,err), gdzie w są parametrami dopasowanego 
-    wielomianu, a err to błąd średniokwadratowy dopasowania
+    Wyznacz blad klasyfikacji.
+    :param p_y_x: macierz przewidywanych prawdopodobienstw
+    :param y_true: zbior rzeczywistych etykiet klas 1xN.
+    Kazdy wiersz macierzy reprezentuje rozklad p(y|x)
+    :return: blad klasyfikacji
     """
-    phi = design_matrix(x_train, M)
-    w = np.linalg.inv(np.transpose(phi) @ phi) @ np.transpose(phi) @ y_train
-    return (w, mean_squared_error(x_train, y_train, w))
+    maxInd = np.shape(p_y_x)[1]-np.argmax(np.fliplr(p_y_x), axis=1)-1
+    return np.sum(y_true != maxInd)/np.shape(y_true)
 
+def model_selection_knn(Xval, Xtrain, yval, ytrain, k_values):
+    """
+    :param Xval: zbior danych walidacyjnych N1xD
+    :param Xtrain: zbior danych treningowych N2xD
+    :param yval: etykiety klas dla danych walidacyjnych 1xN1
+    :param ytrain: etykiety klas dla danych treningowych 1xN2
+    :param k_values: wartosci parametru k, ktore maja zostac sprawdzone
+    :return: funkcja wykonuje selekcje modelu knn i zwraca krotke (best_error,best_k,errors), gdzie best_error to najnizszy
+    osiagniety blad, best_k - k dla ktorego blad byl najnizszy, errors - lista wartosci bledow dla kolejnych k z k_values
+    """
+    # errors = []
+    # h = hamming_distance(Xval, Xtrain)
+    # lab = sort_train_labels_knn(h, ytrain)
+    # for k in k_values:
+    #     pr = p_y_x_knn(lab, k)
+    #     err = classification_error(pr, yval)
+    #     errors.append(err)
+    # best_error = min(errors)
+    # best_k = k_values[np.argmin(errors)]
+    # return (best_error, best_k, np.squeeze(errors))
+    k = len(k_values)
+    errors = []
+    Dist = hamming_distance(Xval, Xtrain)
+    ksort = sort_train_labels_knn(Dist, ytrain)
+    for i in range(0, k):
+        error = classification_error(p_y_x_knn(ksort, k_values[i]), yval)
+        errors.append(error)
+    best_error = min(errors)
+    best_k = k_values[np.argmin(errors)]
+    return best_error, best_k,errors
+    
 
-def regularized_least_squares(x_train, y_train, M, regularization_lambda):
+def estimate_a_priori_nb(ytrain):
     """
-    :param x_train: ciąg treningowy wejśćia Nx1
-    :param y_train: ciąg treningowy wyjscia Nx1
-    :param M: rzad wielomianu
-    :param regularization_lambda: parametr regularyzacji
-    :return: funkcja zwraca krotkę (w,err), gdzie w są parametrami dopasowanego
-    wielomianu zgodnie z kryterium z regularyzacją l2, a err to błąd 
-    średniokwadratowy dopasowania
+    :param ytrain: etykiety dla dla danych treningowych 1xN
+    :return: funkcja wyznacza rozklad a priori p(y) i zwraca p_y - wektor prawdopodobienstw a priori 1xM
     """
-    phi = design_matrix(x_train, M)
-    w = np.linalg.inv(np.transpose(phi) @ phi + regularization_lambda*np.identity(M+1)) @ np.transpose(phi) @ y_train
-    return (w, mean_squared_error(x_train, y_train, w))
+    pass
 
+def estimate_p_x_y_nb(Xtrain, ytrain, a, b):
+    """
+    :param Xtrain: dane treningowe NxD
+    :param ytrain: etykiety klas dla danych treningowych 1xN
+    :param a: parametr a rozkladu Beta
+    :param b: parametr b rozkladu Beta
+    :return: funkcja wyznacza rozklad prawdopodobienstwa p(x|y) zakladajac, ze x przyjmuje wartosci binarne i ze elementy
+    x sa niezalezne od siebie. Funkcja zwraca macierz p_x_y o wymiarach MxD.
+    """
+    pass
 
-def model_selection(x_train, y_train, x_val, y_val, M_values):
+def p_y_x_nb(p_y, p_x_1_y, X):
     """
-    :param x_train: ciąg treningowy wejśćia Nx1
-    :param y_train: ciąg treningowy wyjscia Nx1
-    :param x_val: ciąg walidacyjny wejśćia Nx1
-    :param y_val: ciąg walidacyjny wyjscia Nx1
-    :param M_values: tablica stopni wielomianu, które mają byc sprawdzone
-    :return: funkcja zwraca krotkę (w,train_err,val_err), gdzie w są parametrami
-    modelu, ktory najlepiej generalizuje dane, tj. daje najmniejszy błąd na 
-    ciągu walidacyjnym, train_err i val_err to błędy na sredniokwadratowe na 
-    ciągach treningowym i walidacyjnym
+    :param p_y: wektor prawdopodobienstw a priori o wymiarach 1xM
+    :param p_x_1_y: rozklad prawdopodobienstw p(x=1|y) - macierz MxD
+    :param X: dane dla ktorych beda wyznaczone prawdopodobienstwa, macierz NxD
+    :return: funkcja wyznacza rozklad prawdopodobienstwa p(y|x) dla kazdej z klas z wykorzystaniem klasyfikatora Naiwnego
+    Bayesa. Funkcja zwraca macierz p_y_x o wymiarach NxM.
     """
-    best_w = np.empty(0)
-    val_err = np.inf
-    train_err = np.inf
-    for m in M_values:
-        (w, t_err) = least_squares(x_train, y_train, m)
-        v_err = mean_squared_error(x_val, y_val, w)
-        if (v_err < val_err):
-            (best_w, train_err, val_err) = (w, t_err, v_err)
-    return (best_w, train_err, val_err)
+    pass
 
-
-def regularized_model_selection(x_train, y_train, x_val, y_val, M, lambda_values):
+def model_selection_nb(Xtrain, Xval, ytrain, yval, a_values, b_values):
     """
-    :param x_train: ciąg treningowy wejśćia Nx1
-    :param y_train: ciąg treningowy wyjscia Nx1
-    :param x_val: ciąg walidacyjny wejśćia Nx1
-    :param y_val: ciąg walidacyjny wyjscia Nx1
-    :param M: stopień wielomianu
-    :param lambda_values: lista z wartościami różnych parametrów regularyzacji
-    :return: funkcja zwraca krotkę (w,train_err,val_err,regularization_lambda),
-    gdzie w są parametrami modelu, ktory najlepiej generalizuje dane, tj. daje
-    najmniejszy błąd na ciągu walidacyjnym. Wielomian dopasowany jest wg
-    kryterium z regularyzacją. train_err i val_err to błędy średniokwadratowe
-    na ciągach treningowym i walidacyjnym. regularization_lambda to najlepsza
-    wartość parametru regularyzacji
+    :param Xtrain: zbior danych treningowych N2xD
+    :param Xval: zbior danych walidacyjnych N1xD
+    :param ytrain: etykiety klas dla danych treningowych 1xN2
+    :param yval: etykiety klas dla danych walidacyjnych 1xN1
+    :param a_values: lista parametrow a do sprawdzenia
+    :param b_values: lista parametrow b do sprawdzenia
+    :return: funkcja wykonuje selekcje modelu Naive Bayes - wybiera najlepsze wartosci parametrow a i b. Funkcja zwraca
+    krotke (error_best, best_a, best_b, errors) gdzie best_error to najnizszy
+    osiagniety blad, best_a - a dla ktorego blad byl najnizszy, best_b - b dla ktorego blad byl najnizszy,
+    errors - macierz wartosci bledow dla wszystkich par (a,b)
     """
-    best_w = np.empty(0)
-    val_err = np.inf
-    train_err = np.inf
-    reg_lambda = np.inf
-    for l in lambda_values:
-        (w, t_err) = regularized_least_squares(x_train, y_train, M, l)
-        v_err = mean_squared_error(x_val, y_val, w)
-        if (v_err < val_err):
-            (best_w, train_err, val_err, reg_lambda) = (w, t_err, v_err, l)
-    return (best_w, train_err, val_err, reg_lambda)
+    pass

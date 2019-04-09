@@ -1,7 +1,7 @@
 # --------------------------------------------------------------------------
 # ------------  Metody Systemowe i Decyzyjne w Informatyce  ----------------
 # --------------------------------------------------------------------------
-#  Zadanie 1: Regresja liniowa
+#  Zadanie 2: k-NN i Naive Bayes
 #  autorzy: A. Gonczarek, J. Kaczmar, S. Zareba
 #  2017
 # --------------------------------------------------------------------------
@@ -9,145 +9,172 @@
 # ----------------- TEN PLIK MA POZOSTAC NIEZMODYFIKOWANY ------------------
 # --------------------------------------------------------------------------
 
-import os
+from content import (hamming_distance, sort_train_labels_knn, model_selection_knn, model_selection_nb, estimate_p_x_y_nb,
+                              classification_error, estimate_a_priori_nb, p_y_x_nb, p_y_x_knn)
+import numpy as np
+import matplotlib.pyplot as plt
 import pickle
 import warnings
 from time import sleep
-
-import matplotlib.pyplot as plt
-import numpy as np
-
-from content import least_squares, model_selection, regularized_model_selection
 from test import TestRunner
-from utils import polynomial
 
 
-def target_output(x):
-    return np.sin(2 * np.pi * x)
+def plot_a_b_errors(errors, a_points, b_points):
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    cax = ax.matshow(errors)
+    fig.colorbar(cax)
+    plt.title("Selekcja modelu dla NB")
+    ax.set_xticklabels([''] + a_points)
+    ax.set_yticklabels([''] + b_points)
+    ax.xaxis.set_label_position('bottom')
+    ax.xaxis.set_tick_params(labelbottom=True,labeltop=False,top=False)
+    ax.set_xlabel('Parametr b')
+    ax.set_ylabel('Parametr a')
+    plt.draw()
+    plt.waitforbuttonpress(0)
 
 
-def plot_model(x_train, y_train, x, y_obj, y_model, x_val=None, y_val=None,
-               train_err=None, val_err=None):
-    x_min = np.min([np.min(x_train), np.min(x)])
-    x_max = np.max([np.max(x_train), np.max(x)])
-    y_min = -1.5
-    y_max = 1.5
-    int_x = x_max - x_min
-    x_beg = x_min - int_x / 14.0
-    x_end = x_max + int_x / 14.0
-    x_ticks = [x_min, x_max]
-    int_y = y_max - y_min
-    y_ticks = [y_min, y_min + 0.5 * int_y, y_max]
+def plot_error_NB_KNN(error_NB, error_KNN):
+    plt.figure()
+    plt.rcParams['image.cmap'] = 'gray'
+    plt.rcParams['image.interpolation'] = 'none'
+    plt.style.use(['dark_background'])
+    labels = ["Naive Bayess", "KNN"]
+    data = [error_NB, error_KNN]
 
-    sub.set_xlim(x_beg, x_end)
-    sub.set_ylim(1.1 * y_min, 1.1 * y_max)
-    sub.set_xticks(x_ticks)
-    sub.set_yticks(y_ticks)
-    sub.plot(x_train, y_train, 'o', markerfacecolor='none', markeredgecolor='blue',
-             markersize=8, markeredgewidth=2)
-    sub.plot(x, y_obj, '-g', linewidth=2)
-    sub.plot(x, y_model, '-r', linewidth=2)
-    if x_val is not None and y_val is not None:
-        sub.plot(x_val, y_val, 'o', markerfacecolor='none', markeredgecolor='red',
-                 markersize=8, markeredgewidth=2)
-    if train_err is not None and val_err is not None:
-        sub.text(0, -1.3, 'Train error: {0:.5f}\nVal error:    {1:.5f}'.format(
-            train_err, val_err), bbox={'facecolor': 'none', 'pad': 10})
+    xlocations = np.array(range(len(data))) + 0.5
+    width = 0.5
+    plt.bar(xlocations, data, width=width, color='#FFCC55')
+    plt.xticks(xlocations, labels)
+    plt.xlim(0, xlocations[-1] + width * 2 - .5)
+    plt.title("Porownanie modeli - blad klasyfikacji")
+    plt.gca().get_xaxis().tick_bottom()
+    plt.gca().get_yaxis().tick_left()
+    plt.draw()
+    plt.waitforbuttonpress(0)
 
 
-if __name__ == "__main__":
-    # Ignorowanie warningow
-    warnings.filterwarnings("ignore")
+def classification_KNN_vs_no_neighbours(xs, ys):
+    plt.rcParams['image.cmap'] = 'gray'
+    plt.rcParams['image.interpolation'] = 'none'
+    plt.style.use(['dark_background'])
+    plt.xlabel('Liczba sasiadow k')
+    plt.ylabel('Blad klasyfikacji')
+    plt.title("Selekcja modelu dla k-NN")
 
-    # Odpalenie testow
+    plt.plot(xs, ys, 'r-', color='#FFCC55')
+    plt.draw()
+    plt.waitforbuttonpress(0)
+
+
+
+def word_cloud(frequencies, title):
+    from wordcloud import WordCloud
+    wordcloud = WordCloud(font_path='assets/DroidSansMono.ttf',
+                          relative_scaling=1.0).generate_from_frequencies(frequencies)
+    plt.title(title)
+    plt.imshow(wordcloud)
+    plt.axis("off")
+    return wordcloud
+
+
+def word_clouds(list_of_frequencies, topics):
+    fig = plt.figure(num='Rozklad slow w poszczegolnych klasach dla modelu NB')
+    plt.rcParams['image.cmap'] = 'gray'
+    plt.rcParams['image.interpolation'] = 'none'
+    plt.style.use(['dark_background'])
+    for idx, (topic, frequencies) in enumerate(zip(topics, list_of_frequencies)):
+        location = 221 + idx
+        plt.subplot(location)
+        wordcloud = word_cloud(frequencies, topic)
+        plt.axis("off")
+        plt.imshow(wordcloud)
+    plt.draw()
+    plt.waitforbuttonpress(0)
+
+
+def run_unittests():
     test_runner = TestRunner()
     results = test_runner.run()
-
-    if results.failures:
+    if results.failures or results.errors:
         exit()
     sleep(0.1)
 
-    # Ladowanie danych
-    with open(os.path.join(os.path.dirname(__file__), 'data.pkl'), mode='rb') as file:
-        data = pickle.load(file)
-    x_plot = np.arange(0, 1.01, 0.01)
-    y_obj = target_output(x_plot)
 
-    # Dopasowanie wielomianow metoda najmniejszych kwadratow
-    print('\n--- Dopasowanie wielomianow metoda najmniejszych kwadratow ---')
-    print('-------------- Liczba punktow treningowych N=8. --------------')
-    fig = plt.figure(figsize=(12, 6), num='Zadanie najmniejszych kwadratow dla N=8')
+def load_data():
+    PICKLE_FILE_PATH = 'data.pkl'
+    with open(PICKLE_FILE_PATH, 'rb') as f:
+        return pickle.load(f)
 
-    for i in range(8):
-        w, err = least_squares(data['x_train_8'], data['y_train_8'], i)
-        y_model = polynomial(x_plot, w)
-        sub = fig.add_subplot(2, 4, i + 1)
-        plot_model(data['x_train_8'], data['y_train_8'], x_plot, y_obj, y_model)
-        sub.set_title("M = {}".format(i))
 
-    plt.tight_layout()
-    plt.draw()
+def run_training():
+
+    data = load_data()
+
+    # KNN model selection
+    k_values = range(1, 201, 2)
+    print('\n------------- Selekcja liczby sasiadow dla modelu dla KNN -------------')
+    print('-------------------- Wartosci k: 1, 3, ..., 200 -----------------------')
+    print('--------------------- To moze potrwac ok. 1 min ------------------------')
+
+    error_best, best_k, errors = model_selection_knn(data['Xval'],
+                                                     data['Xtrain'],
+                                                     data['yval'],
+                                                     data['ytrain'],
+                                                     k_values)
+    print('Najlepsze k: {num1} i najlepszy blad: {num2:.4f}'.format(num1=best_k, num2=error_best))
     print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-    plt.waitforbuttonpress(0)
+    classification_KNN_vs_no_neighbours(k_values, errors)
+    a_values = [1, 3, 10, 30, 100, 300, 1000]
+    b_values = [1, 3, 10, 30, 100, 300, 1000]
 
-    print('\n--- Dopasowanie wielomianow metoda najmniejszych kwadratow ---')
-    print('-------------- Liczba punktow treningowych N=50. --------------')
-    fig = plt.figure(figsize=(12, 6), num='Zadanie najmniejszych kwadratow dla N=50')
+    print('\n----------------- Selekcja parametrow a i b dla NB --------------------')
+    print('--------- Wartosci a i b: 1, 3, 10, 30, 100, 300, 1000 -----------------')
+    print('--------------------- To moze potrwac ok. 1 min ------------------------')
 
-    for i in range(8):
-        w, err = least_squares(data['x_train_50'], data['y_train_50'], i)
-        y_model = polynomial(x_plot, w)
-        sub = fig.add_subplot(2, 4, i + 1)
-        plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model)
-        sub.set_title("M = {}".format(i))
+    # NB model selection
+    error_best, best_a, best_b, errors = model_selection_nb(data['Xtrain'], data['Xval'], data['ytrain'],
+                                                            data['yval'], a_values, b_values)
 
-    plt.tight_layout()
-    plt.draw()
+    print('Najlepsze a: {}, b: {} i najlepszy blad: {:.4f}'.format(best_a,best_b,error_best))
     print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-    plt.waitforbuttonpress(0)
+    plot_a_b_errors(errors, a_values, b_values)
+    p_x_y = estimate_p_x_y_nb(data['Xtrain'], data['ytrain'], best_a, best_b)
 
-    # Selekcja modelu
-    print('\n--- Selekcja modelu dla liniowego zadania najmniejszych kwadratow ---')
-    print('---------------- Modele wielomianowe stopnia M=0,...,7 ----------------')
-    print('- Liczba punktow treningowych N=50. Liczba punktow walidacyjnych N=20 -')
+    classes_no = p_x_y.shape[0]
+    print('\n------Wizualizacja najbardziej popularnych slow dla poszczegolnych klas------')
+    print('--Sa to slowa o najwyzszym prawdopodobienstwie w danej klasie dla modelu NB--')
 
-    M_values = range(0, 7)
-    w, train_err, val_err = model_selection(data['x_train_50'], data['y_train_50'],
-                                            data['x_val_20'], data['y_val_20'], M_values)
-    M = np.shape(w)[0] - 1
-    y_model = polynomial(x_plot, w)
+    try:
+        groupnames = data['groupnames']
+        words = {}
+        for x in range(classes_no):
+            indices = np.argsort(p_x_y[x, :])[::-1][:50]
+            words[groupnames[x]] = {word: prob for word, prob in zip(data['wordlist'][indices], p_x_y[x, indices])}
+        word_clouds(words.values(), words.keys())
+    except Exception:
+        print('---Wystapil problem z biblioteka wordcloud--- ')
 
-    fig = plt.figure(figsize=(6, 5), num='Selekcja modelu dla M')
-    sub = fig.add_subplot(1, 1, 1)
-    sub.set_title('Najlepsze M={}'.format(M))
-    plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model,
-               data['x_val_20'], data['y_val_20'], train_err, val_err)
-
-    plt.tight_layout()
-    plt.draw()
     print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-    plt.waitforbuttonpress(0)
 
-    print('\n--- Selekcja modelu dla liniowego zadania najmniejszych kwadratow z regularyzacja ---')
-    print('-- Stopien M=7. Liczba punktow treningowych N=50. Liczba punktow walidacyjnych N=20 --')
+    print('\n----------------Porownanie bledow dla KNN i NB---------------------')
 
-    M = 7
-    lambdas = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30, 100, 300]
-    w, train_err, val_err, best_lambda = regularized_model_selection(data['x_train_50'],
-                                                                     data['y_train_50'],
-                                                                     data['x_val_20'],
-                                                                     data['y_val_20'],
-                                                                     M, lambdas)
-    y_model = polynomial(x_plot, w)
+    Dist = hamming_distance(data['Xtest'], data['Xtrain'])
+    y_sorted = sort_train_labels_knn(Dist, data['ytrain'])
+    p_y_x = p_y_x_knn(y_sorted, best_k)
+    error_KNN = classification_error(p_y_x, data['ytest'])
 
-    fig = plt.figure(figsize=(6, 5), num='Selekcja modelu dla parametru regularyzacji')
-    sub = fig.add_subplot(1, 1, 1)
-    sub.set_title('M={}    Najlepsze $\lambda$={}'.format(M, best_lambda))
-    plot_model(data['x_train_50'], data['y_train_50'], x_plot, y_obj, y_model,
-               data['x_val_20'], data['y_val_20'],
-               train_err, val_err)
+    p_y = estimate_a_priori_nb(data['ytrain'])
+    p_y_x = p_y_x_nb(p_y, p_x_y, data['Xtest'])
+    error_NB = classification_error(p_y_x, data['ytest'])
 
-    plt.tight_layout()
-    plt.draw()
+    plot_error_NB_KNN(error_NB, error_KNN)
     print('\n--- Wcisnij klawisz, aby kontynuowac ---')
-    plt.waitforbuttonpress(0)
+
+
+if __name__ == "__main__":
+    warnings.filterwarnings("ignore")
+    run_unittests()
+    run_training()
+
