@@ -121,6 +121,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 PICK_PHOTO_FOR_AVATAR -> {
@@ -144,7 +145,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
 
     private fun Bundle.toGalleryEntry() : GalleryEntry {
         val date = try {
-            SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).parse(getString("Date"))
+            SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(getString("Date"))
         } catch(e: ParseException) {
             Calendar.getInstance().time
         }
@@ -161,16 +162,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
     private lateinit var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback
     private lateinit var itemTouchHelper: ItemTouchHelper
 
-    private var isFABOpen = false
-
-    private val galleryEntries: MutableList<GalleryEntry> =
-        MutableList(3) {
-                i -> GalleryEntry(
-            Uri.parse("https://external-preview.redd.it/lzcL5WbUuBr7pI9zIM9ZbUSrETZR1UNb-g6C5DehYss.jpg?auto=webp&s=df2898b646958f288f8e2e54ce0d30da0ecd42e7"),
-            "Title $i",
-            MutableList(1) {""},
-            Date())
-        }
+    private val galleryEntries = mutableListOf<GalleryEntry>()
 
     companion object {
         const val PICK_PHOTO_FOR_AVATAR = 667
