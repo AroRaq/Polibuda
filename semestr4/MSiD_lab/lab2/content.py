@@ -130,12 +130,12 @@ def p_y_x_nb(p_y, p_x_1_y, X):
     """
     X = X.toarray()
     prob = []
-    for i in range(X.shape[0]):                                                 # po D
-        mul_s_f = p_x_1_y * X[i] + (1 - p_x_1_y) * (1 - X)[i]                   # Bayes macierz prawdopodobieństw [4xD]
-        class_prob = np.prod(mul_s_f, axis=1) * p_y                             # p(x|y') * p(y') [1x4]
-        denominator = np.sum(class_prob)                                        # suma p(x|y') * p(y')
-        prob.append(class_prob / denominator)
-    return np.array(prob)                                                       # macierz prawdopodobieństw p(y|x) dla obiektów z "X" [NxM]
+    for i in range(X.shape[0]):
+        mul_s_f = p_x_1_y * X[i] + (1 - p_x_1_y) * (1 - X[i])
+        numerator = np.prod(mul_s_f, axis=1) * p_y                             # p(x|y') * p(y') [1x4]
+        denumerator = np.sum(numerator)                                        # sum p(x|y') * p(y')
+        prob.append(numerator / denumerator)
+    return np.array(prob)
 
 
 def model_selection_nb(X_train, X_val, y_train, y_val, a_values, b_values):
