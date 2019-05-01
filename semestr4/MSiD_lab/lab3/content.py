@@ -172,14 +172,14 @@ def model_selection(x_train, y_train, x_val, y_val, w0, epochs, eta, mini_batch,
     """
     F = []
     for l in lambdas:
-        obj_fun = lambda w, x, y: regularized_logistic_cost_function(w, x, y, l)
-        (w, _) = stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta,mini_batch)
+        fun = lambda w, x, y: regularized_logistic_cost_function(w, x, y, l)
+        (w, _) = stochastic_gradient_descent(fun, x_train, y_train, w0, epochs, eta,mini_batch)
         f = []
         for t in thetas:
             f.append(f_measure(y_val, prediction(x_val, w, t)))
         F.append(f)
     idx = np.unravel_index(np.argmin(F), np.shape(F))
-    print(idx)
-    obj_fun = lambda w, x, y: regularized_logistic_cost_function(w, x, y, lambdas[idx[1]])
-    (w, _) = stochastic_gradient_descent(obj_fun, x_train, y_train, w0, epochs, eta, mini_batch)
-    return (lambdas[idx[1]], thetas[idx[0]], w, F)
+    print(idx, np.shape(lambdas))
+    fun = lambda w, x, y: regularized_logistic_cost_function(w, x, y, lambdas[idx[1]])
+    (w, _) = stochastic_gradient_descent(fun, x_train, y_train, w0, epochs, eta, mini_batch)
+    return (lambdas[idx[1]], thetas[idx[1]], w, F)
