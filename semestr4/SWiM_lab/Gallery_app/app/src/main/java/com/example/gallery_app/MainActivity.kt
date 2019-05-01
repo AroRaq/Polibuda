@@ -10,11 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.leinardi.android.speeddial.SpeedDialActionItem
-import com.squareup.picasso.Picasso
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment, bundle: Bundle) {
-        galleryEntries.add(bundle.toGalleryEntry())
+        imageHolder.addGalleryEntry(bundle.toGalleryEntry())
         viewAdapter.notifyItemInserted(viewAdapter.itemCount)
     }
 
@@ -38,10 +39,11 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        imageHolder = ViewModelProviders.of(this).get(ImageHolder::class.java)
         setUpSpeedDial()
         setUpRecycledView()
         setUpSwipeToDismiss()
-        Picasso.get().isLoggingEnabled = true
+        //Picasso.get().isLoggingEnabled = true
     }
 
     private fun setUpSpeedDial() {
@@ -77,7 +79,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
         simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                galleryEntries.removeAt(viewHolder.adapterPosition)
+                imageHolder.getGalleryEntries().removeAt(viewHolder.adapterPosition)
                 viewAdapter.notifyItemRemoved(viewHolder.adapterPosition)
             }
 
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
 
     private fun setUpRecycledView() {
         viewManager = LinearLayoutManager(this)
-        viewAdapter = GalleryAdapter(galleryEntries)
+        viewAdapter = GalleryAdapter(imageHolder.getGalleryEntries())
 
         recyclerView = recycler_view_gallery.apply {
             setHasFixedSize(true)
@@ -105,7 +107,8 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
     private fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
-        startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(intent, SELECT_IMAGES_FROM_GALLERY)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -124,9 +127,19 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                PICK_PHOTO_FOR_AVATAR -> {
-                    val uri = data!!.data
-                    galleryEntries.add(GalleryEntry(uri!!, nameFromUri(uri), null, Date()))
+                SELECT_IMAGES_FROM_GALLERY -> {
+                    if (data!!.clipData != null) {
+                        val count = data.clipData.itemCount
+                        for (i in 0 until count) {
+                            val uri = data.clipData.getItemAt(i).uri
+                            imageHolder.addGalleryEntry(GalleryEntry(uri!!, nameFromUri(uri), Date(), null))
+                        }
+                    }
+                    else if (data.data != null) {
+                        val uri = data.data
+                        imageHolder.addGalleryEntry(GalleryEntry(uri!!, nameFromUri(uri), Date(), null))
+                    }
+
                     viewAdapter.notifyItemInserted(viewAdapter.itemCount)
                 }
             }
@@ -152,7 +165,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
         val title = getString("Title")!!
         val tags = getString("Tags")!!.split(",")
         val url = getString("Url")!!
-        return GalleryEntry(Uri.parse(url), title, tags, date)
+        return GalleryEntry(Uri.parse(url), title, date, tags)
     }
 
     private lateinit var recyclerView: RecyclerView
@@ -162,10 +175,23 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
     private lateinit var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback
     private lateinit var itemTouchHelper: ItemTouchHelper
 
-    private val galleryEntries = mutableListOf<GalleryEntry>()
+    private lateinit var imageHolder: ImageHolder
 
     companion object {
-        const val PICK_PHOTO_FOR_AVATAR = 667
+        const val SELECT_IMAGES_FROM_GALLERY = 667
     }
 
+}
+
+class ImageHolder : ViewModel() {
+
+    private val galleryEntries = mutableListOf<GalleryEntry>()
+
+    fun getGalleryEntries() : MutableList<GalleryEntry> {
+        return galleryEntries
+    }
+
+    fun addGalleryEntry(entry: GalleryEntry) {
+        galleryEntries.add(entry)
+    }
 }
