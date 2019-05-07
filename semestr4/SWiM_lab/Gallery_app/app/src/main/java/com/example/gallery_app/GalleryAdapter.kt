@@ -52,6 +52,9 @@ class GalleryAdapter(private val myDataset: MutableList<GalleryEntry>) :
                 .load(myDataset[position].uri)
                 .placeholder(R.drawable.progress_animation)
                 .error(R.drawable.ic_cancel_black_24dp)
+                .resize(1920, 1080)
+                .onlyScaleDown()
+                .centerInside()
                 .into(view.imageView_card,
                     object: Callback {
                         override fun onSuccess() {

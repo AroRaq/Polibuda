@@ -6,11 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_details.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class DetailsFragment(val dataset: List<GalleryEntry>, currEntry: GalleryEntry) : Fragment() {
+class DetailsFragment(val dataset: List<GalleryEntry>, val currEntry: GalleryEntry) : Fragment() {
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -27,6 +31,13 @@ class DetailsFragment(val dataset: List<GalleryEntry>, currEntry: GalleryEntry) 
         view.recycler_view_similar.apply {
             layoutManager = GridLayoutManager(view.context, 2)
             adapter = SimilarImageAdapter(dataset)
+            //addItemDecoration()
+        }
+        view.apply {
+            textView_title.text = currEntry.title
+            textView_tags.text = currEntry.tags?.joinToString() ?: ""
+            textView_date.text = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).format(currEntry.date)
+            textView_source.text = currEntry.uri.toString()
         }
         return view
     }

@@ -19,7 +19,12 @@ class ImageFragment(private val entry: GalleryEntry) : Fragment() {
         savedInstanceState: Bundle?
     ) : View? {
         val view = inflater.inflate(R.layout.fragment_image, container, false)
-        Picasso.get().load(entry.uri).into(view.findViewById<ImageView>(R.id.image_fullscreen))
+        Picasso.get()
+            .load(entry.uri)
+            .resize(1080, 1920)
+            .onlyScaleDown()
+            .centerInside()
+            .into(view.findViewById<ImageView>(R.id.image_fullscreen))
         return view
     }
 
