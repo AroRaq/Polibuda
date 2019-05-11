@@ -1,11 +1,10 @@
-package com.example.gallery_app
+package com.example.gallery_app.mainactivity
 
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -15,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gallery_app.GalleryEntry
+import com.example.gallery_app.R
 import com.leinardi.android.speeddial.SpeedDialActionItem
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -22,6 +23,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.gallery_app.logic.*
 
 class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogListener {
 
@@ -49,12 +51,18 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
     private fun setUpSpeedDial() {
         speedDial.apply {
             addActionItem(
-                SpeedDialActionItem.Builder(R.id.fab_fromurl, R.drawable.ic_web_black_24dp)
+                SpeedDialActionItem.Builder(
+                    R.id.fab_fromurl,
+                    R.drawable.ic_web_black_24dp
+                )
                     .setLabel("Photo link")
                     .setLabelBackgroundColor(Color.WHITE)
                     .setLabelClickable(false)
                     .create())
-            addActionItem(SpeedDialActionItem.Builder(R.id.fab_fromgallery, R.drawable.ic_photo_black_24dp)
+            addActionItem(SpeedDialActionItem.Builder(
+                R.id.fab_fromgallery,
+                R.drawable.ic_photo_black_24dp
+            )
                 .setLabel("From gallery")
                 .setLabelBackgroundColor(Color.WHITE)
                 .setLabelClickable(false)
@@ -66,7 +74,7 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
                         false
                     }
                     R.id.fab_fromgallery -> {
-                        pickImageFromGallery()
+                        pickImagesFromGallery()
                         false
                     }
                     else ->false
@@ -104,11 +112,13 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
         }
     }
 
-    private fun pickImageFromGallery() {
+    private fun pickImagesFromGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(intent, SELECT_IMAGES_FROM_GALLERY)
+        startActivityForResult(intent,
+            SELECT_IMAGES_FROM_GALLERY
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -128,31 +138,22 @@ class MainActivity : AppCompatActivity(), NewEntryDialogFragment.NewEntryDialogL
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 SELECT_IMAGES_FROM_GALLERY -> {
-                    if (data!!.clipData != null) {
-                        val count = data.clipData.itemCount
+                    data!!.clipData?.let {
+                        val count = it.itemCount
                         for (i in 0 until count) {
-                            val uri = data.clipData.getItemAt(i).uri
-                            imageHolder.addGalleryEntry(GalleryEntry(uri!!, nameFromUri(uri), Date(), null))
+                            val uri = it.getItemAt(i).uri
+                            imageHolder.addGalleryEntry(
+                                GalleryEntry(uri, nameFromUri(uri, this), Date(),null)
+                            )
                         }
+                    } ?: data.data?.let { uri ->
+                        imageHolder.addGalleryEntry(
+                            GalleryEntry(uri, nameFromUri(uri, this), Date(), null)
+                        )
                     }
-                    else if (data.data != null) {
-                        val uri = data.data
-                        imageHolder.addGalleryEntry(GalleryEntry(uri!!, nameFromUri(uri), Date(), null))
-                    }
-
                     viewAdapter.notifyItemInserted(viewAdapter.itemCount)
                 }
             }
-        }
-    }
-
-    private fun nameFromUri(uri: Uri?): String? {
-        return uri?.let { returnUri ->
-            contentResolver.query(returnUri, null, null, null, null)
-        }?.use { cursor ->
-            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            cursor.moveToFirst()
-            cursor.getString(nameIndex).split(".")[0]
         }
     }
 

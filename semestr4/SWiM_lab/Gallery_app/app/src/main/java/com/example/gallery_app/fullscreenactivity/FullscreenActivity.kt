@@ -1,4 +1,4 @@
-package com.example.gallery_app
+package com.example.gallery_app.fullscreenactivity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.example.gallery_app.GalleryEntry
+import com.example.gallery_app.R
 
 class FullscreenActivity : AppCompatActivity() {
 
@@ -18,31 +20,22 @@ class FullscreenActivity : AppCompatActivity() {
         }
 
         val bundle = intent.extras!!
-        dataset = bundle.getParcelableArrayList<GalleryEntry>("galleryEntries")!!
-        index = bundle.getInt("index")
+        similarImages = bundle.getParcelableArrayList<GalleryEntry>("similar")!!
+        entry = bundle.getParcelable("entry")!!
     }
 
     private lateinit var pager: ViewPager
-    private var index: Int = 0
-    private lateinit var dataset: ArrayList<GalleryEntry>
+    lateinit var entry: GalleryEntry
+    lateinit var similarImages: ArrayList<GalleryEntry>
 
     private inner class MyPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
         override fun getCount(): Int = 2
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> ImageFragment(dataset[index])
-                1 -> DetailsFragment(
-                    //dataset[index].let {
-                    //    dataset.filter { el -> el != it && el.tags?.any { tag -> it.tags?.contains(tag) ?: false} ?: false} },
-                    //dataset[index])
-                    dataset.map { el ->
-                        Pair(el, el.tags!!.count { tag -> dataset[index].tags!!.contains(tag) })}
-                        .filter { el -> el.second > 0 }
-                        .sortedBy { el -> el.second }
-                        .map { el -> el.first},
-                    dataset[index])
+                0 -> ImageFragment()
+                1 -> MultiFragment()
 
-                else -> ImageFragment(dataset[index])
+                else -> ImageFragment()
             }
         }
     }

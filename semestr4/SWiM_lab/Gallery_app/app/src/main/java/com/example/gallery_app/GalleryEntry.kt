@@ -29,6 +29,14 @@ data class GalleryEntry(val uri: Uri,
         }
     }
 
+    fun getSimilaImages(entryList: List<GalleryEntry>) : List<GalleryEntry> {
+        return entryList.map { el ->
+            Pair(el, el.tags!!.count { tag -> this.tags!!.contains(tag) })
+        }.filter { el -> el.second > 0  && el.first.uri != this.uri}
+            .sortedBy { el -> el.second }
+            .map { el -> el.first }
+    }
+
     companion object CREATOR : Parcelable.Creator<GalleryEntry> {
         override fun createFromParcel(parcel: Parcel): GalleryEntry {
             return GalleryEntry(parcel)

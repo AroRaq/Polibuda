@@ -1,10 +1,11 @@
-package com.example.gallery_app
+package com.example.gallery_app.fullscreenactivity
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gallery_app.GalleryEntry
+import com.example.gallery_app.R
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.recyclerview_item.view.*
 

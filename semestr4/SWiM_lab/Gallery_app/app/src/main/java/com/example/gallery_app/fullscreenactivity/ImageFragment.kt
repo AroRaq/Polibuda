@@ -1,5 +1,6 @@
-package com.example.gallery_app
+package com.example.gallery_app.fullscreenactivity
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.example.gallery_app.GalleryEntry
+import com.example.gallery_app.R
 import com.squareup.picasso.Picasso
 
 
-class ImageFragment(private val entry: GalleryEntry) : Fragment() {
+class ImageFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(
@@ -28,8 +31,18 @@ class ImageFragment(private val entry: GalleryEntry) : Fragment() {
         return view
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        entry = (activity as FullscreenActivity).entry
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+    }
+
     interface OnFragmentInteractionListener {
         fun onFragmentInteraction(uri: Uri)
     }
 
+    private lateinit var entry: GalleryEntry
 }
