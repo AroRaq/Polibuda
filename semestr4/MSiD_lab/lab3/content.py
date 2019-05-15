@@ -109,8 +109,8 @@ def regularized_logistic_cost_function(w, x_train, y_train, regularization_lambd
     :return: krotka (log, grad), gdzie *log* to wartość funkcji logistycznej
         z regularyzacją l2, a *grad* jej gradient po parametrach *w* Mx1
     """
-    (val, gr) = logistic_cost_function(w, x_train, y_train)
-    log = val + (regularization_lambda / 2) * np.sum(w[1:] ** 2)
+    (L, gr) = logistic_cost_function(w, x_train, y_train)
+    log = L + (regularization_lambda / 2) * np.sum(w[1:] ** 2)
     grad = gr + regularization_lambda * w
     grad[0] = gr[0]
     return (log, grad)
@@ -171,15 +171,11 @@ def model_selection(x_train, y_train, x_val, y_val, w0, epochs, eta, mini_batch,
         dla wszystkich par *(lambda, theta)* #lambda x #theta
     """
     F = []
+    fun = lambda l: lambda w, x, y: regularized_logistic_cost_function(w, x, y, l)
+    stoch = lambda l: stochastic_gradient_descent(fun(l), x_train, y_train, w0, epochs, eta, mini_batch)
     for l in lambdas:
-        fun = lambda w, x, y: regularized_logistic_cost_function(w, x, y, l)
-        (w, _) = stochastic_gradient_descent(fun, x_train, y_train, w0, epochs, eta,mini_batch)
-        f = []
-        for t in thetas:
-            f.append(f_measure(y_val, prediction(x_val, w, t)))
-        F.append(f)
-    idx = np.unravel_index(np.argmin(F), np.shape(F))
-    print(idx, np.shape(lambdas))
-    fun = lambda w, x, y: regularized_logistic_cost_function(w, x, y, lambdas[idx[1]])
-    (w, _) = stochastic_gradient_descent(fun, x_train, y_train, w0, epochs, eta, mini_batch)
-    return (lambdas[idx[1]], thetas[idx[1]], w, F)
+        (w_sto, _) = stoch(l)
+        F.append([f_measure(y_val, prediction(x_val, w_sto, t)) for t in thetas])
+    idx = np.unravel_index(np.argmax(F), np.shape(F))
+    (w, _) = stoch(lambdas[idx[0]])
+    return (lambdas[idx[0]], thetas[idx[1]], w, np.array(F))
