@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                   xmlns:tools="http://schemas.android.com/tools"
-                                   android:layout_width="match_parent"
-                                   android:layout_height="wrap_content"
-                                   android:layout_margin="8dp"
-                                   app:cardCornerRadius="8dp"
-                                   app:cardElevation="8dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
 
     <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" tools:srcCompat="@tools:sample/avatars"
-            android:layout_weight="1"
-            android:scaleType="fitXY"
-            android:id="@+id/image_similar"/>
+        android:id="@+id/image_similar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:scaleType="fitXY"
+        tools:srcCompat="@tools:sample/avatars"
+        tools:ignore="ContentDescription" />
 </androidx.cardview.widget.CardView>

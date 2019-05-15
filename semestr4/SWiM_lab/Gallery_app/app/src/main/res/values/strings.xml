@@ -9,4 +9,16 @@
     <string name="dialog_label_tags">Tags</string>
     <string name="dialog_label_title">Title</string>
     <string name="dialog_label_link">Link to the image</string>
+    <string name="details_tags_label">Tags of this image:</string>
+    <string name="details_date_label">Image date:</string>
+    <string name="details_similar_label">Similar images:</string>
+    <string name="details_tags_placeholder">_TAGS_</string>
+    <string name="details_date_placeholder">_DATE_</string>
+    <string name="details_source_placeholder">_SOURCE_</string>
+    <string name="details_title_label">Image title:</string>
+    <string name="details_title_placeholder">_TITLE_</string>
+    <string name="details_source_label">Source:</string>
+    <string name="card_title_label">Title</string>
+    <string name="card_date_label">Date</string>
+    <string name="card_tags_label">Tags:</string>
 </resources>

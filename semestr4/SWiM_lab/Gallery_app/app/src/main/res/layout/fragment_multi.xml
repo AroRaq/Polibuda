@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".fullscreenactivity.MultiFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fullscreenactivity.MultiFragment">
 
-    <fragment android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:id="@+id/details"
-              class="com.example.gallery_app.fullscreenactivity.DetailsFragment"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-              android:layout_marginTop="8dp" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"/>
+    <fragment
+        android:id="@+id/details"
+        class="com.example.gallery_app.fullscreenactivity.DetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_main"
+        android:layout_marginTop="@dimen/margin_main"
+        android:layout_marginEnd="@dimen/margin_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <fragment android:layout_width="match_parent" android:layout_height="0dp"
-              android:id="@+id/similarimages"
-              class="com.example.gallery_app.fullscreenactivity.SimilarImagesFragment"
-              android:layout_marginTop="8dp"
-              app:layout_constraintTop_toBottomOf="@+id/details" app:layout_constraintStart_toStartOf="parent"
-              android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
-              android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
-              app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"/>
+    <fragment
+        android:id="@+id/similarimages"
+        class="com.example.gallery_app.fullscreenactivity.SimilarImagesFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_main"
+        android:layout_marginTop="@dimen/margin_main"
+        android:layout_marginEnd="@dimen/margin_main"
+        android:layout_marginBottom="@dimen/margin_main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/details"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

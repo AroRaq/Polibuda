@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   xmlns:tools="http://schemas.android.com/tools"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_margin="@dimen/margin_main"
+                                   app:cardCornerRadius="@dimen/margin_main"
+                                   app:cardElevation="@dimen/margin_main"
+                                   app:cardBackgroundColor="@color/colorBackground">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:id="@+id/imageView_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginTop="@dimen/margin_main"
+                android:layout_marginEnd="@dimen/margin_main"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/cate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_cardtitle"
+                tools:ignore="ContentDescription"/>
+
+        <TextView
+                android:id="@+id/textView_cardtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginTop="@dimen/margin_main"
+                android:text="@string/card_title_label"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+                android:id="@+id/textView_carddate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginEnd="@dimen/margin_main"
+                android:text="@string/card_date_label"
+                android:textAllCaps="false"
+                android:textSize="10sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@+id/textView_cardtitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView_cardtitle"
+                app:layout_constraintTop_toTopOf="@+id/textView_cardtitle"/>
+
+        <TextView
+                android:id="@+id/label_cardtags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginTop="@dimen/margin_main"
+                android:layout_marginBottom="@dimen/margin_main"
+                android:text="@string/card_tags_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_card"/>
+
+        <TextView
+                android:id="@+id/textView_cardtags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_main"
+                android:layout_marginEnd="@dimen/margin_main"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/label_cardtags"
+                app:layout_constraintTop_toTopOf="@+id/label_cardtags"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

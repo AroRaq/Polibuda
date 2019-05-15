@@ -16,7 +16,7 @@ class SimilarImageAdapter(val dataset: List<GalleryEntry>) : RecyclerView.Adapte
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilarImageViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recyclerview_item, parent, false) as CardView
+                .inflate(R.layout.recyclerview_item, parent, false) as CardView
         return SimilarImageViewHolder(view)
     }
 
@@ -24,10 +24,10 @@ class SimilarImageAdapter(val dataset: List<GalleryEntry>) : RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: SimilarImageViewHolder, position: Int) {
         Picasso.get().load(dataset[position].uri)
-            .resize(540, 540)
-            .onlyScaleDown()
-            .centerInside()
-            .into(holder.cardView.image_similar)
+                .resize(540, 540)
+                .onlyScaleDown()
+                .centerInside()
+                .into(holder.cardView.image_similar)
     }
 
 }

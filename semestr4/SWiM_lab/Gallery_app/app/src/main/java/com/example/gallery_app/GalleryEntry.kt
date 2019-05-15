@@ -10,10 +10,10 @@ data class GalleryEntry(val uri: Uri,
                         val date: Date?,
                         var tags: List<String>?) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readParcelable(Uri::class.java.classLoader)!!,
-        parcel.readString(),
-        Date(parcel.readLong()),
-        mutableListOf<String>().also { parcel.readStringList(it) }
+            parcel.readParcelable(Uri::class.java.classLoader)!!,
+            parcel.readString(),
+            Date(parcel.readLong()),
+            mutableListOf<String>().also { parcel.readStringList(it) }
     )
 
     override fun describeContents(): Int {
@@ -29,12 +29,13 @@ data class GalleryEntry(val uri: Uri,
         }
     }
 
-    fun getSimilaImages(entryList: List<GalleryEntry>) : List<GalleryEntry> {
+    fun getSimilarImages(entryList: List<GalleryEntry>): List<GalleryEntry> {
         return entryList.map { el ->
             Pair(el, el.tags!!.count { tag -> this.tags!!.contains(tag) })
-        }.filter { el -> el.second > 0  && el.first.uri != this.uri}
-            .sortedBy { el -> el.second }
-            .map { el -> el.first }
+        }.filter { el -> el.second > 0 && el.first.uri != this.uri }
+                .sortedBy { el -> el.second }
+                .map { el -> el.first }
+                .reversed()
     }
 
     companion object CREATOR : Parcelable.Creator<GalleryEntry> {

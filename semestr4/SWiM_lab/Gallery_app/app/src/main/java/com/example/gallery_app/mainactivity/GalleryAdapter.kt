@@ -17,7 +17,7 @@ import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_row.view.*
+import kotlinx.android.synthetic.main.card_main.view.*
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +33,7 @@ class GalleryAdapter(private val myDataset: MutableList<GalleryEntry>) :
         labeler = FirebaseVision.getInstance().onDeviceImageLabeler
 
         val cardView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_row, parent, false) as CardView
+            .inflate(R.layout.card_main, parent, false) as CardView
 
         return MyViewHolder(cardView)
     }
@@ -62,7 +62,7 @@ class GalleryAdapter(private val myDataset: MutableList<GalleryEntry>) :
                             view.imageView_card.setOnClickListener {
                                 val currEntry = myDataset[holder.adapterPosition]
                                 val intent = Intent(view.context, FullscreenActivity::class.java).apply {
-                                    putParcelableArrayListExtra("similar", ArrayList(currEntry.getSimilaImages(myDataset)))
+                                    putParcelableArrayListExtra("similar", ArrayList(currEntry.getSimilarImages(myDataset)))
                                     putExtra("entry", currEntry)
                                 }
                                 view.context.startActivity(intent)

@@ -1,85 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent"
-                                                   android:id="@+id/relative_layout_newentry">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relative_layout_newentry"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <TextView
-            android:text="@string/dialog_label_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/label_imageurl"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="24dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:layout_marginTop="32dp"/>
+        android:id="@+id/label_imageurl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:layout_marginTop="32dp"
+        android:text="@string/dialog_label_link"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="textUri"
-            android:ems="10"
-            android:id="@+id/editText_imageurl"
-            app:layout_constraintTop_toBottomOf="@+id/label_imageurl" android:layout_marginEnd="24dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+        android:id="@+id/editText_imageurl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:ems="10"
+        android:inputType="textUri"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_imageurl" />
+
     <TextView
-            android:text="@string/dialog_label_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView4" android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/editText_imageurl" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="24dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.0"/>
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:text="@string/dialog_label_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_imageurl" />
+
     <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:ems="10"
-            android:id="@+id/editText_imagetitle"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="24dp"
-            app:layout_constraintEnd_toEndOf="parent"/>
+        android:id="@+id/editText_imagetitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
     <TextView
-            android:text="@string/dialog_label_tags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_imagetags" android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/editText_imagetitle" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="24dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"
-            app:layout_constraintHorizontal_bias="0.0"/>
+        android:id="@+id/label_imagetags"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:text="@string/dialog_label_tags"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_imagetitle" />
+
     <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editText_imagetags"
-            app:layout_constraintTop_toBottomOf="@+id/label_imagetags" android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="24dp"
-            app:layout_constraintEnd_toEndOf="parent"/>
+        android:id="@+id/editText_imagetags"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_imagetags" />
+
     <TextView
-            android:text="@string/dialog_label_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_imagedate" android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/editText_imagetags" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="24dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="24dp"
-            app:layout_constraintHorizontal_bias="0.0"/>
+        android:id="@+id/label_imagedate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:text="@string/dialog_label_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_imagetags" />
+
     <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:id="@+id/editText_imagedate"
-            app:layout_constraintTop_toBottomOf="@+id/label_imagedate" android:layout_marginEnd="24dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:clickable="true" android:focusableInTouchMode="false" android:focusable="true"/>
+        android:id="@+id/editText_imagedate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:clickable="true"
+        android:ems="10"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_imagedate" />
+
     <TextView
-            android:text="@string/dialog_newimage_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView" android:layout_marginTop="24dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="24dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="24dp"
-            android:textAppearance="@style/Base.TextAppearance.MaterialComponents.Headline6" android:textSize="30sp"/>
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_big"
+        android:layout_marginEnd="@dimen/margin_big"
+        android:text="@string/dialog_newimage_title"
+        android:textAppearance="@style/Base.TextAppearance.MaterialComponents.Headline6"
+        android:textSize="@dimen/title_font_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

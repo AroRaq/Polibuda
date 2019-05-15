@@ -5,4 +5,8 @@
     <dimen name="standard_105">105dp</dimen>
     <dimen name="standard_45">45dp</dimen>
     <dimen name="standard_21">21dp</dimen>
+    <dimen name="margin_main">8dp</dimen>
+    <dimen name="margin_between">16dp</dimen>
+    <dimen name="margin_big">24dp</dimen>
+    <dimen name="title_font_size">30sp</dimen>
 </resources>
