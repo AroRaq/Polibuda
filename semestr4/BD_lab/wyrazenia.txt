@@ -1,0 +1,29 @@
+="        " & "Uprzejmie informuję, że od dnia " & [Dzień rozpoczęcia premii: ] & 
+" każdemu nauczycielowi pracującemu w naszej szkole od ponad 3 lat przysługuje premia w wysokości 10% pensji."
+
+=Switch(IsNull([Plec]),"Sz.P.",[Plec]="K","Pani",[Plec]="M","Pana") & " staż w naszej szkole "
+& IIF(IsNull([Staz]), 
+	"jest nieokreślony", 
+	"wynosi " & [Staz] & Switch([Staz]=1, " rok", [Staz]=2 or [Staz]=3 or [Staz]=4, " lata", [Staz]>=0, " lat"))
+& ", a więc premia " & Switch(IsNull([Plec]),"Sz.P.",[Plec]="K","Pani",[Plec]="M","Panu") 
+& IIF(IsNull([Staz]) or [Staz]<3, 
+	" nie", 
+	"") 
+& " przysługuje."
+
+
+="        " & IIF(IsNull([Pensja]),
+	"Jako że nie otrzymuje " & Switch(IsNull([Plec]),"Sz.P.",[Plec]="K","Pani",[Plec]="M","Pan") & " pensji, zarobki nie ulegną zmianie.",
+	Switch(IsNull([Plec]),"Sz.P.",[Plec]="K","Pani",[Plec]="M","Pana") & " pensja wynosi " & Format([Pensja], "0.00"" zł""") & ", a premia " &
+		IIF(IsNull([Staz]) or [Staz]<3,
+			"pozostaje niezmieniona " & IIF(IsNull([Premia]), ".", " i wynosi " & Format([Premia]*3.83, "0.00"" zł""")),
+			"będzie od wyżej wymienionego dnia będzie wynosić " & Format(IIF(IsNull([Premia]), 0, [Premia]*3.83) + 0.1*[Pensja], "0.00"" zł""") & "."
+		)
+)
+
+="        " & IIF(IsNull([Miasto]), 
+	"", 
+	"Proszę również o kontakt ze mną w celu uzupełnienia " & Switch(IsNull([Plec]),"Sz.P.",[Plec]="K","Pani",[Plec]="M","Pana") & " danych osobowych."
+)
+
+Switch([Staz]=1, " rok", [Staz]=2 or [Staz]=3 or [Staz]=4, " lata", [Staz]>=0, " lat")
