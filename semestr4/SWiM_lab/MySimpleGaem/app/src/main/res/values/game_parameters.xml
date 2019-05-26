@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="initialGameSpeed">500</integer>
+    <integer name="gameSpeedIncreaseRate">20</integer>
+    <integer name="gapSize">300</integer>
+    <integer name="distanceBetweenObstacles">1000</integer>
+</resources>
