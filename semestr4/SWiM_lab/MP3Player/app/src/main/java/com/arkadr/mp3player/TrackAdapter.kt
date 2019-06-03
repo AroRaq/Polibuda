@@ -6,10 +6,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 
 class TrackAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return TrackInfo()
     }
 
     override fun getCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return 2
     }
 }

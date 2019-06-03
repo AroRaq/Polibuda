@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MP3Player</string>
+    <string name="com_spotify_sdk_redirect_scheme">testschema</string>
+    <string name="com_spotify_sdk_redirect_host">callback</string>
+</resources>
