@@ -1,39 +1,48 @@
 package com.arkadr.mysimplegaem.game
 
 import android.content.Context
-import android.graphics.Paint
-import android.util.AttributeSet
+import android.graphics.*
 import android.util.Log
 import android.view.SurfaceView
+import android.view.View
 import com.arkadr.mysimplegaem.graphics.Vector2i
 import java.util.*
 
-class GameBoard(context: Context, attrs: AttributeSet) : SurfaceView(context, attrs), Runnable {
+
+class GameView(context: Context, size: Point) : SurfaceView(context), Runnable, View.OnClickListener {
+
+    var game = Game(Vector2i(size.x, size.y), context)
+    private val brush = Paint()
+    private var lastFrameTime = Calendar.getInstance().timeInMillis
+    private val gameThread = Thread(this)
+    private var playing = true
 
     override fun run() {
         while (playing) {
 
-            val timeElapsed = (Calendar.getInstance().timeInMillis - lastFrameTime) / 1000.0
-            lastFrameTime = Calendar.getInstance().timeInMillis
-            game.update(timeElapsed)
+            val timeElapsed = (System.currentTimeMillis() - lastFrameTime) / 1000.0
+            lastFrameTime = System.currentTimeMillis()
+            if (!game.gameOver)
+                game.update(timeElapsed)
 
             draw()
         }
     }
 
-    fun draw() {
+    override fun onClick(v: View?) {
+        if (game.gameOver)
+            game.restart()
+    }
+
+    private fun draw() {
         if (holder.surface.isValid) {
             val canvas = holder.lockCanvas()
             canvas.drawRGB(0, 0, 0)
             game.draw(canvas)
-
             holder.unlockCanvasAndPost(canvas)
         }
     }
 
-    fun setupGame() {
-        game = Game(Vector2i(width, height), context.resources)
-    }
 
     fun pause() {
         playing = false
@@ -46,16 +55,10 @@ class GameBoard(context: Context, attrs: AttributeSet) : SurfaceView(context, at
 
     fun resume() {
         playing = true
-//        prepareLevel()
         gameThread.start()
+        this.setOnClickListener(this)
     }
 
-
-    var game = Game(Vector2i(1000, 1000), context.resources)
-    private val brush = Paint()
-    private var lastFrameTime = Calendar.getInstance().timeInMillis
-    private val gameThread = Thread(this)
-    private var playing = true
 }
 
 
