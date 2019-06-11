@@ -1,73 +1,87 @@
 package com.arkadr.mp3player
 
+import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import com.adamratzman.spotify.spotifyApi
-import com.spotify.android.appremote.api.ConnectionParams
-import com.spotify.android.appremote.api.Connector
-import com.spotify.android.appremote.api.SpotifyAppRemote
-import com.spotify.sdk.android.authentication.AuthenticationRequest
-import com.spotify.sdk.android.authentication.AuthenticationResponse
+import android.content.ComponentName
+import android.content.Context
+import android.content.ServiceConnection
+import android.os.IBinder
+import androidx.documentfile.provider.DocumentFile
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 
 class MainActivity : AppCompatActivity() {
 
-    val CLIENT_ID = "307c90e9631446b48a6d354bfa5e86ca"
-    val CLIENT_SECRET = "202be2e395ca4b80b14ecec6cd746a8c"
-    val REDIRECT_URI = "testschema://callback"
+    companion object {
+        const val RESULT_FOLDER = 141
+    }
 
-    lateinit var spotifyAppRemote: SpotifyAppRemote
+    private lateinit var audioServiceBinder: PlayerServiceBinder
+
+    lateinit var songListAdapter : SongListAdapter
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+            audioServiceBinder = iBinder as PlayerServiceBinder
+            audioServiceBinder.context = this@MainActivity
+            songListAdapter.playerServiceBinder = audioServiceBinder
+        }
+        override fun onServiceDisconnected(componentName: ComponentName) {}
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        songListAdapter = SongListAdapter()
+        songList.adapter = songListAdapter
+        songList.layoutManager = LinearLayoutManager(this)
 
+        bindAudioService()
 
-        val api = spotifyApi {
-            credentials {
-                clientId = CLIENT_ID
-                redirectUri = REDIRECT_URI
-                clientSecret = CLIENT_SECRET
+        chooseFolder()
+    }
 
+    private fun unBoundAudioService() {
+        unbindService(serviceConnection)
+    }
 
-            }
-        }.buildCredentialed()
+    override fun onDestroy() {
+        unBoundAudioService()
+        super.onDestroy()
+    }
 
-//        val connectionParams: ConnectionParams = ConnectionParams.Builder(CLIENT_ID)
-//            .setRedirectUri(REDIRECT_URI)
-//            .showAuthView(true)
-//            .build()
-
-//        SpotifyAppRemote.connect(this, connectionParams, object:Connector.ConnectionListener {
-//            override fun onFailure(p0: Throwable?) {
-//                Log.d("ERROR", p0.toString())
-//            }
-//            override fun onConnected(sap: SpotifyAppRemote) {
-//                spotifyAppRemote =  sap
-//                connected()
-//            }
-//
-//        })
-
-
-
-        button_open.setOnClickListener {
-            val intent = Intent(this, PlayerActivity::class.java).apply {
-                putExtra("index", 0)
-                putParcelableArrayListExtra("songs", ArrayList<Uri>())
-            }
-            startActivity(intent)
+    private fun bindAudioService() {
+        if (!::audioServiceBinder.isInitialized) {
+            val intent = Intent(this@MainActivity, PlayerService::class.java)
+            bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         }
     }
 
+    private fun chooseFolder() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+        startActivityForResult(Intent.createChooser(intent, "Choose folder"), RESULT_FOLDER)
+    }
 
-    fun connected() {
-        spotifyAppRemote.playerApi.play("spotify:playlist:37i9dQZF1DX7K31D69s4M1")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                RESULT_FOLDER -> {
+                    val treeUri = data?.data!!
+                    val pickedDir = DocumentFile.fromTreeUri(this, treeUri)
+                    SongList.get().clear()
+                    for (file in pickedDir!!.listFiles()) {
+                        if (file.name?.endsWith(".mp3") == true) {
+                            SongList.get().add(file)
+                        }
+                    }
+                    songListAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

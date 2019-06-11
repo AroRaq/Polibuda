@@ -12,30 +12,35 @@
             android:layout_marginBottom="24dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_progress" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toStartOf="@+id/text_length"/>
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
             android:id="@+id/button_play"
             app:layout_constraintStart_toEndOf="@+id/button_prev" app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/button_next" android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toTopOf="@+id/seekBar" android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_baseline_pause_circle_outline_24px"
+            android:height="100dp"
     />
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+    <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
             android:id="@+id/button_next"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_play" android:layout_marginEnd="24dp"/>
-    <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/button_play" android:layout_marginEnd="24dp"
+            android:background="@drawable/ic_baseline_skip_next_24px"
+            app:layout_constraintStart_toEndOf="@+id/button_play" app:layout_constraintHorizontal_bias="0.5"/>
+    <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
             android:id="@+id/button_prev" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/button_play" android:layout_marginStart="24dp"
-    />
+            android:background="@drawable/ic_baseline_skip_previous_24px"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/button_play"/>
     <androidx.viewpager.widget.ViewPager
             android:layout_width="0dp"
             android:layout_height="0dp" app:layout_constraintEnd_toEndOf="parent"

@@ -6,10 +6,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 
 class TrackAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
-        return TrackInfo()
+        return TrackInfo(SongList.get()[position])
     }
 
     override fun getCount(): Int {
-        return 2
+        return SongList.get().size
     }
 }
