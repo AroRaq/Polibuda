@@ -267,5 +267,5 @@ __pycache__/
 # Python virtual environment
 env/
 
-# MSiD competition
-semestr4/MSiD_lab/lab4/
+#VS Code prefs
+.vscode/
