@@ -266,6 +266,7 @@ __pycache__/
 
 # Python virtual environment
 virtual_environment/
+env/
 
 # Virtual machines
 virtual_machine/
